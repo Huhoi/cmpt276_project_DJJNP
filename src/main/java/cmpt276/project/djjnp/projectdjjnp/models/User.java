@@ -2,6 +2,8 @@ package cmpt276.project.djjnp.projectdjjnp.models;
 
 import jakarta.persistence.*;
 
+
+// Database Table
 @Entity
 @Table(name="users")
 public class User {
