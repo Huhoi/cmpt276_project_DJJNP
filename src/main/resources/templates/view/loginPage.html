@@ -12,12 +12,13 @@
     <div class="container">
 
         <h1 class="mb-3">Login</h1>
-        <form action="@{view/loginUser}" th:object="${us}" method="post">
+        <form th:action="@{/view/loginUser}" th:object="${us}" method="post">
             <!-- Email -->
             <div class="mb-3">
                 <input type="text" 
                 id="emailForm" 
                 class="form-control form-control-lg" 
+                th:field="*{email}"
                 placeholder="Email" 
                 required pattern="\S(.*\S)?" 
                 title="Check White Spaces (Start/End)"
@@ -29,24 +30,27 @@
                 <input type="text" 
                 id="passwordForm" 
                 class="form-control form-control-lg" 
+                th:field="*{password}"
                 placeholder="Password" 
                 required pattern="\S(.*\S)?" 
                 title="Check White Spaces (Start/End)"
                 >
             </div>
+
+            <!-- Login Button-->
+            <div class="d-grid gap-2">
+                <input class="btn btn-outline-secondary" 
+                    id="loginButton" 
+                    type="submit" 
+                    value="Login"
+                    style="border-radius: 50px; width: 300px;">
+                </input>
+            </div>
+
         </form>
         <a href="window.location.href = '/view/signup'">Register Now!</a>
 
-        <!-- Login Button-->
-        <div class="d-grid gap-2">
-            <input class="btn btn-outline-secondary" 
-                id="loginButton" 
-                type="button" 
-                value="Register"
-                onclick="window.location.href = '/view/login'"
-                style="border-radius: 50px; width: 300px;">
-            </input>
-        </div>
+       
         
 
     </div>
