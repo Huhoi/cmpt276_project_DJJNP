@@ -66,7 +66,7 @@ public class UsersLogin {
             return "view/success";
         }
         else{
-            return"error";
+            return"view/loginPage";
         }
         
     }
