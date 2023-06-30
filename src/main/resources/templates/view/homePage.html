@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/css/homePageStyle.css">
+</head>
+<body>
+    <div class="navBar">
+        <table class="navBarTable">
+            <tr>
+                <th>ChronoPlanner</th>
+                <td>
+                    <div class="navButton">
+                        <button type="button" th:onclick="|window.location.href='/home'|" id="button">Home</button>
+                    </div>
+                </td>
+                <td>
+                    <div class="navButton">
+                        <button type="button" id="button">Schedule</button>
+                    </div>
+                </td>
+                <td>
+                    <div class="navButton">
+                        <button type="button" id="button">Display</button>
+                    </div>
+                </td>
+                <td>
+                    <div class="navButton">
+                        <button type="button" th:onclick="|window.location.href='/account'|" id="button">Account</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div th:object="${user}" class="main">
+        <span>Hello </span>
+        <span th:text="*{email}"></span>
+    </div>
+
+</body>
+</html>
