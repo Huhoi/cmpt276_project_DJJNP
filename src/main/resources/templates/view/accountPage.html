@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account</title>
+    <link rel="stylesheet" href="/css/accountPageStyle.css">
+</head>
+<body>
+    <div class="navBar">
+        <table class="navBarTable">
+            <tr>
+                <th>ChronoPlanner</th>
+                <td class="navButton">
+                    <div>
+                        <button type="button" th:onclick="|window.location.href='/home'|" id="button">Home</button>
+                    </div>
+                </td>
+                <td class="navButton">
+                    <div>
+                        <button type="button" id="button">Schedule</button>
+                    </div>
+                </td>
+                <td class="navButton">
+                    <div>
+                        <button type="button" id="button">Display</button>
+                    </div>
+                </td>
+                <td class="navButton">
+                    <div>
+                        <button type="button" th:onclick="|window.location.href='/account'|" id="button">Account</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="main">
+        <table class="accButtonTable">
+            <tr>
+                <td class="logoutContainer">
+                    <button type="button" th:onclick="|window.location.href='/logout'|" id="logoutButton">Log Out</button>
+                </td>
+            </tr>
+            <tr>
+                <td class="deleteContainer">
+                    <button type="button" id="deleteAccountButton">Delete Account</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

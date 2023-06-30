@@ -75,22 +75,36 @@ public class UsersLogin {
             User newUser = userList.get(0);
             request.getSession().setAttribute("sessionUser", newUser);
             model.addAttribute("user", newUser);
-            System.out.println("~~~ Creating new session for email: " + userEmail + " ~~~\n~~~ Session ID: " + request.getSession().getId() + " ~~~");
-            return "view/success";
+            System.out.println("~~~ Creating new session for email: " + newUser.getEmail() + " ~~~\n~~~ Session ID: " + request.getSession().getId() + " ~~~");
+            return "redirect:/home";
         }
     }
 
     //------------------------------------------
     // Logout Mapping
     //------------------------------------------
-    @GetMapping("/view/logout")
+    @GetMapping("/logout")
     public String destroySession(HttpServletRequest request) {
         request.getSession().invalidate();
-        return "view/loginPage";
+        return "redirect:/view/login";
     }
 
+    //------------------------------------------
+    // Home Page After Logging In
+    //------------------------------------------
+    @GetMapping("/home")
+    public String showHome(Model model, HttpServletRequest request, HttpSession session){
+        User currentUser = (User) request.getSession().getAttribute("sessionUser");
+        model.addAttribute("user", currentUser);
+        return "view/homePage";
+    }
 
-
-
+    //------------------------------------------
+    // Account Page
+    //------------------------------------------
+    @GetMapping("/account")
+    public String showAccount(){
+        return "view/accountPage";
+    }
 
 }
