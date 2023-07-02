@@ -45,7 +45,7 @@ public class UsersLogin {
     @PostMapping("/view/registerUser")
     public String registerUser(@ModelAttribute("us") User user){
         service.registerUser(user);
-        return "view/loginPage";
+        return "redirect:/view/login";
     }
 
     //------------------------------------------
