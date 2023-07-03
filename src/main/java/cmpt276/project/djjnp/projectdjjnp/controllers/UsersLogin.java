@@ -45,7 +45,7 @@ public class UsersLogin {
     @PostMapping("/view/registerUser")
     public String registerUser(@ModelAttribute("us") User user){
         service.registerUser(user);
-        return "view/login";
+        return "view/loginPage";
     }
 
     //------------------------------------------
@@ -76,7 +76,15 @@ public class UsersLogin {
             request.getSession().setAttribute("sessionUser", newUser);
             model.addAttribute("user", newUser);
             System.out.println("~~~ Creating new session for email: " + newUser.getEmail() + " ~~~\n~~~ Session ID: " + request.getSession().getId() + " ~~~");
-            return "redirect:/home";
+           
+            // Checks if ADMIN account
+            if(newUser.getEmail().equals("adminEmail")){
+                return "redirect:/accountAdmin";
+            }
+            else{
+                return "redirect:/home";
+            }
+           
         }
     }
 
@@ -89,6 +97,9 @@ public class UsersLogin {
         return "redirect:/view/login";
     }
 
+
+
+
     //------------------------------------------
     // Home Page After Logging In
     //------------------------------------------
@@ -99,12 +110,42 @@ public class UsersLogin {
         return "view/homePage";
     }
 
+
+
     //------------------------------------------
     // Account Page
     //------------------------------------------
     @GetMapping("/account")
-    public String showAccount(){
-        return "view/accountPage";
+    public String showAccount(Model model, HttpServletRequest request, HttpSession session){
+        User currentUser = (User) request.getSession().getAttribute("sessionUser");
+        model.addAttribute("user", currentUser);
+        
+        // Checks if ADMIN account else REGULAR user
+        if(currentUser.getEmail().equals("adminEmail")){
+            List<User> users = userRepo.findAll();
+            model.addAttribute("us", users);
+            return "view/accountAdminPage";
+        }
+        else{
+            return "view/accountPage";
+        }
+
+        
+    
+    }
+
+
+
+    
+    //------------------------------------------
+    // Admin Account Page
+    //------------------------------------------
+    @GetMapping("/accountAdmin")
+    public String showAdminAccount(Model model){
+        //Get all users from database
+        List<User> users = userRepo.findAll();
+        model.addAttribute("us", users);
+        return "view/accountAdminPage";
     }
 
 }
