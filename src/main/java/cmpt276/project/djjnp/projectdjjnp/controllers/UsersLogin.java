@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import cmpt276.project.djjnp.projectdjjnp.models.User;
 import cmpt276.project.djjnp.projectdjjnp.models.UserRepository;
@@ -29,6 +30,11 @@ public class UsersLogin {
 
     @Autowired(required = true)
     private UserRepository userRepo;
+
+    @GetMapping("/")
+    public RedirectView homeRedirect(){
+        return new RedirectView("view/login");
+    }
 
     //------------------------------------------
     // Registration Mapping
