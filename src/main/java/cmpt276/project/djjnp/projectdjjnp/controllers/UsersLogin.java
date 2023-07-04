@@ -66,6 +66,7 @@ public class UsersLogin {
         }
     }
 
+    
     //------------------------------------------
     // Login Mapping
     //------------------------------------------
@@ -106,6 +107,8 @@ public class UsersLogin {
         }
     }
 
+
+
     //------------------------------------------
     // Logout Mapping
     //------------------------------------------
@@ -115,11 +118,12 @@ public class UsersLogin {
         return "redirect:/view/login";
     }
 
+
     //------------------------------------------
     // Delete Mapping
     //------------------------------------------
     @GetMapping("/delete/{uid}")
-    public String deleteAdminView(@PathVariable String uid, HttpServletRequest request){
+    public String deleteAdminView(@PathVariable String uid, HttpServletRequest request, @RequestParam Map<String,String> formData, @ModelAttribute("us") User user){
 
         int id = Integer.parseInt(uid);
         User u = userRepo.findById(id).get();
@@ -177,6 +181,8 @@ public class UsersLogin {
     
     }
     
+
+
     //------------------------------------------
     // Admin Account Page
     //------------------------------------------

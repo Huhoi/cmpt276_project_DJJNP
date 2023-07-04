@@ -11,8 +11,8 @@
 	<groupId>cmpt276.project.djjnp</groupId>
 	<artifactId>projectdjjnp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>assignment2</name>
-	<description>Assignment 2</description>
+	<name>projectdjjnp</name>
+	<description>projectdjjnp</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
