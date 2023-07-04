@@ -43,9 +43,27 @@ public class UsersLogin {
     }
 
     @PostMapping("/view/registerUser")
-    public String registerUser(@ModelAttribute("us") User user){
-        service.registerUser(user);
-        return "redirect:/view/login";
+    public String registerUser(@ModelAttribute("us") User user, Model model, @RequestParam Map<String,String> formData){
+        
+        String userEmail = formData.get("email");
+        
+        List<User> userList = userRepo.findByEmail(userEmail);
+        // model.addAttribute("us", users);
+
+
+        if(userList.isEmpty()){
+            return "redirect:/view/register";
+        }
+        else{
+            
+            service.registerUser(user);
+            return "redirect:/view/login";
+        }
+        
+
+        
+
+        
     }
 
     
