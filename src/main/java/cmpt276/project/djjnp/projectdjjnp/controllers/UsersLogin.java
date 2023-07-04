@@ -106,10 +106,7 @@ public class UsersLogin {
         int id = Integer.parseInt(uid);
         User u = userRepo.findById(id).get();
 
-        System.out.println("~~~ Deleting session for email: " + u.getEmail() + " ~~~\n~~~ Session ID: " + request.getSession().getId() + " ~~~");
-
         userRepo.delete(u);
-        request.getSession().invalidate();
         
         return "redirect:/accountAdmin";
 
