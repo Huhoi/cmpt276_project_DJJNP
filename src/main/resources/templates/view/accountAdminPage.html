@@ -48,15 +48,22 @@
                 User Accounts
             </tr>
 
-            <tr th:each ="user:${us}">
+            <tr th:each ="user,rStat:${us}" th:if="${rStat.count} &gt; 1">
                 <td th:text="${user.email}" class="userEmail"></td>
                 <div></div>
                 <td>
-                    <a class="btn btn-danger" 
+                    <a th:href="@{'/delete/{uid}'(uid=${user.uid})}"
+                    class="btn btn-danger" 
                     id="deleteButton" 
                     role="button">
                     DELETE
                     </a>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="logoutContainer">
+                    <button type="button" th:onclick="|window.location.href='/logout'|" id="logoutButton">Log Out</button>
                 </td>
             </tr>
 
