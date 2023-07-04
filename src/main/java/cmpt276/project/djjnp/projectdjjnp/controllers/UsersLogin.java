@@ -48,6 +48,7 @@ public class UsersLogin {
         return "redirect:/view/login";
     }
 
+    
     //------------------------------------------
     // Login Mapping
     //------------------------------------------
@@ -87,6 +88,8 @@ public class UsersLogin {
            
         }
     }
+
+
 
     //------------------------------------------
     // Logout Mapping
@@ -129,14 +132,11 @@ public class UsersLogin {
         else{
             return "view/accountPage";
         }
-
-        
-    
+            
     }
-
-
-
     
+
+
     //------------------------------------------
     // Admin Account Page
     //------------------------------------------

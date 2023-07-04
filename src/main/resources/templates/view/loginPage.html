@@ -19,7 +19,7 @@
                 class="form-control form-control-lg" 
                 th:field="*{email}"
                 placeholder="Email" 
-                required pattern="\S(.*\S)?" 
+                required
                 title="Check White Spaces (Start/End)"
                 >
             </div>
@@ -31,7 +31,7 @@
                 class="form-control form-control-lg" 
                 th:field="*{password}"
                 placeholder="Password" 
-                required pattern="\S(.*\S)?" 
+                required 
                 title="Check White Spaces (Start/End)"
                 >
             </div>
@@ -48,9 +48,6 @@
 
         </form>
         <a href="/view/register">Register Now!</a>
-
-       
-        
 
     </div>
 
