@@ -50,7 +50,12 @@
             </tr>
             <tr>
                 <td class="deleteContainer">
-                    <button type="button" id="deleteAccountButton">Delete Account</button>
+                    <a th:href="@{'/deleteUser/{uid}'(uid=${user.uid})}"
+                    class="btn btn-danger" 
+                    id="deleteAccountButton" 
+                    role="button">
+                    Delete Account
+                    </a>
                 </td>
             </tr>
         </table>

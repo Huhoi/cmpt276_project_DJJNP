@@ -97,8 +97,38 @@ public class UsersLogin {
         return "redirect:/view/login";
     }
 
+    //------------------------------------------
+    // Delete Mapping
+    //------------------------------------------
+    @GetMapping("/delete/{uid}")
+    public String deleteAdminView(@PathVariable String uid, HttpServletRequest request){
 
+        int id = Integer.parseInt(uid);
+        User u = userRepo.findById(id).get();
 
+        System.out.println("~~~ Deleting session for email: " + u.getEmail() + " ~~~\n~~~ Session ID: " + request.getSession().getId() + " ~~~");
+
+        userRepo.delete(u);
+        request.getSession().invalidate();
+        
+        return "redirect:/accountAdmin";
+
+    }
+
+    @GetMapping("/deleteUser/{uid}")
+    public String deleteUser(@PathVariable String uid, HttpServletRequest request){
+
+        int id = Integer.parseInt(uid);
+        User u = userRepo.findById(id).get();
+
+        System.out.println("~~~ Deleting session for email: " + u.getEmail() + " ~~~\n~~~ Session ID: " + request.getSession().getId() + " ~~~");
+
+        userRepo.delete(u);
+        request.getSession().invalidate();
+
+        return "redirect:/view/login";
+
+    }
 
     //------------------------------------------
     // Home Page After Logging In
@@ -121,7 +151,7 @@ public class UsersLogin {
         model.addAttribute("user", currentUser);
         
         // Checks if ADMIN account else REGULAR user
-        if(currentUser.getEmail().equals("adminEmail")){
+        if(currentUser.getPassword().equals("adminPass")){
             List<User> users = userRepo.findAll();
             model.addAttribute("us", users);
             return "view/accountAdminPage";
@@ -129,13 +159,8 @@ public class UsersLogin {
         else{
             return "view/accountPage";
         }
-
-        
     
     }
-
-
-
     
     //------------------------------------------
     // Admin Account Page
