@@ -43,9 +43,21 @@ public class UsersLogin {
     }
 
     @PostMapping("/view/registerUser")
-    public String registerUser(@ModelAttribute("us") User user){
-        service.registerUser(user);
-        return "view/loginPage";
+    public String registerUser(@RequestParam Map<String,String> formData, Model model, HttpServletRequest request, HttpSession session, @ModelAttribute("us") User user){
+        String userEmail = formData.get("email");
+
+        List<User> userList = userRepo.findByEmail(userEmail);
+
+        if (userList.isEmpty()){
+            String userPass = formData.get("password");
+            user.setEmail(userEmail);
+            user.setPassword(userPass);
+            service.registerUser(user);
+            return "redirect:/view/login";
+        }
+        else{
+            return "redirect:/view/register";
+        }
     }
 
     //------------------------------------------
