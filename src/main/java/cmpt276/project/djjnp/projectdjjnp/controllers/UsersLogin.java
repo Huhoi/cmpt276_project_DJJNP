@@ -100,16 +100,24 @@ public class UsersLogin {
         return "redirect:/view/login";
     }
 
+
     //------------------------------------------
     // Delete Mapping
     //------------------------------------------
     @GetMapping("/delete/{uid}")
-    public String deleteAdminView(@PathVariable String uid, HttpServletRequest request){
+    public String deleteAdminView(@PathVariable String uid, HttpServletRequest request, @RequestParam Map<String,String> formData, @ModelAttribute("us") User user){
 
         int id = Integer.parseInt(uid);
         User u = userRepo.findById(id).get();
 
         System.out.println("~~~ Deleting session for email: " + u.getEmail() + " ~~~\n~~~ Session ID: " + request.getSession().getId() + " ~~~");
+
+        String userEmail = formData.get("email");
+        String userPassword = formData.get("password");
+
+        List<User> userList = userRepo.findByEmailAndPassword(userEmail, userPassword);
+
+
 
         userRepo.delete(u);
         request.getSession().invalidate();
@@ -162,11 +170,7 @@ public class UsersLogin {
         else{
             return "view/accountPage";
         }
-<<<<<<< HEAD
-            
-=======
     
->>>>>>> 6987db164262382b96cc181feefa222afe4a55fa
     }
     
 
