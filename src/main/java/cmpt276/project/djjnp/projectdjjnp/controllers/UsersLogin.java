@@ -159,6 +159,17 @@ public class UsersLogin {
         return "view/homePage";
     }
 
+    //------------------------------------------
+    // Calendar Page
+    //------------------------------------------
+    @GetMapping("/calendar")
+    public String showCalendar(Model model, HttpServletRequest request, HttpSession session){
+        User currentUser = (User) request.getSession().getAttribute("sessionUser");
+        model.addAttribute("user", currentUser);
+        return "view/calendarPage";
+    
+    }
+
 
 
     //------------------------------------------
