@@ -32,7 +32,7 @@ public class UsersLogin {
     private UserRepository userRepo;
 
     @GetMapping("/")
-    public RedirectView homeRedirect(){
+    public RedirectView homeRedirect() {
         return new RedirectView("view/login");
     }
 
@@ -40,7 +40,7 @@ public class UsersLogin {
     // Registration Mapping
     //------------------------------------------
     @GetMapping("/view/register")
-    public String register(Model model){
+    public String register(Model model) {
         
         User users = new User();
         model.addAttribute("us", users);
@@ -49,19 +49,19 @@ public class UsersLogin {
     }
 
     @PostMapping("/view/registerUser")
-    public String registerUser(@RequestParam Map<String,String> formData, Model model, HttpServletRequest request, HttpSession session, @ModelAttribute("us") User user){
+    public String registerUser(@RequestParam Map<String,String> formData, Model model, HttpServletRequest request, HttpSession session, @ModelAttribute("us") User user) {
         String userEmail = formData.get("email");
 
         List<User> userList = userRepo.findByEmail(userEmail);
 
-        if (userList.isEmpty()){
+        if (userList.isEmpty()) {
             String userPass = formData.get("password");
             user.setEmail(userEmail);
             user.setPassword(userPass);
             service.registerUser(user);
             return "redirect:/view/login";
         }
-        else{
+        else {
             return "redirect:/view/register";
         }
     }
@@ -71,14 +71,14 @@ public class UsersLogin {
     // Login Mapping
     //------------------------------------------
     @GetMapping("/view/login")
-    public String login(Model model, HttpServletRequest request, HttpSession session){
+    public String login(Model model, HttpServletRequest request, HttpSession session) {
         User users = new User();
         model.addAttribute("us", users);
         return "view/loginPage";
     }
 
     @PostMapping("/view/loginUser")
-    public String loginUser(@RequestParam Map<String,String> formData, Model model, HttpServletRequest request, HttpSession session, @ModelAttribute("us") User user){
+    public String loginUser(@RequestParam Map<String,String> formData, Model model, HttpServletRequest request, HttpSession session, @ModelAttribute("us") User user) {
         System.out.println(user.getEmail());
         System.out.println(user.getPassword());
         
@@ -97,10 +97,10 @@ public class UsersLogin {
             System.out.println("~~~ Creating new session for email: " + newUser.getEmail() + " ~~~\n~~~ Session ID: " + request.getSession().getId() + " ~~~");
            
             // Checks if ADMIN account
-            if(newUser.getEmail().equals("adminEmail")){
+            if(newUser.getEmail().equals("adminEmail")) {
                 return "redirect:/accountAdmin";
             }
-            else{
+            else {
                 return "redirect:/home";
             }
            
@@ -118,12 +118,11 @@ public class UsersLogin {
         return "redirect:/view/login";
     }
 
-
     //------------------------------------------
     // Delete Mapping
     //------------------------------------------
     @GetMapping("/delete/{uid}")
-    public String deleteAdminView(@PathVariable String uid, HttpServletRequest request, @RequestParam Map<String,String> formData, @ModelAttribute("us") User user){
+    public String deleteAdminView(@PathVariable String uid, HttpServletRequest request, @RequestParam Map<String,String> formData, @ModelAttribute("us") User user) {
 
         int id = Integer.parseInt(uid);
         User u = userRepo.findById(id).get();
@@ -135,7 +134,7 @@ public class UsersLogin {
     }
 
     @GetMapping("/deleteUser/{uid}")
-    public String deleteUser(@PathVariable String uid, HttpServletRequest request){
+    public String deleteUser(@PathVariable String uid, HttpServletRequest request) {
 
         int id = Integer.parseInt(uid);
         User u = userRepo.findById(id).get();
@@ -146,14 +145,13 @@ public class UsersLogin {
         request.getSession().invalidate();
 
         return "redirect:/view/login";
-
     }
 
     //------------------------------------------
     // Home Page After Logging In
     //------------------------------------------
     @GetMapping("/home")
-    public String showHome(Model model, HttpServletRequest request, HttpSession session){
+    public String showHome(Model model, HttpServletRequest request, HttpSession session) {
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         model.addAttribute("user", currentUser);
         return "view/homePage";
@@ -163,42 +161,45 @@ public class UsersLogin {
     // Calendar Page
     //------------------------------------------
     @GetMapping("/calendar")
-    public String showCalendar(Model model, HttpServletRequest request, HttpSession session){
+    public String showCalendar(Model model, HttpServletRequest request, HttpSession session) {
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         model.addAttribute("user", currentUser);
         return "view/calendarPage";
-    
     }
 
-
+    //------------------------------------------
+    // Display Page
+    //------------------------------------------
+    @GetMapping("/display")
+    public String showMap(Model model, HttpServletRequest request, HttpSession session) {
+        // get info from database to display on map/list
+        return "view/displayPage";
+    }
 
     //------------------------------------------
     // Account Page
     //------------------------------------------
     @GetMapping("/account")
-    public String showAccount(Model model, HttpServletRequest request, HttpSession session){
+    public String showAccount(Model model, HttpServletRequest request, HttpSession session) {
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         model.addAttribute("user", currentUser);
         
         // Checks if ADMIN account else REGULAR user
-        if(currentUser.getPassword().equals("adminPass")){
+        if(currentUser.getPassword().equals("adminPass")) {
             List<User> users = userRepo.findAll();
             model.addAttribute("us", users);
             return "view/accountAdminPage";
         }
-        else{
+        else {
             return "view/accountPage";
         }
-    
     }
-    
-
 
     //------------------------------------------
     // Admin Account Page
     //------------------------------------------
     @GetMapping("/accountAdmin")
-    public String showAdminAccount(Model model){
+    public String showAdminAccount(Model model) {
         //Get all users from database
         List<User> users = userRepo.findAll();
         model.addAttribute("us", users);
