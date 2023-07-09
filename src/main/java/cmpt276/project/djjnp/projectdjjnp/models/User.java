@@ -38,7 +38,6 @@ public class User {
     public void setUid(int uid) {
         this.uid = uid;
     }
-
     
     
 }
