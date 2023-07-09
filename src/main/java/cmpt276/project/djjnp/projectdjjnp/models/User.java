@@ -1,5 +1,7 @@
 package cmpt276.project.djjnp.projectdjjnp.models;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 
 
@@ -12,6 +14,7 @@ public class User {
     private int uid;
     private String email;
     private String password;
+    private List<Event> events;
 
     public User(){}
     public User(String email, String password){
@@ -37,6 +40,20 @@ public class User {
     }
     public void setUid(int uid) {
         this.uid = uid;
+    }
+    public List<Event> getAllEvents() {
+        return events;
+    }
+    public void addEvent(Event event) {
+        events.add(event);
+    }
+    public void removeEvent(Event event){
+        for (int i = 0; i < events.size(); i++){
+            if (event.equals(events.get(i))){
+                events.remove(i);
+                return;
+            }
+        }
     }
 
     
