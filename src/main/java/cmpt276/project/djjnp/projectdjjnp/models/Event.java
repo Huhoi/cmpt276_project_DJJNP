@@ -1,35 +1,48 @@
-// package cmpt276.project.djjnp.projectdjjnp.models;
-// import java.time.LocalDateTime;
+package cmpt276.project.djjnp.projectdjjnp.models;
 
-// public class Event {
-//     private String eventName; //replace with location/event from map API
-//     private LocalDateTime date;
+import jakarta.persistence.*;
 
-//     public Event(){}
+@Entity
+@Table(name = "events")
+public class Event {
+    @Id
+    private int uid;
+    private String eventName; // replace with location/event from map API
+    private int date;
 
-//     public Event(String eventName, LocalDateTime date){
-//         this.eventName = eventName;
-//         this.date = date;
-//     }
+    public Event() {
+    }
 
-//     public String getEventName() {
-//         return eventName;
-//     }
-//     public void setEventName(String eventName) {
-//         this.eventName = eventName;
-//     }
-//     public LocalDateTime getDate() {
-//         return date;
-//     }
-//     public void setDate(LocalDateTime date) {
-//         this.date = date;
-//     }
-//     public boolean equals(Event event){
-//         if (event.getEventName().equals(this.eventName) && event.getDate().equals(this.date)){
-//             return true;
-//         }
-//         else{
-//             return false;
-//         }
-//     }
-// }
+    public Event(int uid, String eventName, int date) {
+        this.uid = uid;
+        this.eventName = eventName;
+    }
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
+
+   
+    public int getDate() {
+        return date;
+    }
+
+    public void setDate(int date) {
+        this.date = date;
+    }
+
+}
+
