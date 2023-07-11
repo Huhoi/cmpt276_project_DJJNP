@@ -20,6 +20,7 @@ import cmpt276.project.djjnp.projectdjjnp.models.UserRepository;
 import cmpt276.project.djjnp.projectdjjnp.service.UserService;
 import cmpt276.project.djjnp.projectdjjnp.service.UserServiceImplementation;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -71,9 +72,15 @@ public class UsersLogin {
     // Login Mapping
     //------------------------------------------
     @GetMapping("/view/login")
-    public String login(Model model, HttpServletRequest request, HttpSession session){
+    public String login(Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response){
         User users = new User();
         model.addAttribute("us", users);
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setDateHeader("Expires", 0); // Proxies.
+        if(request.getSession().getAttribute("sessionUser") != null){
+            return "redirect:/home";
+        }
         return "view/loginPage";
     }
 
@@ -113,8 +120,15 @@ public class UsersLogin {
     // Logout Mapping
     //------------------------------------------
     @GetMapping("/logout")
-    public String destroySession(HttpServletRequest request) {
+    public String destroySession(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setDateHeader("Expires", 0); // Proxies.
+        request.getSession().removeAttribute("sessionUser");
         request.getSession().invalidate();
+        if(request.getSession().getAttribute("sessionUser") == null){
+            return "redirect:/view/login";
+        }
         return "redirect:/view/login";
     }
 
@@ -153,10 +167,37 @@ public class UsersLogin {
     // Home Page After Logging In
     //------------------------------------------
     @GetMapping("/home")
-    public String showHome(Model model, HttpServletRequest request, HttpSession session){
+    public String showHome(Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response){
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setDateHeader("Expires", 0); // Proxies.
+
+        if(request.getSession().getAttribute("sessionUser") == null){
+            return "redirect:/view/login";
+        }
+
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         model.addAttribute("user", currentUser);
         return "view/homePage";
+    }
+
+    //------------------------------------------
+    // Calendar Page
+    //------------------------------------------
+    @GetMapping("/calendar")
+    public String showCalendar(Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response){
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setDateHeader("Expires", 0); // Proxies.
+
+        if(request.getSession().getAttribute("sessionUser") == null){
+            return "redirect:/view/login";
+        }
+
+        User currentUser = (User) request.getSession().getAttribute("sessionUser");
+        model.addAttribute("user", currentUser);
+        return "view/calendarPage";
+    
     }
 
 
@@ -165,7 +206,15 @@ public class UsersLogin {
     // Account Page
     //------------------------------------------
     @GetMapping("/account")
-    public String showAccount(Model model, HttpServletRequest request, HttpSession session){
+    public String showAccount(Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response){
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setDateHeader("Expires", 0); // Proxies.
+
+        if(request.getSession().getAttribute("sessionUser") == null){
+            return "redirect:/view/login";
+        }
+
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         model.addAttribute("user", currentUser);
         
@@ -187,7 +236,14 @@ public class UsersLogin {
     // Admin Account Page
     //------------------------------------------
     @GetMapping("/accountAdmin")
-    public String showAdminAccount(Model model){
+    public String showAdminAccount(Model model, HttpServletResponse response, HttpServletRequest request){
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setDateHeader("Expires", 0); // Proxies.
+        
+        if(request.getSession().getAttribute("sessionUser") == null){
+            return "redirect:/view/login";
+        }
         //Get all users from database
         List<User> users = userRepo.findAll();
         model.addAttribute("us", users);
