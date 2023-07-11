@@ -2,7 +2,6 @@ package cmpt276.project.djjnp.projectdjjnp.models;
 
 import jakarta.persistence.*;
 
-
 @Entity
 @Table(name = "events")
 public class Event {
@@ -46,3 +45,4 @@ public class Event {
     }
 
 }
+
