@@ -216,9 +216,9 @@ public class UsersLogin {
         response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
         response.setDateHeader("Expires", 0); // Proxies.
 
-        if(request.getSession().getAttribute("sessionUser") == null){
+        if (request.getSession().getAttribute("sessionUser") == null) {
             return "redirect:/view/login";
-          
+        }
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         model.addAttribute("user", currentUser);
         
