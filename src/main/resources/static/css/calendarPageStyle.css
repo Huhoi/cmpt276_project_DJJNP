@@ -1,6 +1,6 @@
 #caledarContainer{
     position: relative;
-    left: 1000px;
+    left: 500px;
 }
 
 
@@ -56,6 +56,10 @@
 
 #container {
     width: 770px;
+    position: relative;
+    top: 15px;
+    right: 225px;
+    
 }
 
 #monthDisplay{
@@ -155,6 +159,14 @@
     box-shadow: 0px 0px 3px gray;
 }
 
+#timeBegin, #timeEnd{
+    box-sizing: border-box;
+    box-shadow: 0px 0px 3px gray;
+    outline: none;
+    border: none;
+    font-family: sans-serif;
+}
+
 #eventTitleInput.error {
     border: 2px solid red;
 }
@@ -165,6 +177,7 @@
 
 #saveButton, #closeButton {
     background-color: #92a1d1;
+    width: 56px;
 }
 
 #eventText {
@@ -180,4 +193,13 @@
     height: 100vh;
     position: absolute;
     background-color: rgba(0,0,0,0.8);
+}
+
+/* Schedule Display */
+
+#scheduleContainer{
+    width: 400px;
+    position: relative;
+    left: 1250px;
+    bottom: 750px;
 }

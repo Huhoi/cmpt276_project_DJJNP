@@ -46,6 +46,7 @@
         </table>
         
     </div>
+
     <!-- Calendar  -->
     <div id="calendarContainer">
         <div id="container">
@@ -74,7 +75,6 @@
     
     <div id="newEventModal">
         <h2>New Event</h2>
-        
             <form action="/calendar/add" method="post">
                 <input id="eventTitleInput"
                     name ="eventTitleInput" 
@@ -91,6 +91,8 @@
                     
                 />
                 <select name="timeBegin" id="timeBegin" required >
+                    <option value="" disabled selected>Begin</option>
+
                     <option value="0000">12:00am</option>
                     <option value="0030">12:30am</option>
                     <option value="0100">1:00am</option>
@@ -152,7 +154,9 @@
                     <option value="2330">11:30pm</option>
                 </select>
 
-                <select name="timeEnd" id="timeEnd" required > 
+                <select name="timeEnd" id="timeEnd" onclick="timeCheck()" required > 
+                    <option value="" disabled selected>End</option>
+
                     <option value="0000">12:00am</option>
                     <option value="0030">12:30am</option>
                     <option value="0100">1:00am</option>
@@ -213,12 +217,9 @@
                     <option value="2300">11:00pm</option>
                     <option value="2330">11:30pm</option>
                 </select>
-
-                
-                <button id="saveButton" type="submit" onclick="timeCheck()">Save</button>
+                <button id="saveButton" type="submit" >Save</button>
                 <button id="cancelButton">Cancel</button>
             </form>
-        
       </div>
   
       <div id="deleteEventModal">
@@ -231,7 +232,18 @@
       </div>
   
       <div id="modalBackDrop"></div>
+      
+      <!-- Schedule -->
+      <div id="scheduleContainer" th:object="${user}">
+        Schedule HEere
+        <div th:object="${event}">
+            <div th:each="event:${event}">
+                <div th:text="${event.date} + ' UID:' + ${event.uid} + 'Event:' +${event.eventName}"></div>
+            </div>
+        </div>
+        
 
+      </div>
       
 
 </body>

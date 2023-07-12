@@ -136,11 +136,16 @@ function initButtons() {
 }
 
 function timeCheck() {
-  var timeBegin = parseInt(document.getElementById('timeBegin').value);
-  var timeEnd = parseInt(document.getElementById('timeEnd').value);
+  var timeBeginValue = parseInt(document.getElementById('timeBegin').value);
+  var timeEndValue = parseInt(document.getElementById('timeEnd').value);
 
-  if (timeBegin > timeEnd) {
+  var timeBegin = document.getElementById('timeBegin');
+  var timeEnd = document.getElementById('timeEnd');
+
+  if (timeBeginValue > timeEndValue) {
     window.alert("Time Error");
+    timeBegin.selectedIndex = 0;
+    timeEnd.selectedIndex = 0;
   }
 
 }

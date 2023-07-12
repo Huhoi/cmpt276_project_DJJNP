@@ -197,12 +197,15 @@ public class UsersLogin {
         }
 
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
+        List<Event> currentUserEvent = eventRepo.findAll();
+
         model.addAttribute("user", currentUser);
+        model.addAttribute("event", currentUserEvent);
 
         return "view/calendarPage";
     }
 
-
+    //Adding From Calendar
     @PostMapping("/calendar/add")
     public String addCalendar(@RequestParam Map<String, String> form, Model model, HttpServletRequest request,
             HttpSession session, HttpServletResponse response) {
