@@ -3,7 +3,6 @@ package cmpt276.project.djjnp.projectdjjnp.controllers;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,10 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
+import cmpt276.project.djjnp.projectdjjnp.models.Event;
 import cmpt276.project.djjnp.projectdjjnp.models.User;
 import cmpt276.project.djjnp.projectdjjnp.models.UserRepository;
+import cmpt276.project.djjnp.projectdjjnp.models.EventRepository;
 import cmpt276.project.djjnp.projectdjjnp.service.UserService;
-import cmpt276.project.djjnp.projectdjjnp.service.UserServiceImplementation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -31,6 +31,9 @@ public class UsersLogin {
 
     @Autowired(required = true)
     private UserRepository userRepo;
+
+    @Autowired(required = true)
+    private EventRepository eventRepo;
 
     @GetMapping("/")
     public RedirectView homeRedirect() {
@@ -184,18 +187,47 @@ public class UsersLogin {
     // Calendar Page
     //------------------------------------------
     @GetMapping("/calendar")
-    public String showCalendar(Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response){
+    public String showCalendar(Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) {
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
         response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
         response.setDateHeader("Expires", 0); // Proxies.
 
-        if(request.getSession().getAttribute("sessionUser") == null){
+        if (request.getSession().getAttribute("sessionUser") == null) {
             return "redirect:/view/login";
         }
+
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         model.addAttribute("user", currentUser);
+
         return "view/calendarPage";
     }
+
+
+    @PostMapping("/calendar/add")
+    public String addCalendar(@RequestParam Map<String, String> form, Model model, HttpServletRequest request,
+            HttpSession session, HttpServletResponse response) {
+        //Saves Event
+        User currentUser = (User) request.getSession().getAttribute("sessionUser");
+        model.addAttribute("user", currentUser);
+
+        int id = currentUser.getUid();
+        String event = form.get("eventTitleInput");
+        int timeBegin = Integer.parseInt(form.get("timeBegin"));
+        int timeEnd = Integer.parseInt(form.get("timeEnd"));
+        String date = form.get("dateInput");
+        
+        System.out.println("Event: " + event);
+        System.out.println("Date: " + date);
+        System.out.println("time: " + timeBegin);
+        System.out.println("time: " + timeEnd);
+
+                
+        eventRepo.save(new Event(id, event, timeBegin, timeEnd, date));
+
+        return "redirect:/calendar";
+    }
+    
+
 
     //------------------------------------------
     // Display Page
@@ -242,7 +274,7 @@ public class UsersLogin {
         response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
         response.setDateHeader("Expires", 0); // Proxies.
         
-        if(request.getSession().getAttribute("sessionUser") == null){
+        if (request.getSession().getAttribute("sessionUser") == null) {
             return "redirect:/view/login";
         }
         //Get all users from database

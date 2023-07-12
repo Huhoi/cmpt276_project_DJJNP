@@ -90,7 +90,7 @@ function closeModal() {
   newEventModal.style.display = 'none';
   deleteEventModal.style.display = 'none';
   backDrop.style.display = 'none';
-  eventTitleInput.value = '';
+  //eventTitleInput.value = '';
   clicked = null;
   load();
 }
@@ -104,7 +104,7 @@ function saveEvent() {
       title: eventTitleInput.value,
     });
 
-    localStorage.setItem('events', JSON.stringify(events));
+    // localStorage.setItem('events', JSON.stringify(events)); Adds event to calendar
     closeModal();
   } else {
     eventTitleInput.classList.add('error');
@@ -135,8 +135,16 @@ function initButtons() {
 
 }
 
+function timeCheck() {
+  var timeBegin = parseInt(document.getElementById('timeBegin').value);
+  var timeEnd = parseInt(document.getElementById('timeEnd').value);
+
+  if (timeBegin > timeEnd) {
+    window.alert("Time Error");
+  }
+
+}
 
 initButtons();
 load();
-
 
