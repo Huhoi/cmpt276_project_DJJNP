@@ -234,13 +234,34 @@
       <div id="modalBackDrop"></div>
       
       <!-- Schedule -->
-      <div id="scheduleContainer" th:object="${user}">
+      <div id="scheduleContainer" >
         Schedule HEere
-        <div th:object="${event}">
-            <div th:each="event:${event}">
-                <div th:text="${event.date} + ' UID:' + ${event.uid} + 'Event:' +${event.eventName}"></div>
-            </div>
-        </div>
+
+        <table>
+            <tr>
+                <td>TODO</td>
+                <td>Time</td>
+                <td>Date</td>
+            </tr>
+
+            <tr th:each="event:${event}" th:if="${event.uid} == ${user.uid}" id="eventList" >
+                <td th:text="'Event: ' + ${event.eventName}"></td>
+                <td th:text="'Time: ' + ${event.timeBegin} + '->' + ${event.timeEnd}"></td>
+                <td th:text="'Date: ' + ${event.date}"></td>
+            </tr>
+
+        </table>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            
+
+
+            /*]]>*/
+        </script>
+        
+                
+                
+
         
 
       </div>
