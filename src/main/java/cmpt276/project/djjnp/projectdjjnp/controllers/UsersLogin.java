@@ -230,14 +230,13 @@ public class UsersLogin {
         String event = form.get("eventTitleInput");
         int timeBegin = Integer.parseInt(form.get("timeBegin"));
         int timeEnd = Integer.parseInt(form.get("timeEnd"));
-        String date = form.get("dateInput");
+        String date = form.get("selectedDate");
         
         System.out.println("Event: " + event);
         System.out.println("Date: " + date);
         System.out.println("time: " + timeBegin);
         System.out.println("time: " + timeEnd);
 
-                
         eventRepo.save(new Event(id, event, timeBegin, timeEnd, date));
 
         return "redirect:/calendar";
