@@ -1,6 +1,7 @@
 package cmpt276.project.djjnp.projectdjjnp.controllers;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -198,6 +199,18 @@ public class UsersLogin {
 
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         List<Event> currentUserEvent = eventRepo.findAll();
+
+        //Sort the list by chronological order
+        Collections.sort(currentUserEvent, (e1, e2) -> {
+            //Compare date
+            int sameDate = e1.getDate().compareTo(e2.getDate());
+            if (sameDate != 0){
+                return sameDate;
+            }
+            //Compare start time if events are the same date
+            return e1.getTimeBegin() - e2.getTimeBegin();
+        });
+
 
         model.addAttribute("user", currentUser);
         model.addAttribute("event", currentUserEvent);
