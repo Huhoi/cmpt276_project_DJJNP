@@ -15,6 +15,7 @@ const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frida
 
 function openModal(date) {
   clicked = date;
+  document.getElementById('selectedDate').value = date;
 
   const eventForDay = events.find(e => e.date === clicked);
 
@@ -90,7 +91,7 @@ function closeModal() {
   newEventModal.style.display = 'none';
   deleteEventModal.style.display = 'none';
   backDrop.style.display = 'none';
-  eventTitleInput.value = '';
+  //eventTitleInput.value = '';
   clicked = null;
   load();
 }
@@ -104,7 +105,7 @@ function saveEvent() {
       title: eventTitleInput.value,
     });
 
-    localStorage.setItem('events', JSON.stringify(events));
+    // localStorage.setItem('events', JSON.stringify(events)); Adds event to calendar
     closeModal();
   } else {
     eventTitleInput.classList.add('error');
@@ -135,8 +136,23 @@ function initButtons() {
 
 }
 
+function timeCheck() {
+  var timeBeginValue = parseInt(document.getElementById('timeBegin').value);
+  var timeEndValue = parseInt(document.getElementById('timeEnd').value);
+
+  var timeBegin = document.getElementById('timeBegin');
+  var timeEnd = document.getElementById('timeEnd');
+
+  if (timeBeginValue > timeEndValue) {
+    window.alert("Time Error");
+    timeBegin.selectedIndex = 0;
+    timeEnd.selectedIndex = 0;
+  }
+
+}
+
+
 
 initButtons();
 load();
-
 

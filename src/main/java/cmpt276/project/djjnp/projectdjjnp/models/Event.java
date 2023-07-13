@@ -5,17 +5,27 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "events")
 public class Event {
+    
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int sid;
     private int uid;
     private String eventName; // replace with location/event from map API
-    private int date;
+    private String date;
+    private int timeBegin;
+    private int timeEnd;
+    
+    
 
     public Event() {
     }
 
-    public Event(int uid, String eventName, int date) {
+    public Event(int uid, String eventName, int timeBegin, int timeEnd, String date) {
         this.uid = uid;
         this.eventName = eventName;
+        this.timeBegin = timeBegin;
+        this.timeEnd = timeEnd;
+        this.date = date;
     }
 
     public String getEventName() {
@@ -25,7 +35,38 @@ public class Event {
     public void setEventName(String eventName) {
         this.eventName = eventName;
     }
+   
+    public int getTimeBegin() {
+        return timeBegin;
+    }
 
+    public void setTimeBegin(int timeBegin) {
+        this.timeBegin = timeBegin;
+    }
+
+    public int getTimeEnd() {
+        return timeEnd;
+    }
+
+    public void setTimeEnd(int timeEnd) {
+        this.timeEnd = timeEnd;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public int getSid() {
+        return sid;
+    }
+
+    public void setSid(int sid) {
+        this.sid = sid;
+    }
 
     public int getUid() {
         return uid;
@@ -35,14 +76,9 @@ public class Event {
         this.uid = uid;
     }
 
-   
-    public int getDate() {
-        return date;
-    }
+    
 
-    public void setDate(int date) {
-        this.date = date;
-    }
+   
 
 }
 

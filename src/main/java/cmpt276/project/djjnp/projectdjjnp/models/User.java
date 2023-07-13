@@ -1,7 +1,5 @@
 package cmpt276.project.djjnp.projectdjjnp.models;
 
-import java.util.List;
-
 import jakarta.persistence.*;
 
 
