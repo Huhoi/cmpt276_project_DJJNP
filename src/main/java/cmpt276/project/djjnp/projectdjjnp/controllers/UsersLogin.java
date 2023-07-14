@@ -1,7 +1,9 @@
 package cmpt276.project.djjnp.projectdjjnp.controllers;
 
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -221,7 +223,7 @@ public class UsersLogin {
     //Adding From Calendar
     @PostMapping("/calendar/add")
     public String addCalendar(@RequestParam Map<String, String> form, Model model, HttpServletRequest request,
-            HttpSession session, HttpServletResponse response) {
+            HttpSession session, HttpServletResponse response) throws Exception{
         //Saves Event
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         model.addAttribute("user", currentUser);
@@ -230,7 +232,9 @@ public class UsersLogin {
         String event = form.get("eventTitleInput");
         int timeBegin = Integer.parseInt(form.get("timeBegin"));
         int timeEnd = Integer.parseInt(form.get("timeEnd"));
-        String date = form.get("selectedDate");
+
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        Date date = formatter.parse(form.get("selectedDate"));
         
         
         System.out.println("Event: " + event);
