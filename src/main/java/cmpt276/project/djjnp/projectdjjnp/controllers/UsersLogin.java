@@ -232,6 +232,7 @@ public class UsersLogin {
         int timeEnd = Integer.parseInt(form.get("timeEnd"));
         String date = form.get("selectedDate");
         
+        
         System.out.println("Event: " + event);
         System.out.println("Date: " + date);
         System.out.println("time: " + timeBegin);

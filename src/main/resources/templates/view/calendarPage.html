@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/navigationBarStyle.css">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="/js/calendarPageScript.js" defer></script>
 </head>
 <body>
@@ -84,14 +85,9 @@
                     required 
                 />
                 <input type="hidden" id="selectedDate" name="selectedDate"/>
-                <!--
-                <input id="dateInput"
-                    name ="dateInput" 
-                    type="date" 
-                    placeholder="Date"
-                    class="form-control form-control-lg" 
-                    
-                />-->
+                
+
+
                 <select name="timeBegin" id="timeBegin" required >
                     <option value="" disabled selected>Begin</option>
 
@@ -253,21 +249,11 @@
             </tr>
 
         </table>
-        <script th:inline="javascript">
-            /*<![CDATA[*/
-            
-
-
-            /*]]>*/
-        </script>
-        
-                
-                
 
         
 
       </div>
-      
+    
 
 </body>
 </html>
