@@ -231,6 +231,7 @@ public class UsersLogin {
         String event = form.get("eventTitleInput");
         int timeBegin = Integer.parseInt(form.get("timeBegin"));
         int timeEnd = Integer.parseInt(form.get("timeEnd"));
+        
 
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         Date date = formatter.parse(form.get("selectedDate"));
@@ -247,9 +248,9 @@ public class UsersLogin {
     }
 
     //Delete From Event List
-    @PostMapping("/calendar/delete")
-    public String deleteCalendar(@RequestParam Map<String, String> form){
-        eventRepo.deleteById(Integer.parseInt(form.get("deleteEvent")));
+    @GetMapping("/calendar/delete/{sid}")
+    public String deleteCalendar(@PathVariable String sid){
+        eventRepo.deleteById(Integer.parseInt(sid));
         return "redirect:/calendar";
     }
     
