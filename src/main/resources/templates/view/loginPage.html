@@ -10,10 +10,10 @@
 <body>
     <div class="container">
 
-        <h1 class="mb-3">Login</h1>
-        <form th:action="@{/view/loginUser}" th:object="${us}" method="post">
+        <h1 >Login</h1>
+        <form th:action="@{/view/loginUser}" th:object="${us}" method="post" id="loginForm">
             <!-- Email -->
-            <div class="mb-3">
+            <div>
                 <input type="text" 
                 id="emailForm" 
                 class="form-control form-control-lg" 
@@ -25,7 +25,7 @@
             </div>
 
             <!-- Password -->
-            <div class="mb-3">
+            <div>
                 <input type="password" 
                 id="passwordForm" 
                 class="form-control form-control-lg" 
@@ -37,8 +37,8 @@
             </div>
 
             <!-- Login Button-->
-            <div class="d-grid gap-2">
-                <input class="btn btn-outline-secondary" 
+            <div>
+                <input class="btn btn-secondary" 
                     id="loginButton" 
                     type="submit" 
                     value="Login"
@@ -47,7 +47,8 @@
             </div>
 
         </form>
-        <a href="/view/register">Register Now!</a>
+
+        <a href="/view/register">&rarr;Register&larr;</a>
 
     </div>
 
