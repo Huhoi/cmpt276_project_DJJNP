@@ -1,14 +1,23 @@
-#container{
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+/* Container */
+.container{
+    position: relative;
+    right: 150px;
+    top: 150px;
+    width: 30px; 
+
+   
+
     
 }
 
-/*Login Form*/
-#loginForm{
-    width: 30px;
+h1{
+    position: relative;
+    left: 95px;
+    bottom: 15px;
+    
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
 }
+
 
 /*Email / Password Inputs*/
 #emailForm, #passwordForm{
@@ -17,5 +26,26 @@
     border-right: 0px; 
     border-left: 0px;
     border-color: purple;
+    
+    box-shadow: 0px 0px 2px gray;
+
+    margin-top: 10px;
+    margin-bottom: 25px;
+
     width: 300px;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Register HyperLink */
+a{
+    position: relative;
+    top: 10px;
+    width: 100px;
+
+    font: bold;
+    font-family: Arial, Helvetica, sans-serif;
+
+    text-decoration: none;
+   
 }
