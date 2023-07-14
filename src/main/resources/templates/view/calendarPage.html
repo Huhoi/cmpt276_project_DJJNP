@@ -216,6 +216,25 @@
                 </select>
                 <button id="saveButton" type="submit" >Save</button>
                 <button id="cancelButton">Cancel</button>
+
+                    Schedule HEere
+            
+                        <table>
+                            <tr>
+                                <td>TODO</td>
+                                <td>Time</td>
+                                <td>Date</td>
+                            </tr>
+            
+                            <tr th:each="event:${event}" th:if="${event.uid} == ${user.uid}" id="eventList" >
+                                    <td th:text="'Event: ' + ${event.eventName}"></td>
+                                    <td th:text="'Time: ' + ${event.timeBegin} + '->' + ${event.timeEnd}"></td>
+                                    <td th:text="'Date: ' + ${event.date}"></td>
+                                    <td><a th:href="@{'/calendar/delete/{sid}' (sid=${event.sid})}">Delete</a></td>
+                            </tr>
+            
+                        </table>
+
             </form>
       </div>
   
@@ -231,7 +250,7 @@
       <div id="modalBackDrop"></div>
       
       <!-- Schedule -->
-      <div id="scheduleContainer" >
+      <!-- <div id="scheduleContainer" >
         Schedule HEere
 
             <table>
@@ -246,14 +265,15 @@
                         <td th:text="'Event: ' + ${event.eventName}"></td>
                         <td th:text="'Time: ' + ${event.timeBegin} + '->' + ${event.timeEnd}"></td>
                         <td th:text="'Date: ' + ${event.date}"></td>
-                        <input type="hidden" th:value="${event.sid}" id="deleteEvent" name="deleteEvent">
-                        <td><button type="submit">Delete</td>
+                        <td><a th:href="@{'/calendar/delete/{sid}' (sid=${event.sid})}">Delete</a></td>
                     </form>
                 </tr>
 
             </table>
       </div>
     
+      </div> -->
+      
 
 </body>
 </html>
