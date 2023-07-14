@@ -235,13 +235,14 @@ public class UsersLogin {
 
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         Date date = formatter.parse(form.get("selectedDate"));
-        
+        String dateAsString = formatter.format(date);
+ 
         System.out.println("Event: " + event);
         System.out.println("Date: " + date);
         System.out.println("time: " + timeBegin);
         System.out.println("time: " + timeEnd);
 
-        eventRepo.save(new Event(id, event, timeBegin, timeEnd, date));
+        eventRepo.save(new Event(id, event, timeBegin, timeEnd, dateAsString));
 
         return "redirect:/calendar";
     }

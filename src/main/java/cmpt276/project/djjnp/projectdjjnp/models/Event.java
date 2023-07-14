@@ -1,6 +1,5 @@
 package cmpt276.project.djjnp.projectdjjnp.models;
 
-import java.util.Date;
 
 import jakarta.persistence.*;
 
@@ -13,7 +12,7 @@ public class Event {
     private int sid;
     private int uid;
     private String eventName; // replace with location/event from map API
-    private Date date;
+    private String date;
     private int timeBegin;
     private int timeEnd;
     
@@ -22,7 +21,7 @@ public class Event {
     public Event() {
     }
 
-    public Event(int uid, String eventName, int timeBegin, int timeEnd, Date date) {
+    public Event(int uid, String eventName, int timeBegin, int timeEnd, String date) {
         this.uid = uid;
         this.eventName = eventName;
         this.timeBegin = timeBegin;
@@ -54,11 +53,11 @@ public class Event {
         this.timeEnd = timeEnd;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
