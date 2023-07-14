@@ -213,7 +213,6 @@ public class UsersLogin {
             return e1.getTimeBegin() - e2.getTimeBegin();
         });
 
-
         model.addAttribute("user", currentUser);
         model.addAttribute("event", currentUserEvent);
 
@@ -244,6 +243,13 @@ public class UsersLogin {
 
         eventRepo.save(new Event(id, event, timeBegin, timeEnd, dateAsString));
 
+        return "redirect:/calendar";
+    }
+
+    //Delete From Event List
+    @PostMapping("/calendar/delete")
+    public String deleteCalendar(@RequestParam Map<String, String> form){
+        eventRepo.deleteById(Integer.parseInt(form.get("deleteEvent")));
         return "redirect:/calendar";
     }
     
