@@ -234,21 +234,24 @@
       <div id="scheduleContainer" >
         Schedule HEere
 
-        <table>
-            <tr>
-                <td>TODO</td>
-                <td>Time</td>
-                <td>Date</td>
-            </tr>
+            <table>
+                <tr>
+                    <td>TODO</td>
+                    <td>Time</td>
+                    <td>Date</td>
+                </tr>
 
-            <tr th:each="event:${event}" th:if="${event.uid} == ${user.uid}" id="eventList" >
-                <td th:text="'Event: ' + ${event.eventName}"></td>
-                <td th:text="'Time: ' + ${event.timeBegin} + '->' + ${event.timeEnd}"></td>
-                <td th:text="'Date: ' + ${event.date}"></td>
-            </tr>
+                <tr th:each="event:${event}" th:if="${event.uid} == ${user.uid}" id="eventList" >
+                    <form action="/calendar/delete" method="post">
+                        <td th:text="'Event: ' + ${event.eventName}"></td>
+                        <td th:text="'Time: ' + ${event.timeBegin} + '->' + ${event.timeEnd}"></td>
+                        <td th:text="'Date: ' + ${event.date}"></td>
+                        <input type="hidden" th:value="${event.sid}" id="deleteEvent" name="deleteEvent">
+                        <td><button type="submit">Delete</td>
+                    </form>
+                </tr>
 
-        </table>
-
+            </table>
       </div>
     
 
