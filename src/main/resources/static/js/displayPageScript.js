@@ -56,6 +56,7 @@ function initMap() {
         });
 
         latLngBounds.extend(marker.position);
+        // Click on marker to reveal details
         (function(marker, sel) {
             google.maps.event.addListener(marker, "click", function(e) {
                 infoWindow.setContent(sel.timestamp);
@@ -97,39 +98,60 @@ function initMap() {
             });
         }
     }
-    console.log("WORKING??");
+    console.log("NOTE: Map may not load if you refresh too frequently");
 
     map.fitBounds(latLngBounds);
+
+    // Place marker on click location
+    google.maps.event.addListener(map, "click", function(event) {
+        // Create marker and store in list
+        let marker = addMarker(event.latLng);
+        markers.push(marker);
+
+        // Print list in console
+        // NOTE: The markers are of type 'Marker' (https://developers.google.com/maps/documentation/javascript/reference/marker)
+        console.log("~~~~~ CURRENT LIST ~~~~~");
+        markers.forEach(print => {
+            console.log("Lat: " + print.latitude + ", Lng: " + print.longitude);
+        });
+    });
+
+
+    // Display markers on table
+    markers.forEach(marker => {
+        var table = document.getElementById("list");
+        var row = table.insertRow(1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        cell1.innerHTML = marker.timestamp;
+        cell2.innerHTML = marker.latitude;
+        cell3.innerHTML = marker.longitude;
+    });
+}
+
+
+
+// Add a marker to the map
+function addMarker(newMarker) {
+    // Create new marker
+    new google.maps.Marker({
+        position: newMarker,
+        map: map
+    });
+
+    // Return marker details
+    return {
+        "timestamp": "New marker",
+        "latitude": newMarker.lat(),
+        "longitude": newMarker.lng(),
+        "description": "Add description"
+    };
 }
 
 
 
 
-
-
-
-
-// // Add a marker to the map
-// function addMarker(location) {
-//     return new google.maps.Marker({
-//         position: location,
-//         map: map
-//     });
-// }
-
-// // Place marker on click location
-// google.maps.event.addListener(map, "click", function(event) {
-//     // Create marker and store in list
-//     let m = addMarker(event.latLng);
-//     markers.push(m);
-
-//     // Print list in console
-//     // NOTE: The markers are of type 'Marker' (https://developers.google.com/maps/documentation/javascript/reference/marker)
-//     console.log("~~~~~~~~~~ CURRENT LIST ~~~~~~~~~~");
-//     markers.forEach(print => {
-//         console.log("Lat: " + print.getPosition().lat() + ", Lng: " + print.getPosition().lng());
-//     });
-// });
 
 
 
