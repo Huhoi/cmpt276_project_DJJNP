@@ -77,6 +77,9 @@
     <div id="newEventModal">
         <h2>New Event</h2>
             <form action="/calendar/add" method="post">
+                <input type="hidden" id="selectedDate" name="selectedDate""/>
+            </form>
+            <form action="/calendar/add" method="post">
                 <input id="eventTitleInput"
                     name ="eventTitleInput" 
                     type="text" 
@@ -86,6 +89,8 @@
                 />
                 
                 <input type="hidden" id="selectedDate" name="selectedDate"/>
+                
+                
 
                 <select name="timeBegin" id="timeBegin" required >
                     <option value="" disabled selected>Begin</option>
@@ -226,11 +231,11 @@
                                 <td>Date</td>
                             </tr>
             
-                            <tr th:each="event:${event}" th:if="${event.uid} == ${user.uid}" id="eventList" >
+                            <tr th:each="event:${event}" th:if="${event.uid} == ${user.uid} and ${event.date} == ${date}" id="eventList" >
                                     <td th:text="'Event: ' + ${event.eventName}"></td>
                                     <td th:text="'Time: ' + ${event.timeBegin} + '->' + ${event.timeEnd}"></td>
                                     <td th:text="'Date: ' + ${event.date}"></td>
-                                    <td><a th:href="@{'/calendar/delete/{sid}' (sid=${event.sid})}">Delete</a></td>
+                                    <td><button type="button" th:onclick="|window.location.href='@{'/calendar/delete/{sid}' (sid=${event.sid})}'|" id="deleteButton">Delete</button></td>
                             </tr>
             
                         </table>
