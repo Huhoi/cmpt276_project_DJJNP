@@ -12,12 +12,14 @@ const eventTitleInput = document.getElementById('eventTitleInput');
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 
-
 function openModal(date) {
   clicked = date;
   document.getElementById('selectedDate').value = date;
 
+  
+
   const eventForDay = events.find(e => e.date === clicked);
+
 
   if (eventForDay) {
     document.getElementById('eventText').innerText = eventForDay.title;

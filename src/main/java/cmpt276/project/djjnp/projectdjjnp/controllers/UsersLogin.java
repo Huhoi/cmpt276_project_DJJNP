@@ -232,11 +232,17 @@ public class UsersLogin {
         int timeBegin = Integer.parseInt(form.get("timeBegin"));
         int timeEnd = Integer.parseInt(form.get("timeEnd"));
         
+        
 
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         Date date = formatter.parse(form.get("selectedDate"));
         String dateAsString = formatter.format(date);
- 
+        
+
+
+        model.addAttribute("date", dateAsString);
+        
+        
         System.out.println("Event: " + event);
         System.out.println("Date: " + date);
         System.out.println("time: " + timeBegin);

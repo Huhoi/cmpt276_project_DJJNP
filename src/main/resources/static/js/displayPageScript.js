@@ -133,6 +133,7 @@ function initMap() {
 
 
 
+
 // // Test location at SFU Burnaby
 // const marker1 = new google.maps.Marker({
 //     position: {lat: 49.278059, lng: -122.919883},
