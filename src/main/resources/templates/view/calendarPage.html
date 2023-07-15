@@ -216,7 +216,7 @@
                 <button id="saveButton" type="submit" >Save</button>
                 <button id="cancelButton">Cancel</button>
 
-                    Schedule HEere
+                    Schedule Here
             
                         <table>
                             <tr>
@@ -229,7 +229,7 @@
                                     <td th:text="'Event: ' + ${event.eventName}"></td>
                                     <td th:text="'Time: ' + ${event.timeBegin} + '->' + ${event.timeEnd}"></td>
                                     <td th:text="'Date: ' + ${event.date}"></td>
-                                    <td><a th:href="@{'/calendar/delete/{sid}' (sid=${event.sid})}">Delete</a></td>
+                                    <td><button type="button" th:onclick="|window.location.href='@{'/calendar/delete/{sid}' (sid=${event.sid})}'|" id="deleteButton">Delete</button></td>
                             </tr>
             
                         </table>
