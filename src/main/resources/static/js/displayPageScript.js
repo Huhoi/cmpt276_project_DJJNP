@@ -65,6 +65,8 @@ function initMap() {
         document.getElementById("latitudeInput").value = marker.latitude;
         document.getElementById("longitudeInput").value = marker.longitude;
         document.getElementById("descriptionInput").value = marker.description;
+        
+        document.forms["markerForm"].submit();
 
         // Reload to show routes
         reloadMap();
@@ -174,6 +176,7 @@ function addMarker(newMarker) {
         "description": "Add description"
     };
 }
+
 
 
 
