@@ -1,8 +1,14 @@
 #map {
-    height: 700px;
+    height: 500px;
     width: 100%;
 }
 
+#listDiv {
+    text-align: center;
+}
+
 #list {
-    width: 80%;
+    margin: auto;
+    width: 50%;
+    overflow: scroll;
 }
