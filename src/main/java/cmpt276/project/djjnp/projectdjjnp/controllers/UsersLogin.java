@@ -315,11 +315,13 @@ public class UsersLogin {
         
 
         //Testing if it works
+        System.out.println("Sumbiting");
         System.out.println("Timestamp: " + timestamp);
         System.out.println("Latitude: " + latitude);
         System.out.println("Longitude: " + longitude);
         System.out.println("Description: " + description);
-
+        
+        locationRepo.save(new Location(id, timestamp, latitude, longitude, description));
 
         return "redirect:/display";
     
