@@ -279,7 +279,7 @@ public class UsersLogin {
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
         response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
         response.setDateHeader("Expires", 0); // Proxies.
-        
+
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         List<Event> currentUserEvent = eventRepo.findAll();
         List<Location> currentUserLocation = locationRepo.findAll();
@@ -291,10 +291,11 @@ public class UsersLogin {
         model.addAttribute("user", currentUser);
         model.addAttribute("event", currentUserEvent);
         model.addAttribute("location", currentUserLocation);
-        
+
         return "view/displayPage";
     }
 
+    //Adds location to database
     @PostMapping("/display/add")
     public String showMapAdd(@RequestParam Map<String, String> form, Model model, HttpServletRequest request,
             HttpSession session, HttpServletResponse response) throws Exception {

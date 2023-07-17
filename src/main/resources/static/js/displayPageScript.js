@@ -61,6 +61,11 @@ function initMap() {
         cell3.innerHTML = marker.longitude;
         cell4.innerHTML = marker.description;
 
+        document.getElementById("timestampInput").value = marker.timestamp;
+        document.getElementById("latitudeInput").value = marker.latitude;
+        document.getElementById("longitudeInput").value = marker.longitude;
+        document.getElementById("descriptionInput").value = marker.description;
+
         // Reload to show routes
         reloadMap();
     });
@@ -80,8 +85,11 @@ function initMap() {
         cell2.innerHTML = marker.latitude;
         cell3.innerHTML = marker.longitude;
         cell4.innerHTML = marker.description;
+
+
     });
 }
+
 
 function reloadMap() {
     // Load all markers on the map

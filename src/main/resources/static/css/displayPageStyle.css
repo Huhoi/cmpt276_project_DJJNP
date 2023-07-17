@@ -4,11 +4,16 @@
 }
 
 #listDiv {
-    text-align: center;
+    height: 300px;
+    width: 50%;
+    overflow: auto;
+    margin: auto;
 }
 
 #list {
-    margin: auto;
-    width: 50%;
     overflow: scroll;
+}
+
+.table-wrapper-scroll-y {
+    display: block;
 }
