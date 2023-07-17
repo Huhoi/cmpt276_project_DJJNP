@@ -40,55 +40,98 @@ function initMap() {
         zoom: 8
     };
     map = new google.maps.Map(document.getElementById("map"), options);
+    console.log("NOTE: Map may not load if you refresh too frequently");
 
+    // Place marker on click location
+    google.maps.event.addListener(map, "click", function(event) {
+        // Create marker and store in list
+        // NOTE: The markers are of type 'Marker' (https://developers.google.com/maps/documentation/javascript/reference/marker)
+        let marker = addMarker(event.latLng);
+        markers.push(marker);
+
+        // Display route after marker added
+        var table = document.getElementById("list");
+        var row = table.insertRow(1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        cell1.innerHTML = marker.timestamp;
+        cell2.innerHTML = marker.latitude;
+        cell3.innerHTML = marker.longitude;
+
+        // Reload to show routes
+        reloadMap();
+    });
+
+    // Load markers and routes
+    reloadMap();
+
+    // Create list with existing markers
+    markers.forEach(marker => {
+        var table = document.getElementById("list");
+        var row = table.insertRow(1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        cell1.innerHTML = marker.timestamp;
+        cell2.innerHTML = marker.latitude;
+        cell3.innerHTML = marker.longitude;
+    });
+}
+
+function reloadMap() {
     // Load all markers on the map
-    var infoWindow = new google.maps.InfoWindow();
-    var lat_lng = new Array();
-    var latLngBounds = new google.maps.LatLngBounds();
+    var coordList = new Array(); // Stores all latitude and longitudes in the form of a LatLng object
+    var infoWindow = new google.maps.InfoWindow(); // The window that pops up when you click a marker
+    var latLngBounds = new google.maps.LatLngBounds(); // Used to automatically resize map
+    // Loop to initialize all markers that currently exist
     for (let i = 0; i < markers.length; i++) {
         var sel = markers[i];
         var selLatLng = new google.maps.LatLng(sel.latitude, sel.longitude);
-        lat_lng.push(selLatLng);
+        coordList.push(selLatLng);
         var marker = new google.maps.Marker({
             position: selLatLng,
             map: map,
             title: sel.timestamp
         });
 
-        latLngBounds.extend(marker.position);
+        // Click on marker to reveal details
         (function(marker, sel) {
             google.maps.event.addListener(marker, "click", function(e) {
                 infoWindow.setContent(sel.timestamp);
                 infoWindow.open(map, marker);
             });
         })(marker, sel);
+
+        // Auto-adjust the map to show all markers
+        latLngBounds.extend(marker.position);
     }
 
     // Routing stuff
-    // NOTE TO SELF: Read documentation to find out what some of these things do
+    // Implement the Google directions service to help with pathfinding
     var service = new google.maps.DirectionsService();
-
     // Loop to draw lines connecting all points
-    for (let j = 0; j < lat_lng.length; j++) {
-        if ((j + 1) < lat_lng.length) {
-            var src = lat_lng[j];
-            var dest = lat_lng[j+1];
-
+    for (let j = 0; j < coordList.length; j++) {
+        if ((j + 1) < coordList.length) {
+            // TEMPORARY: We route the previous marker in the array with the next
+            var src = coordList[j];
+            var dest = coordList[j+1];
+            // Call upon the directions service to get paths given an origin and a
+            // destination. Can adjust mode of transportation via the travelMode field.
             service.route({
                 origin: src,
                 destination: dest,
-                // May be able to change mode of transportation
-                travelMode: google.maps.DirectionsTravelMode.DRIVING
-            }, function(result, status) {
+                travelMode: google.maps.DirectionsTravelMode.DRIVING // DRIVING, BYCYCLING, TRANSIT, WALKING
+            },
+            // Function checks if a response was received from the API call, and
+            // proceeds to create a path between the two given points
+            function(result, status) {
                 if (status == google.maps.DirectionsStatus.OK) {
-                    // Init path array
                     var path = new google.maps.MVCArray();
-                    // Set the path stroke color
                     var poly = new google.maps.Polyline({
                         map: map,
                         strokeColor: '#8153f5'
                     });
-
                     poly.setPath(path);
                     for (let k = 0, len = result.routes[0].overview_path.length; k < len; k++) {
                         path.push(result.routes[0].overview_path[k]);
@@ -97,39 +140,32 @@ function initMap() {
             });
         }
     }
-    console.log("WORKING??");
-
+    // Auto-adjust the map to show all markers
     map.fitBounds(latLngBounds);
 }
 
 
 
+// Add a marker to the map
+function addMarker(newMarker) {
+    // Create new marker
+    new google.maps.Marker({
+        position: newMarker,
+        map: map
+    });
+
+    // Return marker details
+    return {
+        "timestamp": "New marker",
+        "latitude": newMarker.lat(),
+        "longitude": newMarker.lng(),
+        "description": "Add description"
+    };
+}
 
 
 
 
-
-// // Add a marker to the map
-// function addMarker(location) {
-//     return new google.maps.Marker({
-//         position: location,
-//         map: map
-//     });
-// }
-
-// // Place marker on click location
-// google.maps.event.addListener(map, "click", function(event) {
-//     // Create marker and store in list
-//     let m = addMarker(event.latLng);
-//     markers.push(m);
-
-//     // Print list in console
-//     // NOTE: The markers are of type 'Marker' (https://developers.google.com/maps/documentation/javascript/reference/marker)
-//     console.log("~~~~~~~~~~ CURRENT LIST ~~~~~~~~~~");
-//     markers.forEach(print => {
-//         console.log("Lat: " + print.getPosition().lat() + ", Lng: " + print.getPosition().lng());
-//     });
-// });
 
 
 
