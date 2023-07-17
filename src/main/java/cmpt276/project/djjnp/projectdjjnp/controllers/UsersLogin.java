@@ -19,8 +19,10 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import cmpt276.project.djjnp.projectdjjnp.models.Event;
 import cmpt276.project.djjnp.projectdjjnp.models.User;
+import cmpt276.project.djjnp.projectdjjnp.models.Location;
 import cmpt276.project.djjnp.projectdjjnp.models.UserRepository;
 import cmpt276.project.djjnp.projectdjjnp.models.EventRepository;
+import cmpt276.project.djjnp.projectdjjnp.models.LocationRepository;
 import cmpt276.project.djjnp.projectdjjnp.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -37,6 +39,9 @@ public class UsersLogin {
 
     @Autowired(required = true)
     private EventRepository eventRepo;
+
+    @Autowired(required = true)
+    private LocationRepository locationRepo;
 
     @GetMapping("/")
     public RedirectView homeRedirect() {
@@ -226,7 +231,8 @@ public class UsersLogin {
         //Saves Event
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         model.addAttribute("user", currentUser);
-
+        
+        //Gets Paremeters from form
         int id = currentUser.getUid();
         String event = form.get("eventTitleInput");
         int timeBegin = Integer.parseInt(form.get("timeBegin"));
@@ -262,14 +268,63 @@ public class UsersLogin {
     
 
 
+
+
     //------------------------------------------
     // Display Page
     //------------------------------------------
     @GetMapping("/display")
-    public String showMap(Model model, HttpServletRequest request, HttpSession session) {
+    public String showMap(Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) {
         // get info from database to display on map/list
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setDateHeader("Expires", 0); // Proxies.
+        
+        User currentUser = (User) request.getSession().getAttribute("sessionUser");
+        List<Event> currentUserEvent = eventRepo.findAll();
+        List<Location> currentUserLocation = locationRepo.findAll();
+
+        if (request.getSession().getAttribute("sessionUser") == null) {
+            return "redirect:/view/login";
+        }
+
+        model.addAttribute("user", currentUser);
+        model.addAttribute("event", currentUserEvent);
+        model.addAttribute("location", currentUserLocation);
+        
         return "view/displayPage";
     }
+
+    @PostMapping("/display/add")
+    public String showMapAdd(@RequestParam Map<String, String> form, Model model, HttpServletRequest request,
+            HttpSession session, HttpServletResponse response) throws Exception {
+        
+        //Saves Location
+        User currentUser = (User) request.getSession().getAttribute("sessionUser");
+        List<Location> currentUserLocations = locationRepo.findAll();
+        model.addAttribute("user", currentUser);
+        model.addAttribute("location", currentUserLocations);
+        
+        //Gets parameters from form
+        int id = currentUser.getUid();
+        String timestamp = form.get("timestampInput");
+        String latitude = form.get("latitudeInput");
+        String longitude = form.get("longitudeInput");
+        String description = form.get("descriptionInput");
+        
+
+        //Testing if it works
+        System.out.println("Timestamp: " + timestamp);
+        System.out.println("Latitude: " + latitude);
+        System.out.println("Longitude: " + longitude);
+        System.out.println("Description: " + description);
+
+
+        return "redirect:/display";
+    
+    }
+
+
 
   
     //------------------------------------------

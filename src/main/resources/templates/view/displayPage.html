@@ -60,6 +60,14 @@
             <th>Description</th>
         </table>
     </div>
+
+    <!-- Hidden Form to get Data from API -->
+    <form action="/display/add" method="post">
+        <input type="hidden" id="timestampInput" name="timestampInput"/>
+        <input type="hidden" id="latitudeInput" name="latitudeInput"/>
+        <input type="hidden" id="longitudeInput" name="longitudeInput"/>
+        <input type="hidden" id="descriptionInput" name="descriptionInput"/>
+    </form>
     
 </body>
 </html>
