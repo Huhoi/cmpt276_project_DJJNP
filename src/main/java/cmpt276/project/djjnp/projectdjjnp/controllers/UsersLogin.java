@@ -66,6 +66,7 @@ public class UsersLogin {
         String userEmail = formData.get("email");
 
         List<User> userList = userRepo.findByEmail(userEmail);
+        model.addAttribute("error", userEmail);
 
         if (userList.isEmpty()) {
             String userPass = formData.get("password");
@@ -219,23 +220,23 @@ public class UsersLogin {
         return "redirect:/calendar";
     }
 
-    //Getting Date
-    @GetMapping("/calendar/date")
-    public String selectedDate(@RequestParam Map<String, String> form, Model model, @ModelAttribute("date") User user) throws Exception {
+    // //Getting Date
+    // @GetMapping("/calendar/date")
+    // public String selectedDate(@RequestParam Map<String, String> form, Model model, @ModelAttribute("date") User user) throws Exception {
 
-        //Gets selected date
-        String dateInit = form.get("selectedDate2");
-        if (dateInit != null) {
-            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-            Date date = formatter.parse(form.get("selectedDate2"));
-            String dateAsString = formatter.format(date);
-            model.addAttribute("date", dateAsString);
-            System.out.println("DADASDASD" + dateAsString);
+    //     //Gets selected date
+    //     String dateInit = form.get("selectedDate2");
+    //     if (dateInit != null) {
+    //         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    //         Date date = formatter.parse(form.get("selectedDate2"));
+    //         String dateAsString = formatter.format(date);
+    //         model.addAttribute("date", dateAsString);
+    //         System.out.println("DADASDASD" + dateAsString);
 
-        }
+    //     }
 
-        return "view/calendarPage";
-    }
+    //     return "view/calendarPage";
+    // }
 
     //Delete From Event List
     @GetMapping("/calendar/delete/{sid}")

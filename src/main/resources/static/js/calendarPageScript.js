@@ -12,31 +12,38 @@ const eventTitleInput = document.getElementById('eventTitleInput');
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 
-  
-// 
+
 
 function openModal(date) {
+  //The day that is clicked
   clicked = date;
+
+  //Changes an hidden input to selected date on click
   document.getElementById('selectedDate').value = date;
   document.getElementById('selectedDate2').value = date;
-  
 
-  const eventForDay = events.find(e => e.date === clicked);
+  //Creates the ADD Event Modal
+  newEventModal.style.display = 'block';
 
 
-  if (eventForDay) {
-    document.getElementById('eventText').innerText = eventForDay.title;
-    deleteEventModal.style.display = 'block';
-  } else {
-    newEventModal.style.display = 'block';
-  }
-
+  //Creates a "Backdrop" when model opens
   backDrop.style.display = 'block';
 
-  document.forms["date"].submit();
+
+
+
+  //Grabs the array of events
+  //const eventForDay = events.find(e => e.date === clicked);
+  // if (eventForDay) {
+  //   document.getElementById('eventText').innerText = eventForDay.title;
+  //   deleteEventModal.style.display = 'block';
+  // } else {
+  //    newEventModal.style.display = 'block';
+  // }
   
 }
 
+//Loads in the Calendar
 function load() {
   const dt = new Date();
 
@@ -44,6 +51,7 @@ function load() {
     dt.setMonth(new Date().getMonth() + nav);
   }
 
+  //Gets the current date
   const day = dt.getDate();
   const month = dt.getMonth();
   const year = dt.getFullYear();
@@ -57,6 +65,7 @@ function load() {
     month: 'numeric',
     day: 'numeric',
   });
+
   const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
 
   document.getElementById('monthDisplay').innerText =
@@ -65,11 +74,12 @@ function load() {
   calendar.innerHTML = '';
 
   for (let i = 1; i <= paddingDays + daysInMonth; i++) {
+    //Creates the a box for each day of the month
     const daySquare = document.createElement('div');
     daySquare.classList.add('day');
-
     const dayString = `${month + 1}/${i - paddingDays}/${year}`;
 
+    //Highlights the current date
     if (i > paddingDays) {
       daySquare.innerText = i - paddingDays;
       const eventForDay = events.find(e => e.date === dayString);
@@ -78,15 +88,21 @@ function load() {
         daySquare.id = 'currentDay';
       }
 
-      if (eventForDay) {
-        const eventDiv = document.createElement('div');
-        eventDiv.classList.add('event');
-        eventDiv.innerText = eventForDay.title;
-        daySquare.appendChild(eventDiv);
-      }
-
+      //Listens for click on day of month
       daySquare.addEventListener('click', () => openModal(dayString));
-    } else {
+      
+      
+      // document.forms["date"].submit();
+
+      // if (eventForDay) {
+      //   const eventDiv = document.createElement('div');
+      //   eventDiv.classList.add('event');
+      //   eventDiv.innerText = eventForDay.title;
+      //   daySquare.appendChild(eventDiv);
+      // }
+
+    }
+    else {
       daySquare.classList.add('padding');
     }
 
@@ -94,6 +110,7 @@ function load() {
   }
 }
 
+// Closes the modal
 function closeModal() {
   eventTitleInput.classList.remove('error');
   newEventModal.style.display = 'none';
@@ -103,6 +120,7 @@ function closeModal() {
   clicked = null;
   load();
 }
+
 
 function saveEvent() {
   if (eventTitleInput.value) {
@@ -125,6 +143,7 @@ function deleteEvent() {
   localStorage.setItem('events', JSON.stringify(events));
   closeModal();
 }
+
 
 function initButtons() {
   document.getElementById('nextButton').addEventListener('click', () => {

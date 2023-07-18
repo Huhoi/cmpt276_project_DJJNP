@@ -76,7 +76,7 @@
     
     <div id="newEventModal">
         <h2>New Event</h2>
-            <form action="/calendar/date" method="get" name="date">
+            <form name="date">
                 <input type="hidden" id="selectedDate2" name="selectedDate2">
             </form>
 
@@ -231,7 +231,7 @@
                                 <td>Date</td>
                             </tr>
             
-                            <tr th:each="event:${event}" th:if="${event.uid} == ${user.uid} and ${event.date} == ${date}" id="eventList" >
+                            <tr th:each="event:${event}" th:if="${event.uid} == ${user.uid}" id="eventList" >
                                     <td th:text="'Event: ' + ${event.eventName}"></td>
                                     <td th:text="'Time: ' + ${event.timeBegin} + '->' + ${event.timeEnd}"></td>
                                     <td th:text="'Date: ' + ${event.date}"></td>
