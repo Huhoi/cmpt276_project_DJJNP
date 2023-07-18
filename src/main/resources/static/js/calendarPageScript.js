@@ -123,32 +123,13 @@ function load() {
     //Highlights the current date
     if (i > paddingDays) {
       daySquare.innerText = i - paddingDays;
-      const eventForDay = events.find(e => e.date === dayString);
 
-      if (i - paddingDays === today && nav === 0) {
+      if (i - paddingDays === day && nav === 0) {
         daySquare.id = 'currentDay';
       }
 
       //Listens for click on day of month
       daySquare.addEventListener('click', () => openModal(dayString));
-      //if (eventForDay) {
-        //const eventDiv = document.createElement('div');
-        //eventDiv.classList.add('event');
-        //eventDiv.innerText = eventForDay.title;
-        //daySquare.appendChild(eventDiv);
-      //}
-
-
-      
-      
-      // document.forms["date"].submit();
-
-      // if (eventForDay) {
-      //   const eventDiv = document.createElement('div');
-      //   eventDiv.classList.add('event');
-      //   eventDiv.innerText = eventForDay.title;
-      //   daySquare.appendChild(eventDiv);
-      // }
 
     }
     else {
