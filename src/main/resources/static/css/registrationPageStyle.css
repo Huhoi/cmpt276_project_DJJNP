@@ -1,13 +1,9 @@
 /* Container */
 .container{
     position: relative;
-    right: 150px;
+    /* right: 150px; */
     top: 150px;
-    width: 30px; 
-
-   
-
-    
+    left: 450px;
 }
 
 h1{

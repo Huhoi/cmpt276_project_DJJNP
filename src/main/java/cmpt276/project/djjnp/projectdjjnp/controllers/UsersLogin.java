@@ -44,19 +44,22 @@ public class UsersLogin {
     @Autowired(required = true)
     private LocationRepository locationRepo;
 
+    private String errorMessageString = "";
+
     @GetMapping("/")
     public RedirectView homeRedirect() {
         return new RedirectView("view/login");
     }
-
+    
     //------------------------------------------
     // Registration Mapping
     //------------------------------------------
     @GetMapping("/view/register")
-    public String register(Model model) {
-        
+    public String register(Model model) {   
         User users = new User();
         model.addAttribute("us", users);
+        
+        model.addAttribute("errorMessage", errorMessageString);
     
         return "view/registrationPage";
     }
@@ -76,6 +79,7 @@ public class UsersLogin {
             return "redirect:/view/login";
         }
         else {
+            errorMessageString = "Email Already Exists";
             return "redirect:/view/register";
         }
     }
@@ -87,6 +91,7 @@ public class UsersLogin {
     @GetMapping("/view/login")
 
     public String login(Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response){
+        errorMessageString = "";
         User users = new User();
         model.addAttribute("us", users);
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
