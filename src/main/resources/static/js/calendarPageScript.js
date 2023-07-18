@@ -1,8 +1,8 @@
 let nav = 0;
 let clicked = null;
-
 let events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : [];
-
+let weatherData = null;
+let weatherDataIndex = 0;
 
 const calendar = document.getElementById('calendar');
 const newEventModal = document.getElementById('newEventModal');
@@ -74,9 +74,6 @@ function openModal(date) {
   //Creates a "Backdrop" when model opens
   backDrop.style.display = 'block';
 
-
-
-
   //Grabs the array of events
   //const eventForDay = events.find(e => e.date === clicked);
   // if (eventForDay) {
@@ -91,7 +88,6 @@ function openModal(date) {
 //Loads in the Calendar
 function load() {
   const dt = new Date();
-
   if (nav !== 0) {
     dt.setMonth(new Date().getMonth() + nav);
   }
@@ -114,7 +110,7 @@ function load() {
   const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
 
   document.getElementById('monthDisplay').innerText =
-    `${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`;
+      `${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`;
 
   calendar.innerHTML = '';
 
@@ -129,12 +125,20 @@ function load() {
       daySquare.innerText = i - paddingDays;
       const eventForDay = events.find(e => e.date === dayString);
 
-      if (i - paddingDays === day && nav === 0) {
+      if (i - paddingDays === today && nav === 0) {
         daySquare.id = 'currentDay';
       }
 
       //Listens for click on day of month
       daySquare.addEventListener('click', () => openModal(dayString));
+      //if (eventForDay) {
+        //const eventDiv = document.createElement('div');
+        //eventDiv.classList.add('event');
+        //eventDiv.innerText = eventForDay.title;
+        //daySquare.appendChild(eventDiv);
+      //}
+
+
       
       
       // document.forms["date"].submit();
@@ -161,7 +165,6 @@ function closeModal() {
   newEventModal.style.display = 'none';
   deleteEventModal.style.display = 'none';
   backDrop.style.display = 'none';
-  //eventTitleInput.value = '';
   clicked = null;
   load();
 }
@@ -176,7 +179,6 @@ function saveEvent() {
       title: eventTitleInput.value,
     });
 
-    // localStorage.setItem('events', JSON.stringify(events)); Adds event to calendar
     closeModal();
   } else {
     eventTitleInput.classList.add('error');
@@ -205,7 +207,6 @@ function initButtons() {
   document.getElementById('cancelButton').addEventListener('click', closeModal);
   document.getElementById('deleteButton').addEventListener('click', deleteEvent);
   document.getElementById('closeButton').addEventListener('click', closeModal);
-
 }
 
 function timeCheck() {
@@ -220,11 +221,7 @@ function timeCheck() {
     timeBegin.selectedIndex = 0;
     timeEnd.selectedIndex = 0;
   }
-
 }
-
-
 
 initButtons();
 load();
-
