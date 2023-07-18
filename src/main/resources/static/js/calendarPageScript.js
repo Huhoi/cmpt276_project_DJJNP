@@ -1,8 +1,8 @@
 let nav = 0;
 let clicked = null;
-
 let events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : [];
-
+let weatherData = null;
+let weatherDataIndex = 0;
 
 const calendar = document.getElementById('calendar');
 const newEventModal = document.getElementById('newEventModal');
@@ -11,15 +11,58 @@ const backDrop = document.getElementById('modalBackDrop');
 const eventTitleInput = document.getElementById('eventTitleInput');
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+let weatherMapping = {
+  0: "Clear sky",
+  1: "Mainly clear",
+  2: "Partly cloudy",
+  3: "Overcast",
+  45: "Fog",
+  48: "Depositing rime fog",
+  51: "Drizzle: Light",
+  53: "Drizzle: Moderate",
+  55: "Drizzle: Dense intensity",
+  56: "Freezing Drizzle: Light",
+  57: "Freezing Drizzle: Dense intensity",
+  61: "Rain: Slight",
+  63: "Rain: Moderate",
+  65: "Rain: Heavy intensity",
+  66: "Freezing Rain: Light",
+  67: "Freezing Rain: Heavy intensity",
+  71: "Snow fall: Slight",
+  73: "Snow fall: Moderate",
+  75: "Snow fall: Heavy intensity",
+  77: "Snow grains",
+  80: "Rain showers: Slight",
+  81: "Rain showers: Moderate",
+  82: "Rain showers: Violent",
+  85: "Snow showers: Slight",
+  86: "Snow showers: Heavy",
+  95: "Thunderstorm: Slight or moderate",
+  96: "Thunderstorm with slight hail",
+  99: "Thunderstorm with heavy hail"
+};
+
+function decodeWeatherCode(code) {
+  return weatherMapping[code] || "Unknown";
+}
+
+
+async function fetchWeatherData() {
+  try {
+    const result = await fetch("https://api.open-meteo.com/v1/forecast?latitude=49.24&longitude=-122.98&daily=weathercode&timezone=America%2FLos_Angeles&forecast_days=16&models=gem_seamless");
+    return await result.json();
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+    return null;
+  }
+}
+
 
 function openModal(date) {
   clicked = date;
   document.getElementById('selectedDate').value = date;
 
-  
-
   const eventForDay = events.find(e => e.date === clicked);
-
 
   if (eventForDay) {
     document.getElementById('eventText').innerText = eventForDay.title;
@@ -31,14 +74,13 @@ function openModal(date) {
   backDrop.style.display = 'block';
 }
 
-function load() {
+async function load() {
   const dt = new Date();
-
   if (nav !== 0) {
     dt.setMonth(new Date().getMonth() + nav);
   }
-
-  const day = dt.getDate();
+  const today = new Date().getDate();
+  const currentMonth = new Date().getMonth();
   const month = dt.getMonth();
   const year = dt.getFullYear();
 
@@ -54,9 +96,22 @@ function load() {
   const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
 
   document.getElementById('monthDisplay').innerText =
-    `${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`;
+      `${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`;
 
   calendar.innerHTML = '';
+
+  if (month === currentMonth) {
+    const fetchedData = await fetchWeatherData();
+    if (fetchedData && fetchedData.daily && fetchedData.daily.weathercode) {
+      weatherData = fetchedData.daily.weathercode;
+      weatherDataIndex = 0;
+    } else {
+      weatherData = null;
+    }
+  } else if (!weatherData || weatherDataIndex >= weatherData.length) {
+    weatherData = null;
+  }
+
 
   for (let i = 1; i <= paddingDays + daysInMonth; i++) {
     const daySquare = document.createElement('div');
@@ -68,7 +123,7 @@ function load() {
       daySquare.innerText = i - paddingDays;
       const eventForDay = events.find(e => e.date === dayString);
 
-      if (i - paddingDays === day && nav === 0) {
+      if (i - paddingDays === today && nav === 0) {
         daySquare.id = 'currentDay';
       }
 
@@ -77,6 +132,17 @@ function load() {
         eventDiv.classList.add('event');
         eventDiv.innerText = eventForDay.title;
         daySquare.appendChild(eventDiv);
+      }
+
+      if (weatherData && i - paddingDays >= today && month === currentMonth || (nav > 0 && weatherData && weatherDataIndex < weatherData.length)) {
+        const weatherForDay = weatherData[weatherDataIndex];
+        if (weatherForDay !== null) {
+          const weatherDiv = document.createElement('div');
+          weatherDiv.classList.add('weather');
+          weatherDiv.innerText = decodeWeatherCode(weatherForDay);
+          daySquare.appendChild(weatherDiv);
+        }
+        weatherDataIndex++;
       }
 
       daySquare.addEventListener('click', () => openModal(dayString));
@@ -93,7 +159,6 @@ function closeModal() {
   newEventModal.style.display = 'none';
   deleteEventModal.style.display = 'none';
   backDrop.style.display = 'none';
-  //eventTitleInput.value = '';
   clicked = null;
   load();
 }
@@ -107,7 +172,6 @@ function saveEvent() {
       title: eventTitleInput.value,
     });
 
-    // localStorage.setItem('events', JSON.stringify(events)); Adds event to calendar
     closeModal();
   } else {
     eventTitleInput.classList.add('error');
@@ -135,7 +199,6 @@ function initButtons() {
   document.getElementById('cancelButton').addEventListener('click', closeModal);
   document.getElementById('deleteButton').addEventListener('click', deleteEvent);
   document.getElementById('closeButton').addEventListener('click', closeModal);
-
 }
 
 function timeCheck() {
@@ -150,11 +213,7 @@ function timeCheck() {
     timeBegin.selectedIndex = 0;
     timeEnd.selectedIndex = 0;
   }
-
 }
-
-
 
 initButtons();
 load();
-
