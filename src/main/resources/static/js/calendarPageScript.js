@@ -47,6 +47,7 @@ const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frida
 // }
 
 
+
 // async function fetchWeatherData() {
 //   try {
 //     const result = await fetch("https://api.open-meteo.com/v1/forecast?latitude=49.24&longitude=-122.98&daily=weathercode&timezone=America%2FLos_Angeles&forecast_days=16&models=gem_seamless");
@@ -56,6 +57,7 @@ const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frida
 //     return null;
 //   }
 // }
+
 
 
 function openModal(date) {
@@ -68,7 +70,6 @@ function openModal(date) {
 
   //Creates the ADD Event Modal
   newEventModal.style.display = 'block';
-
 
   //Creates a "Backdrop" when model opens
   backDrop.style.display = 'block';
