@@ -12,6 +12,7 @@
 
         <h1>Register</h1>
         <form th:action="@{/view/registerUser}" th:object="${us}" method="post">
+            <div th:text="${errorMessage}" id="errorMsg"></div>
             <!-- Email -->
             <div>
                 <input type="text" 
@@ -42,9 +43,11 @@
                     id="registerButton" 
                     type="submit" 
                     value="Register"
-                    style="border-radius: 50px; width: 300px;">
+                    style="border-radius: 50px; width: 300px;" 
+                    th:onclick="showName(emailJs)">
                 </input>
             </div>
+
         </form>
         <a href="/view/login">&rarr;Login&larr;</a>
         
