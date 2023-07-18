@@ -59,17 +59,6 @@ const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frida
 
 
 function openModal(date) {
-  clicked = date;
-  document.getElementById('selectedDate').value = date;
-
-  const eventForDay = events.find(e => e.date === clicked);
-
-  if (eventForDay) {
-    document.getElementById('eventText').innerText = eventForDay.title;
-    deleteEventModal.style.display = 'block';
-
-
-function openModal(date) {
   //The day that is clicked
   clicked = date;
 
