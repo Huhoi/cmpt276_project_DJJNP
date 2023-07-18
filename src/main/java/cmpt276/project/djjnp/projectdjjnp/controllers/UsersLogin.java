@@ -89,7 +89,6 @@ public class UsersLogin {
     // Login Mapping
     //------------------------------------------
     @GetMapping("/view/login")
-
     public String login(Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response){
         errorMessageString = "";
         User users = new User();
