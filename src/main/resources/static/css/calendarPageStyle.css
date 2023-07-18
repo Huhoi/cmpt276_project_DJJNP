@@ -51,7 +51,7 @@
 }
 
 #header button {
-    background-color:#92a1d1;
+    background-color:#8d6a9f;
 }
 
 #container {
@@ -64,6 +64,7 @@
 #monthDisplay{
     position: relative;
     left: 570px;
+    color:#bb342f
 }
 
 #weekdays {
