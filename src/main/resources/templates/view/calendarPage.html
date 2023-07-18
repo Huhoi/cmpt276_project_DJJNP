@@ -76,7 +76,11 @@
     
     <div id="newEventModal">
         <h2>New Event</h2>
-            <form action="/calendar/add" method="post">
+            <form action="/calendar/date" method="get" name="date">
+                <input type="hidden" id="selectedDate2" name="selectedDate2">
+            </form>
+
+            <form action="/calendar/add" method="post" name="form">
                 <input id="eventTitleInput"
                     name ="eventTitleInput" 
                     type="text" 
@@ -86,9 +90,7 @@
                 />
                 
                 <input type="hidden" id="selectedDate" name="selectedDate"/>
-                
-                
-
+                <!-- List of Begin Times -->
                 <select name="timeBegin" id="timeBegin" required >
                     <option value="" disabled selected>Begin</option>
 
@@ -152,7 +154,7 @@
                     <option value="2300">11:00pm</option>
                     <option value="2330">11:30pm</option>
                 </select>
-
+                <!-- List of End Times -->
                 <select name="timeEnd" id="timeEnd" onclick="timeCheck()" required > 
                     <option value="" disabled selected>End</option>
 
@@ -216,6 +218,7 @@
                     <option value="2300">11:00pm</option>
                     <option value="2330">11:30pm</option>
                 </select>
+
                 <button id="saveButton" type="submit" >Save</button>
                 <button id="cancelButton">Cancel</button>
 
@@ -228,7 +231,7 @@
                                 <td>Date</td>
                             </tr>
             
-                            <tr th:each="event:${event}" th:if="${event.uid} == ${user.uid} " id="eventList" >
+                            <tr th:each="event:${event}" th:if="${event.uid} == ${user.uid} and ${event.date} == ${date}" id="eventList" >
                                     <td th:text="'Event: ' + ${event.eventName}"></td>
                                     <td th:text="'Time: ' + ${event.timeBegin} + '->' + ${event.timeEnd}"></td>
                                     <td th:text="'Date: ' + ${event.date}"></td>
@@ -236,7 +239,7 @@
                             </tr>
             
                         </table>
-
+                       
             </form>
       </div>
   
@@ -251,30 +254,6 @@
   
       <div id="modalBackDrop"></div>
       
-      <!-- Schedule -->
-      <!-- <div id="scheduleContainer" >
-        Schedule HEere
-
-            <table>
-                <tr>
-                    <td>TODO</td>
-                    <td>Time</td>
-                    <td>Date</td>
-                </tr>
-
-                <tr th:each="event:${event}" th:if="${event.uid} == ${user.uid}" id="eventList" >
-                    <form action="/calendar/delete" method="post">
-                        <td th:text="'Event: ' + ${event.eventName}"></td>
-                        <td th:text="'Time: ' + ${event.timeBegin} + '->' + ${event.timeEnd}"></td>
-                        <td th:text="'Date: ' + ${event.date}"></td>
-                        <td><a th:href="@{'/calendar/delete/{sid}' (sid=${event.sid})}">Delete</a></td>
-                    </form>
-                </tr>
-
-            </table>
-      </div>
-    
-      </div> -->
       
 
 </body>

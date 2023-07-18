@@ -12,10 +12,13 @@ const eventTitleInput = document.getElementById('eventTitleInput');
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 
+  
+// 
+
 function openModal(date) {
   clicked = date;
   document.getElementById('selectedDate').value = date;
-
+  document.getElementById('selectedDate2').value = date;
   
 
   const eventForDay = events.find(e => e.date === clicked);
@@ -29,6 +32,9 @@ function openModal(date) {
   }
 
   backDrop.style.display = 'block';
+
+  document.forms["date"].submit();
+  
 }
 
 function load() {

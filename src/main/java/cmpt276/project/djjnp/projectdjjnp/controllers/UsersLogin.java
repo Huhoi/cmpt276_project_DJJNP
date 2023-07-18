@@ -14,15 +14,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
 import cmpt276.project.djjnp.projectdjjnp.models.Event;
-import cmpt276.project.djjnp.projectdjjnp.models.User;
-import cmpt276.project.djjnp.projectdjjnp.models.Location;
-import cmpt276.project.djjnp.projectdjjnp.models.UserRepository;
 import cmpt276.project.djjnp.projectdjjnp.models.EventRepository;
+import cmpt276.project.djjnp.projectdjjnp.models.Location;
 import cmpt276.project.djjnp.projectdjjnp.models.LocationRepository;
+import cmpt276.project.djjnp.projectdjjnp.models.User;
+import cmpt276.project.djjnp.projectdjjnp.models.UserRepository;
 import cmpt276.project.djjnp.projectdjjnp.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -127,52 +128,7 @@ public class UsersLogin {
     }
 
 
-
-    //------------------------------------------
-    // Logout Mapping
-    //------------------------------------------
-    @GetMapping("/logout")
-    public String destroySession(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-        response.setDateHeader("Expires", 0); // Proxies.
-        request.getSession().removeAttribute("sessionUser");
-        request.getSession().invalidate();
-        if(request.getSession().getAttribute("sessionUser") == null){
-            return "redirect:/view/login";
-        }
-        return "redirect:/view/login";
-    }
-
-    //------------------------------------------
-    // Delete Mapping
-    //------------------------------------------
-    @GetMapping("/delete/{uid}")
-    public String deleteAdminView(@PathVariable String uid, HttpServletRequest request, @RequestParam Map<String,String> formData, @ModelAttribute("us") User user) {
-
-        int id = Integer.parseInt(uid);
-        User u = userRepo.findById(id).get();
-
-        userRepo.delete(u);
-        
-        return "redirect:/accountAdmin";
-
-    }
-
-    @GetMapping("/deleteUser/{uid}")
-    public String deleteUser(@PathVariable String uid, HttpServletRequest request) {
-
-        int id = Integer.parseInt(uid);
-        User u = userRepo.findById(id).get();
-
-        System.out.println("~~~ Deleting session for email: " + u.getEmail() + " ~~~\n~~~ Session ID: " + request.getSession().getId() + " ~~~");
-
-        userRepo.delete(u);
-        request.getSession().invalidate();
-
-        return "redirect:/view/login";
-    }
-
+    
     //------------------------------------------
     // Home Page After Logging In
     //------------------------------------------
@@ -195,7 +151,8 @@ public class UsersLogin {
     // Calendar Page
     //------------------------------------------
     @GetMapping("/calendar")
-    public String showCalendar(Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) {
+    public String showCalendar(@RequestParam Map<String, String> form, Model model, HttpServletRequest request,
+            HttpSession session, HttpServletResponse response) throws Exception {
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
         response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
         response.setDateHeader("Expires", 0); // Proxies.
@@ -204,51 +161,54 @@ public class UsersLogin {
             return "redirect:/view/login";
         }
 
+        //Get Data
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         List<Event> currentUserEvent = eventRepo.findAll();
+
 
         //Sort the list by chronological order
         Collections.sort(currentUserEvent, (e1, e2) -> {
             //Compare date
             int sameDate = e1.getDate().compareTo(e2.getDate());
-            if (sameDate != 0){
+            if (sameDate != 0) {
                 return sameDate;
             }
             //Compare start time if events are the same date
             return e1.getTimeBegin() - e2.getTimeBegin();
         });
 
+
+
         model.addAttribute("user", currentUser);
         model.addAttribute("event", currentUserEvent);
 
         return "view/calendarPage";
     }
+    
+    
 
     //Adding From Calendar
     @PostMapping("/calendar/add")
     public String addCalendar(@RequestParam Map<String, String> form, Model model, HttpServletRequest request,
-            HttpSession session, HttpServletResponse response) throws Exception{
+            HttpSession session, HttpServletResponse response) throws Exception {
         //Saves Event
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         model.addAttribute("user", currentUser);
-        
+
         //Gets Paremeters from form
         int id = currentUser.getUid();
         String event = form.get("eventTitleInput");
+
         int timeBegin = Integer.parseInt(form.get("timeBegin"));
         int timeEnd = Integer.parseInt(form.get("timeEnd"));
-        
-        
 
+        //Gets selected date
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         Date date = formatter.parse(form.get("selectedDate"));
         String dateAsString = formatter.format(date);
-        
-
 
         model.addAttribute("date", dateAsString);
-        
-        
+
         System.out.println("Event: " + event);
         System.out.println("Date: " + date);
         System.out.println("time: " + timeBegin);
@@ -259,6 +219,24 @@ public class UsersLogin {
         return "redirect:/calendar";
     }
 
+    //Getting Date
+    @GetMapping("/calendar/date")
+    public String selectedDate(@RequestParam Map<String, String> form, Model model, @ModelAttribute("date") User user) throws Exception {
+
+        //Gets selected date
+        String dateInit = form.get("selectedDate2");
+        if (dateInit != null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+            Date date = formatter.parse(form.get("selectedDate2"));
+            String dateAsString = formatter.format(date);
+            model.addAttribute("date", dateAsString);
+            System.out.println("DADASDASD" + dateAsString);
+
+        }
+
+        return "view/calendarPage";
+    }
+
     //Delete From Event List
     @GetMapping("/calendar/delete/{sid}")
     public String deleteCalendar(@PathVariable String sid){
@@ -266,7 +244,6 @@ public class UsersLogin {
         return "redirect:/calendar";
     }
     
-
 
 
 
@@ -360,11 +337,11 @@ public class UsersLogin {
     // Admin Account Page
     //------------------------------------------
     @GetMapping("/accountAdmin")
-    public String showAdminAccount(Model model, HttpServletResponse response, HttpServletRequest request){
+    public String showAdminAccount(Model model, HttpServletResponse response, HttpServletRequest request) {
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
         response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
         response.setDateHeader("Expires", 0); // Proxies.
-        
+
         if (request.getSession().getAttribute("sessionUser") == null) {
             return "redirect:/view/login";
         }
@@ -372,6 +349,51 @@ public class UsersLogin {
         List<User> users = userRepo.findAll();
         model.addAttribute("us", users);
         return "view/accountAdminPage";
+    }
+
+    //------------------------------------------
+    // Logout Mapping
+    //------------------------------------------
+    @GetMapping("/logout")
+    public String destroySession(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setDateHeader("Expires", 0); // Proxies.
+        request.getSession().removeAttribute("sessionUser");
+        request.getSession().invalidate();
+        if(request.getSession().getAttribute("sessionUser") == null){
+            return "redirect:/view/login";
+        }
+        return "redirect:/view/login";
+    }
+
+    //------------------------------------------
+    // Delete Mapping
+    //------------------------------------------
+    @GetMapping("/delete/{uid}")
+    public String deleteAdminView(@PathVariable String uid, HttpServletRequest request, @RequestParam Map<String,String> formData, @ModelAttribute("us") User user) {
+
+        int id = Integer.parseInt(uid);
+        User u = userRepo.findById(id).get();
+
+        userRepo.delete(u);
+        
+        return "redirect:/accountAdmin";
+
+    }
+
+    @GetMapping("/deleteUser/{uid}")
+    public String deleteUser(@PathVariable String uid, HttpServletRequest request) {
+
+        int id = Integer.parseInt(uid);
+        User u = userRepo.findById(id).get();
+
+        System.out.println("~~~ Deleting session for email: " + u.getEmail() + " ~~~\n~~~ Session ID: " + request.getSession().getId() + " ~~~");
+
+        userRepo.delete(u);
+        request.getSession().invalidate();
+
+        return "redirect:/view/login";
     }
 
 }
