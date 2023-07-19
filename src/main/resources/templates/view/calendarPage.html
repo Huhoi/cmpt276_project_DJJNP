@@ -76,7 +76,7 @@
     
     <div id="newEventModal">
         <h2>New Event</h2>
-            <form name="date">
+            <form method="get" name="date">
                 <input type="hidden" id="selectedDate2" name="selectedDate2">
             </form>
 
@@ -198,18 +198,19 @@
                 <button id="saveButton" type="submit" >Save</button>
                 <button id="cancelButton">Cancel</button>
 
-                    Schedule Here
+                    <div id="tSchedule">Todays Schedule</div>
             
                         <table>
                             <tr>
-                                <td>TODO</td>
-                                <td>Time</td>
-                                <td></td>
-                                <td>Date</td>
+                                <td id="legend">TODO</td>
+                                <td id="legend">Time</td>
+                                <td id="legend"></td>
+                                <td id="legend">Date</td>
                             </tr>
             
-                            <tr th:each="event:${event}"  th:if="${event.uid} == ${user.uid}"  id="eventList" >
-                                    <td th:text="'Event: ' + ${event.eventName}"></td>
+                            <tr th:each="event:${event}"  th:if="${event.uid} == ${user.uid} and ${event.date} == ${date}"  id="eventList" >
+                                <p >
+                                    <td th:text="${event.eventName}"></td>
                                     <div th:switch="${event.timeBegin}">
                                         <td th:case="'0'">12:00am  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
                                         <td th:case="'30'">12:30am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
@@ -310,12 +311,134 @@
                                         <td th:case="'2300'">11:00pm</td>
                                         <td th:case="'2330'">11:30pm</td>
                                     </div>
-                                    <td th:text="'Date: ' + ${event.date}"></td>
+                                    <td th:text="${event.date}"></td>
                                     <td><button type="button" th:onclick="|window.location.href='@{'/calendar/delete/{sid}' (sid=${event.sid})}'|" id="deleteButton">Delete</button></td>
+                                </p>
+
+                            </tr>
+                        </table>
+                    
+                    <div id="aSchedule">All Schedules</div>
+                        <table>
+                            <tr>
+                                <td id="legend">TODO</td>
+                                <td id="legend">Time</td>
+                                <td id="legend"></td>
+                                <td id="legend">Date</td>
+                            </tr>
+            
+                            <tr th:each="event:${event}"  th:if="${event.uid} == ${user.uid}"  id="eventList" >
+                                <p >
+                                    <td th:text="${event.eventName}"></td>
+                                    <div th:switch="${event.timeBegin}">
+                                        <td th:case="'0'">12:00am  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'30'">12:30am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'100'">1:00am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'130'">1:30am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'200'">2:00am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'230'">2:30am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'300'">3:00am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'330'">3:30am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'400'">4:00am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'430'">4:30am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'500'">5:00am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'530'">5:30am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'600'">6:00am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'630'">6:30am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'700'">7:00am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'730'">7:30am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'800'">8:00am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'830'">8:30am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'900'">9:00am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'930'">9:30am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1000'">10:00am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1030'">10:30am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1100'">11:00am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1130'">11:30am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1200'">12:00am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1230'">12:30am &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1300'">1:00pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1330'">1:30pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1400'">2:00pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1430'">2:30pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1500'">3:00pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1530'">3:30pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1600'">4:00pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1630'">4:30pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1700'">5:00pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1730'">5:30pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1800'">6:00pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1830'">6:30pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1900'">7:00pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'1930'">7:30pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'2000'">8:00pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'2030'">8:30pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'2100'">9:00pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'2130'">9:30pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'2200'">10:00pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'2230'">10:30pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'2300'">11:00pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                        <td th:case="'2330'">11:30pm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;</td>
+                                    </div>
+                                    <div th:switch="${event.timeEnd}">
+                                        <td th:case="'0'">12:00am</td>
+                                        <td th:case="'30'">12:30am</td>
+                                        <td th:case="'100'">1:00am</td>
+                                        <td th:case="'130'">1:30am</td>
+                                        <td th:case="'200'">2:00am</td>
+                                        <td th:case="'230'">2:30am</td>
+                                        <td th:case="'300'">3:00am</td>
+                                        <td th:case="'330'">3:30am</td>
+                                        <td th:case="'400'">4:00am</td>
+                                        <td th:case="'430'">4:30am</td>
+                                        <td th:case="'500'">5:00am</td>
+                                        <td th:case="'530'">5:30am</td>
+                                        <td th:case="'600'">6:00am</td>
+                                        <td th:case="'630'">6:30am</td>
+                                        <td th:case="'700'">7:00am</td>
+                                        <td th:case="'730'">7:30am</td>
+                                        <td th:case="'800'">8:00am</td>
+                                        <td th:case="'830'">8:30am</td>
+                                        <td th:case="'900'">9:00am</td>
+                                        <td th:case="'930'">9:30am</td>
+                                        <td th:case="'1000'">10:00am</td>
+                                        <td th:case="'1030'">10:30am</td>
+                                        <td th:case="'1100'">11:00am</td>
+                                        <td th:case="'1130'">11:30am</td>
+                                        <td th:case="'1200'">12:00am</td>
+                                        <td th:case="'1230'">12:30am</td>
+                                        <td th:case="'1300'">1:00pm</td>
+                                        <td th:case="'1330'">1:30pm</td>
+                                        <td th:case="'1400'">2:00pm</td>
+                                        <td th:case="'1430'">2:30pm</td>
+                                        <td th:case="'1500'">3:00pm</td>
+                                        <td th:case="'1530'">3:30pm</td>
+                                        <td th:case="'1600'">4:00pm</td>
+                                        <td th:case="'1630'">4:30pm</td>
+                                        <td th:case="'1700'">5:00pm</td>
+                                        <td th:case="'1730'">5:30pm</td>
+                                        <td th:case="'1800'">6:00pm</td>
+                                        <td th:case="'1830'">6:30pm</td>
+                                        <td th:case="'1900'">7:00pm</td>
+                                        <td th:case="'1930'">7:30pm</td>
+                                        <td th:case="'2000'">8:00pm</td>
+                                        <td th:case="'2030'">8:30pm</td>
+                                        <td th:case="'2100'">9:00pm</td>
+                                        <td th:case="'2130'">9:30pm</td>
+                                        <td th:case="'2200'">10:00pm</td>
+                                        <td th:case="'2230'">10:30pm</td>
+                                        <td th:case="'2300'">11:00pm</td>
+                                        <td th:case="'2330'">11:30pm</td>
+                                    </div>
+                                    <td th:text="${event.date}"></td>
+                                    <td><button type="button" th:onclick="|window.location.href='@{'/calendar/delete/{sid}' (sid=${event.sid})}'|" id="deleteButton">Delete</button></td>
+                                </p>
+
                             </tr>
                         </table>
             </form>
       </div>
+
   
       <div id="deleteEventModal">
         <h2>Event</h2>

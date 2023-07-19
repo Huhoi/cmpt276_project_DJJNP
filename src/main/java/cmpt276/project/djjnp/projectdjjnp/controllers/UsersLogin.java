@@ -2,12 +2,15 @@ package cmpt276.project.djjnp.projectdjjnp.controllers;
 
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +48,7 @@ public class UsersLogin {
     private LocationRepository locationRepo;
 
     private String errorMessageString = "";
+    private String currentDateSelected = "";
 
     @GetMapping("/")
     public RedirectView homeRedirect() {
@@ -170,6 +174,16 @@ public class UsersLogin {
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         List<Event> currentUserEvent = eventRepo.findAll();
 
+        //Get Date
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        LocalDateTime curDate = LocalDateTime.now();
+        //currentDateSelected = formatter.format(curDate);
+        
+        String formatDate = curDate.format(formatter);
+
+        currentDateSelected = formatDate;
+        System.out.println(currentDateSelected);
+        
 
         //Sort the list by chronological order
         Collections.sort(currentUserEvent, (e1, e2) -> {
@@ -181,16 +195,14 @@ public class UsersLogin {
             //Compare start time if events are the same date
             return e1.getTimeBegin() - e2.getTimeBegin();
         });
+       
 
-
-
+        model.addAttribute("date", currentDateSelected);
         model.addAttribute("user", currentUser);
         model.addAttribute("event", currentUserEvent);
 
         return "view/calendarPage";
     }
-    
-    
 
     //Adding From Calendar
     @PostMapping("/calendar/add")
@@ -203,17 +215,18 @@ public class UsersLogin {
         //Gets Paremeters from form
         int id = currentUser.getUid();
         String event = form.get("eventTitleInput");
-
         int timeBegin = Integer.parseInt(form.get("timeBegin"));
         int timeEnd = Integer.parseInt(form.get("timeEnd"));
+
+    
 
         //Gets selected date
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         Date date = formatter.parse(form.get("selectedDate"));
         String dateAsString = formatter.format(date);
+        
 
-        model.addAttribute("date", dateAsString);
-
+        //Prints into console for error check
         System.out.println("Event: " + event);
         System.out.println("Date: " + date);
         System.out.println("time: " + timeBegin);
@@ -223,25 +236,10 @@ public class UsersLogin {
 
         return "redirect:/calendar";
     }
+    
 
-    // //Getting Date
-    // @GetMapping("/calendar/date")
-    // public String selectedDate(@RequestParam Map<String, String> form, Model model, @ModelAttribute("date") User user) throws Exception {
 
-    //     //Gets selected date
-    //     String dateInit = form.get("selectedDate2");
-    //     if (dateInit != null) {
-    //         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-    //         Date date = formatter.parse(form.get("selectedDate2"));
-    //         String dateAsString = formatter.format(date);
-    //         model.addAttribute("date", dateAsString);
-    //         System.out.println("DADASDASD" + dateAsString);
-
-    //     }
-
-    //     return "view/calendarPage";
-    // }
-
+    
     //Delete From Event List
     @GetMapping("/calendar/delete/{sid}")
     public String deleteCalendar(@PathVariable String sid){
