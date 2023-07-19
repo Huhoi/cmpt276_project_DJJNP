@@ -1,3 +1,34 @@
+// // TO-DO: LIVE UPDATING MAP WITHOUT REDIRECTING VIA AJAX
+// $(document).ready(function () {
+//     $("#markerForm").submit(function (event) {
+//         event.preventDefault();
+//         var markerData = {};
+//         markerData["timestamp"] = $("#timestampInput").val();
+//         markerData["latitude"] = $("#latitudeInput").val();
+//         markerData["longitude"] = $("#longitudeInput").val();
+//         markerData["description"] = $("#descriptionInput").val();
+
+//         console.log(markerData["timestamp"]);
+//         console.log(markerData["latitude"]);
+//         console.log(markerData["longitude"]);
+//         console.log(markerData["description"]);
+
+//         $.ajax({
+//             type: "POST",
+//             contentType: "application/json",
+//             url: "/display/add",
+//             data: JSON.stringify(markerData),
+//             dataType: 'json',
+//             success: function (data) {
+//                 console.log("SUCCESS");
+//             },
+//             error: function (e) {
+//                 console.log("ERROR" + e);
+//             }
+//         });
+//     });
+// });
+
 // List of markers on load
 var markers = [
     {
@@ -65,11 +96,27 @@ function initMap() {
         document.getElementById("latitudeInput").value = marker.latitude;
         document.getElementById("longitudeInput").value = marker.longitude;
         document.getElementById("descriptionInput").value = marker.description;
-        
+
+        console.log("supposed to submit");
         document.forms["markerForm"].submit();
 
         // Reload to show routes
         reloadMap();
+
+        // // Ajax test
+        // $.ajax({
+        //     url: 'jdbc:postgresql://dpg-cib1ic5gkuvl1dgdgv70-a.oregon-postgres.render.com/cmpt276_project_database',
+        //     type: 'POST',
+        //     data: {
+        //         timestamp: "name here",
+        //         latitude: "lat here",
+        //         longitude: "long here",
+        //         latitude: "lat here"
+        //     },
+        //     success: function(msg) {
+        //         alert('Email Sent');
+        //     }               
+        // });
     });
 
     // Load markers and routes
@@ -87,8 +134,6 @@ function initMap() {
         cell2.innerHTML = marker.latitude;
         cell3.innerHTML = marker.longitude;
         cell4.innerHTML = marker.description;
-
-
     });
 }
 
@@ -170,10 +215,10 @@ function addMarker(newMarker) {
 
     // Return marker details
     return {
-        "timestamp": "New marker",
+        "timestamp": "New marker", // TO-DO
         "latitude": newMarker.lat(),
         "longitude": newMarker.lng(),
-        "description": "Add description"
+        "description": "Add description" // TO-DO
     };
 }
 

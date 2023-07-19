@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Display Map</title>
+    <!-- Bootstrap and CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/displayPageStyle.css">
     <link rel="stylesheet" href="/css/navigationBarStyle.css">
+    <!-- jQuery && JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="/js/displayPageScript.js" defer></script>
 </head>
 <body>
@@ -30,11 +33,11 @@
                         <button type="button" th:onclick="|window.location.href='/display'|" id="button">Display</button>
                     </div>
                 </td>
-                <td class="navButton">
+                <!-- <td class="navButton">
                     <div>
                         <button type="button" id="button">Feature 5</button>
                     </div>
-                </td>
+                </td> -->
                 <td class="navButton">
                     <div>
                         <button type="button" th:onclick="|window.location.href='/account'|" id="button">Account</button>
@@ -52,22 +55,37 @@
     </script><br>
 
     <div id="listDiv" class="table-wrapper-scroll-y">
-        <!-- <button class="btn btn-dark" onclick="reloadMap()">Rebuild routes</button> -->
         <table id="list" class="table table-dark table-striped">
-            <th>Marker name</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-            <th>Description</th>
+            <thead class="thead-dark">
+                <tr>
+                    <th>Marker name</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="loc:${location}">
+                    <td th:text="${loc.timestamp}"></td>
+                    <td th:text="${loc.latitude}"></td>
+                    <td th:text="${loc.longitude}"></td>
+                    <td th:text="${loc.description}"></td>
+                    <script th:inline="javascript">
+                        var loc = /*[[${loc}]]*/ "";
+                        console.log("INLINE JAVASCRIPT: " + loc.timestamp);
+                    </script>
+                </tr>
+            </tbody>
         </table>
     </div>
 
     <!-- Hidden Form to get Data from API -->
-    <form action="/display/add" method="post" name="markerForm">
+    <form action="/display/add" method="post" id="markerForm" name="markerForm">
         <input type="hidden" id="timestampInput" name="timestampInput"/>
         <input type="hidden" id="latitudeInput" name="latitudeInput"/>
         <input type="hidden" id="longitudeInput" name="longitudeInput"/>
         <input type="hidden" id="descriptionInput" name="descriptionInput"/>
-    </form>
+    </form>    
     
 </body>
 </html>
