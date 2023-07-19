@@ -16,6 +16,9 @@
     padding: 5px;
     border-radius: 5px;
     color: white;
+    font-weight: bold;
+    font-size: 25px;
+    text-align: center;
 }
 
 #saveButton, #cancelButton,#closeButton, #deleteButton{
@@ -43,9 +46,7 @@
 
 #header {
     padding: 10px;
-    color: #d36c6c;
-    font-size: 26px;
-    font-family: sans-serif;
+
     display: flex;
     justify-content: space-between;
 }
@@ -64,18 +65,23 @@
 #monthDisplay{
     position: relative;
     left: 570px;
-    color:#bb342f
+
+    font-size: 30px;
+    font-family: sans-serif;
+    color: #d11212;
+    font-weight: bold;
 }
 
 #weekdays {
     width: 100%;
     display: flex;
     color: #247BA0;
+    text-align: center;
 }
 
 #weekdays div {
     position: relative;
-    left: 585px;
+    left: 575px;
     width: 1000px;
     
 }
@@ -85,6 +91,7 @@
     display: flex;
     margin-left: 575px;
     flex-wrap: wrap;
+    font-style: italic;
 }
 
 .day {
@@ -210,6 +217,7 @@
 
 #eventList{
     box-shadow: 0px 0px 3px gray;
+    background: #d3ecf8;
 
 }
 
@@ -219,4 +227,21 @@ td{
 
 h2{
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+#aSchedule, #tSchedule{
+    position: relative;
+    top: 10px;
+    margin-top: 10px;
+
+    
+    font-weight: bold;
+    font-style: italic;
+    font-size: 25px;
+    color: #1f3f61;
+}
+
+#legend{
+    font-weight:bold;
+    
 }

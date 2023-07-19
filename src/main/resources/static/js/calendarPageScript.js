@@ -4,6 +4,8 @@ let events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('e
 let weatherData = null;
 let weatherDataIndex = 0;
 
+let check = 0;
+
 const calendar = document.getElementById('calendar');
 const newEventModal = document.getElementById('newEventModal');
 const deleteEventModal = document.getElementById('deleteEventModal');
@@ -47,6 +49,7 @@ function decodeWeatherCode(code) {
 }
 
 
+
 async function fetchWeatherData() {
   try {
     const result = await fetch("https://api.open-meteo.com/v1/forecast?latitude=49.24&longitude=-122.98&daily=weathercode&timezone=America%2FLos_Angeles&forecast_days=16&models=gem_seamless");
@@ -57,6 +60,11 @@ async function fetchWeatherData() {
   }
 }
 
+
+
+
+
+
 //Opens the Modal (Popup)
 function openModal(date) {
   //The day that is clicked
@@ -64,7 +72,7 @@ function openModal(date) {
 
   //Changes an hidden input to selected date on click
   document.getElementById('selectedDate').value = date;
-  document.getElementById('selectedDate2').value = date;
+
 
   //Creates the ADD Event Modal
   newEventModal.style.display = 'block';
@@ -80,11 +88,14 @@ async function load() {
   if (nav !== 0) {
     dt.setMonth(new Date().getMonth() + nav);
   }
+  
+  
 
   const today = dt.getDate();
   const currentMonth = dt.getMonth();
   const month = dt.getMonth();
   const year = dt.getFullYear();
+
 
   const firstDayOfMonth = new Date(year, month, 1);
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -163,6 +174,9 @@ function closeModal() {
   backDrop.style.display = 'none';
   clicked = null;
   load();
+
+  check = 0;
+
 }
 
 function saveEvent() {
