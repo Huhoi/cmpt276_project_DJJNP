@@ -180,7 +180,7 @@ public class UsersLogin {
         //Get Date
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");  
         // LocalDateTime curDate = LocalDateTime.now();
-        Date curDate = new Date();
+        Date curDate = new Date(System.currentTimeMillis());
         String str = formatter.format(curDate);
         currentDateSelected = str;
         System.out.println(currentDateSelected);
