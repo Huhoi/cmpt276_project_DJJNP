@@ -2,7 +2,9 @@ package cmpt276.project.djjnp.projectdjjnp.controllers;
 
 
 import java.text.SimpleDateFormat;
+import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Collections;
@@ -178,12 +180,12 @@ public class UsersLogin {
         List<Event> currentUserEvent = eventRepo.findAll();
 
         //Get Date
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");  
-        // LocalDateTime curDate = LocalDateTime.now();
-        Calendar calendar = Calendar.getInstance();
-        //Date curDate = new Date(System.currentTimeMillis());
-        String str = formatter.format(calendar.getTime());
-
+        //SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        LocalDateTime curDate = LocalDateTime.now();
+        
+        String str = curDate.format(formatter);
+    
 
         currentDateSelected = str;
         System.out.println(currentDateSelected);
