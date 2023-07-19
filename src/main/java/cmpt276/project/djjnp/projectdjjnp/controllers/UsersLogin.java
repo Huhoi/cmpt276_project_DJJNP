@@ -4,6 +4,7 @@ package cmpt276.project.djjnp.projectdjjnp.controllers;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -177,13 +178,11 @@ public class UsersLogin {
         List<Event> currentUserEvent = eventRepo.findAll();
 
         //Get Date
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        LocalDateTime curDate = LocalDateTime.now();
-        //currentDateSelected = formatter.format(curDate);
-        
-        String formatDate = curDate.format(formatter);
-
-        currentDateSelected = formatDate;
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");  
+        // LocalDateTime curDate = LocalDateTime.now();
+        Date curDate = new Date();
+        String str = formatter.format(curDate);
+        currentDateSelected = str;
         System.out.println(currentDateSelected);
         
 
