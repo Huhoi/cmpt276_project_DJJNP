@@ -6,8 +6,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -276,7 +278,7 @@ public class UsersLogin {
     @PostMapping("/display/add")
     public String showMapAdd(@RequestParam Map<String, String> form, Model model, HttpServletRequest request,
             HttpSession session, HttpServletResponse response) throws Exception {
-        
+
         //Saves Location
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         List<Location> currentUserLocations = locationRepo.findAll();
@@ -301,9 +303,8 @@ public class UsersLogin {
         locationRepo.save(new Location(id, timestamp, latitude, longitude, description));
 
         return "redirect:/display";
-    
-    }
 
+    }
 
 
   
@@ -397,3 +398,47 @@ public class UsersLogin {
     }
 
 }
+
+
+
+// // Controller-compatible Ajax call for live updates (unfinished)
+// @PostMapping("/display/add")
+// public ResponseEntity<?> showMapAdd(Errors errors) {
+
+//     AjaxResponseBody result = new AjaxResponseBody();
+
+//     if (errors.hasErrors()) {
+
+//         result.setMsg(errors.getAllErrors()
+//                     .stream().map(x -> x.getDefaultMessage())
+//                     .collect(Collectors.joining(",")));
+
+//         return ResponseEntity.badRequest().body(result);
+
+//     }
+
+//     //Saves Location
+//     User currentUser = (User) request.getSession().getAttribute("sessionUser");
+//     List<Location> currentUserLocations = locationRepo.findAll();
+//     model.addAttribute("user", currentUser);
+//     model.addAttribute("location", currentUserLocations);
+    
+//     //Gets parameters from form
+//     int id = currentUser.getUid();
+//     String timestamp = form.get("timestampInput");
+//     String latitude = form.get("latitudeInput");
+//     String longitude = form.get("longitudeInput");
+//     String description = form.get("descriptionInput");
+    
+
+//     //Testing if it works
+//     System.out.println("Sumbiting");
+//     System.out.println("Timestamp: " + timestamp);
+//     System.out.println("Latitude: " + latitude);
+//     System.out.println("Longitude: " + longitude);
+//     System.out.println("Description: " + description);
+    
+//     locationRepo.save(new Location(id, timestamp, latitude, longitude, description));
+
+//     return "redirect:/display";
+// }
