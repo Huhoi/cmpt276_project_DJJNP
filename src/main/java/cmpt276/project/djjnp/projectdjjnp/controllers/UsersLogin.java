@@ -187,8 +187,8 @@ public class UsersLogin {
         String str = curDate.format(formatter);
     
 
-        currentDateSelected = str;
-        System.out.println(currentDateSelected);
+        
+        System.out.println(str);
         
 
         //Sort the list by chronological order
@@ -203,7 +203,7 @@ public class UsersLogin {
         });
        
 
-        model.addAttribute("date", currentDateSelected);
+        model.addAttribute("date", str);
         model.addAttribute("user", currentUser);
         model.addAttribute("event", currentUserEvent);
 
