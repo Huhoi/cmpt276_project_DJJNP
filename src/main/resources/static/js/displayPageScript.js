@@ -75,21 +75,6 @@ function initMap() {
     // Load markers and routes
     reloadMap();
 
-    // Create list with existing markers
-    markers.forEach(marker => {
-        var table = document.getElementById("list");
-        var row = table.insertRow(1);
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        var cell4 = row.insertCell(3);
-        cell1.innerHTML = marker.timestamp;
-        cell2.innerHTML = marker.latitude;
-        cell3.innerHTML = marker.longitude;
-        cell4.innerHTML = marker.description;
-
-
-    });
 }
 
 
@@ -98,64 +83,92 @@ function reloadMap() {
     var coordList = new Array(); // Stores all latitude and longitudes in the form of a LatLng object
     var infoWindow = new google.maps.InfoWindow(); // The window that pops up when you click a marker
     var latLngBounds = new google.maps.LatLngBounds(); // Used to automatically resize map
-    // Loop to initialize all markers that currently exist
-    for (let i = 0; i < markers.length; i++) {
-        var sel = markers[i];
-        var selLatLng = new google.maps.LatLng(sel.latitude, sel.longitude);
-        coordList.push(selLatLng);
-        var marker = new google.maps.Marker({
-            position: selLatLng,
-            map: map,
-            title: sel.timestamp
-        });
 
-        // Click on marker to reveal details
-        (function(marker, sel) {
-            google.maps.event.addListener(marker, "click", function(e) {
-                infoWindow.setContent(sel.timestamp);
-                infoWindow.open(map, marker);
-            });
-        })(marker, sel);
+    fetch('/api/location')
+        .then(response => response.json())
+        .then(data => {
+            for (const i of data){
+                markers.push({timestamp: i.timestamp,
+                              latitude: Number(i.latitude).toFixed(6),
+                              longitude:Number(i.longitude).toFixed(6),
+                              description: i.description});
+            }
 
-        // Auto-adjust the map to show all markers
-        latLngBounds.extend(marker.position);
-    }
-
-    // Routing stuff
-    // Implement the Google directions service to help with pathfinding
-    var service = new google.maps.DirectionsService();
-    // Loop to draw lines connecting all points
-    for (let j = 0; j < coordList.length; j++) {
-        if ((j + 1) < coordList.length) {
-            // TEMPORARY: We route the previous marker in the array with the next
-            var src = coordList[j];
-            var dest = coordList[j+1];
-            // Call upon the directions service to get paths given an origin and a
-            // destination. Can adjust mode of transportation via the travelMode field.
-            service.route({
-                origin: src,
-                destination: dest,
-                travelMode: google.maps.DirectionsTravelMode.DRIVING // DRIVING, BYCYCLING, TRANSIT, WALKING
-            },
-            // Function checks if a response was received from the API call, and
-            // proceeds to create a path between the two given points
-            function(result, status) {
-                if (status == google.maps.DirectionsStatus.OK) {
-                    var path = new google.maps.MVCArray();
-                    var poly = new google.maps.Polyline({
-                        map: map,
-                        strokeColor: '#8153f5'
+            // Loop to initialize all markers that currently exist
+            for (let i = 0; i < markers.length; i++) {
+                var sel = markers[i];
+                var selLatLng = new google.maps.LatLng(sel.latitude, sel.longitude);
+                coordList.push(selLatLng);
+                var marker = new google.maps.Marker({
+                    position: selLatLng,
+                    map: map,
+                    title: sel.timestamp
+                });
+        
+                // Click on marker to reveal details
+                (function(marker, sel) {
+                    google.maps.event.addListener(marker, "click", function(e) {
+                        infoWindow.setContent(sel.timestamp);
+                        infoWindow.open(map, marker);
                     });
-                    poly.setPath(path);
-                    for (let k = 0, len = result.routes[0].overview_path.length; k < len; k++) {
-                        path.push(result.routes[0].overview_path[k]);
-                    }
+                })(marker, sel);
+        
+                // Auto-adjust the map to show all markers
+                latLngBounds.extend(marker.position);
+            }
+        
+            // Routing stuff
+            // Implement the Google directions service to help with pathfinding
+            var service = new google.maps.DirectionsService();
+            // Loop to draw lines connecting all points
+            for (let j = 0; j < coordList.length; j++) {
+                if ((j + 1) < coordList.length) {
+                    // TEMPORARY: We route the previous marker in the array with the next
+                    var src = coordList[j];
+                    var dest = coordList[j+1];
+                    // Call upon the directions service to get paths given an origin and a
+                    // destination. Can adjust mode of transportation via the travelMode field.
+                    service.route({
+                        origin: src,
+                        destination: dest,
+                        travelMode: google.maps.DirectionsTravelMode.DRIVING // DRIVING, BYCYCLING, TRANSIT, WALKING
+                    },
+                    // Function checks if a response was received from the API call, and
+                    // proceeds to create a path between the two given points
+                    function(result, status) {
+                        if (status == google.maps.DirectionsStatus.OK) {
+                            var path = new google.maps.MVCArray();
+                            var poly = new google.maps.Polyline({
+                                map: map,
+                                strokeColor: '#8153f5'
+                            });
+                            poly.setPath(path);
+                            for (let k = 0, len = result.routes[0].overview_path.length; k < len; k++) {
+                                path.push(result.routes[0].overview_path[k]);
+                            }
+                        }
+                    });
                 }
+            }
+            
+            // Auto-adjust the map to show all markers
+            map.fitBounds(latLngBounds);
+
+            // Create list with existing markers
+            markers.forEach(marker => {
+                var table = document.getElementById("list");
+                var row = table.insertRow(1);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                var cell4 = row.insertCell(3);
+                cell1.innerHTML = marker.timestamp;
+                cell2.innerHTML = marker.latitude;
+                cell3.innerHTML = marker.longitude;
+                cell4.innerHTML = marker.description;
             });
-        }
-    }
-    // Auto-adjust the map to show all markers
-    map.fitBounds(latLngBounds);
+        })
+        .catch(error => console.error('Error fetching locations', error));
 }
 
 
