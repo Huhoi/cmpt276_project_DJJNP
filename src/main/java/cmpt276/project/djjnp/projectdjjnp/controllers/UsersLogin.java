@@ -55,6 +55,13 @@ public class UsersLogin {
     private String errorMessageString = "";
     private String currentDateSelected = "";
 
+    private final LocationController locationController;
+
+    @Autowired
+    public UsersLogin(LocationController locationController){
+        this.locationController = locationController;
+    }
+
     @GetMapping("/")
     public RedirectView homeRedirect() {
         return new RedirectView("view/login");
@@ -280,6 +287,7 @@ public class UsersLogin {
 
         return "view/displayPage";
     }
+
 
     //Adds location to database
     @PostMapping("/display/add")
