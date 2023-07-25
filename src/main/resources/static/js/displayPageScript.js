@@ -121,7 +121,7 @@ function initMap() {
 
     // Load markers and routes
     reloadMap();
-
+}
 
 function reloadMap() {
     // Load all markers on the map
