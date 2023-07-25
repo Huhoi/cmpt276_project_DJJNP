@@ -79,6 +79,10 @@
         </table>
     </div>
 
+    <div>
+        <input type="hidden" id="currentUser" th:value="${user.uid}">
+    </div>
+
     <!-- Hidden Form to get Data from API -->
     <form action="/display/add" method="post" id="markerForm" name="markerForm">
         <input type="hidden" id="timestampInput" name="timestampInput"/>

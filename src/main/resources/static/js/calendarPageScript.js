@@ -14,6 +14,19 @@ const backDrop = document.getElementById('modalBackDrop');
 const eventTitleInput = document.getElementById('eventTitleInput');
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+
+function initAutocomplete() {
+  const input = document.getElementById('searchBox');
+  const autocomplete = new google.maps.places.Autocomplete(input, {
+    fields: ['name', 'formatted_address', 'geometry.location'],
+  });
+  autocomplete.addListener('place_changed', () => {
+    const place = autocomplete.getPlace();
+    document.getElementById("locationLat").value = place.geometry.location.lat();
+    document.getElementById("locationLng").value = place.geometry.location.lng();
+  });
+}
+
 let weatherMapping = {
   0: "Clear sky",
   1: "Mainly clear",
