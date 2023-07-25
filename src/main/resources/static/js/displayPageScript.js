@@ -67,14 +67,14 @@ var markers = [
 function initMap() {
     // Edit map options and assign it to its HTML ID
     var options = {
-        center: {lat: 49.278059, lng: -122.919883},
+        center: { lat: 49.278059, lng: -122.919883 },
         zoom: 8
     };
     map = new google.maps.Map(document.getElementById("map"), options);
     console.log("NOTE: Map may not load if you refresh too frequently");
 
     // Place marker on click location
-    google.maps.event.addListener(map, "click", function(event) {
+    google.maps.event.addListener(map, "click", function (event) {
         // Create marker and store in list
         // NOTE: The markers are of type 'Marker' (https://developers.google.com/maps/documentation/javascript/reference/marker)
         let marker = addMarker(event.latLng);
@@ -121,7 +121,7 @@ function initMap() {
 
     // Load markers and routes
     reloadMap();
-
+}
 
 function reloadMap() {
     // Load all markers on the map

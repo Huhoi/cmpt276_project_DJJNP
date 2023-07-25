@@ -3,6 +3,7 @@ let clicked = null;
 let events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : [];
 let weatherData = null;
 let weatherDataIndex = 0;
+let eventList = [];
 
 let check = 0;
 
@@ -72,14 +73,31 @@ function openModal(date) {
 
   //Changes an hidden input to selected date on click
   document.getElementById('selectedDate').value = date;
-
-
+  
   //Creates the ADD Event Modal
   newEventModal.style.display = 'block';
 
   //Creates a "Backdrop" when model opens
   backDrop.style.display = 'block';
+
+  //Use fetch to get data from EVENT table from database
+  fetch('/api/event').then(response => response.json()).then(data => {
+    for (const i of data) {
+      eventList.push({
+        eventName: i.eventName,
+        timeBegin: i.timeBegin,
+        timeEnd: i.timeEnd,
+        uid: i.uid,
+        sid: i.sid
+      });
+    }
+  }).catch(error => console.error('Error fetching events', error));
+
+  //
+
+
 }
+
 
 
 async function load() {

@@ -208,7 +208,7 @@
                                 <td id="legend">Date</td>
                             </tr>
             
-                            <tr th:each="event:${event}"  th:if="${event.uid} == ${user.uid} and ${event.date} == ${date}"  id="eventList" >
+                            <!-- <tr th:each="event:${event}"  th:if="${event.uid} == ${user.uid} and ${event.date} == ${date}"  id="eventList" >
                                 <p >
                                     <td th:text="${event.eventName}"></td>
                                     <div th:switch="${event.timeBegin}">
@@ -315,6 +315,11 @@
                                     <td><button type="button" th:onclick="|window.location.href='@{'/calendar/delete/{sid}' (sid=${event.sid})}'|" id="deleteButton">Delete</button></td>
                                 </p>
 
+                            </tr> -->
+                            <tr>
+                               <p id="tEvents">
+                                
+                               </p> 
                             </tr>
                         </table>
                     

@@ -11,7 +11,7 @@ public class Location {
     private int lid;
     private int uid;
     private int sid;
-    private String timestamp; //Name of Markers on Map
+    private String timestamp; //Name of Markers on Map 
     private String latitude; 
     private String longitude;
     private String description;
