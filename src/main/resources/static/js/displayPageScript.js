@@ -30,38 +30,8 @@
 // });
 
 // List of markers on load
-var markers = [
-    {
-        "timestamp": "SFU Burnaby",
-        "latitude": "49.278059",
-        "longitude": "-122.919883",
-        "description": "On top of a mountain"
-    },
-    {
-        "timestamp": "SFU Surrey",
-        "latitude": "49.186940",
-        "longitude": "-122.849895",
-        "description": "Newer campus"
-    },
-    {
-        "timestamp": "Metrotown",
-        "latitude": "49.2276",
-        "longitude": "-123.0076",
-        "description": "Largest mall in BC"
-    },
-    {
-        "timestamp": "Science World",
-        "latitude": "49.2734",
-        "longitude": "-123.1038",
-        "description": "Tourist attraction"
-    },
-    {
-        "timestamp": "YVR",
-        "latitude": "49.1933",
-        "longitude": "-123.1751",
-        "description": "Vanouver International Airport"
-    }
-];
+var markers = [];
+let currentUser = document.getElementById("currentUser").value;
 
 // Initialize map when page is loaded
 function initMap() {
@@ -129,14 +99,17 @@ function reloadMap() {
     var infoWindow = new google.maps.InfoWindow(); // The window that pops up when you click a marker
     var latLngBounds = new google.maps.LatLngBounds(); // Used to automatically resize map
 
-    fetch('/api/location')
+
+    fetch('/api/event')
         .then(response => response.json())
         .then(data => {
             for (const i of data){
-                markers.push({timestamp: i.timestamp,
-                              latitude: Number(i.latitude).toFixed(6),
-                              longitude:Number(i.longitude).toFixed(6),
-                              description: i.description});
+                if (i.uid == currentUser){
+                    markers.push({timestamp: i.eventName,
+                                latitude: Number(i.latitude).toFixed(6),
+                                longitude:Number(i.longitude).toFixed(6),
+                                description: i.description});
+                }
             }
 
             // Loop to initialize all markers that currently exist

@@ -230,6 +230,8 @@ public class UsersLogin {
         String event = form.get("eventTitleInput");
         int timeBegin = Integer.parseInt(form.get("timeBegin"));
         int timeEnd = Integer.parseInt(form.get("timeEnd"));
+        String locationLatitude = form.get("locationLat");
+        String locationLongitude = form.get("locationLng");
 
     
 
@@ -245,7 +247,7 @@ public class UsersLogin {
         System.out.println("time: " + timeBegin);
         System.out.println("time: " + timeEnd);
 
-        eventRepo.save(new Event(id, event, timeBegin, timeEnd, dateAsString));
+        eventRepo.save(new Event(id, event, locationLatitude ,locationLongitude, timeBegin, timeEnd, dateAsString));
 
         return "redirect:/calendar";
     }

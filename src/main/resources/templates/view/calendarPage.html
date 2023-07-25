@@ -12,6 +12,7 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="/js/calendarPageScript.js" defer></script>
 </head>
+
 <body>
     <!-- Navigation Bar  -->
     <div class="navBar">
@@ -47,6 +48,11 @@
         </table>
         
     </div>
+
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCs8dt2-arfwhEtAAcBeVAFXZlr8HxBTqI&callback=initAutocomplete&libraries=places"
+        defer>
+    </script><br>
 
     <!-- Calendar  -->
     <div id="calendarContainer">
@@ -88,6 +94,10 @@
                     class="form-control form-control-lg"
                     required 
                 />
+
+                <input type="text" id="searchBox" placeholder="Location">
+                <input type="hidden" id="locationLat" name="locationLat">
+                <input type="hidden" id="locationLng" name="locationLng">
                 
                 <input type="hidden" id="selectedDate" name="selectedDate"/>
                 <!-- List of Begin Times -->
@@ -437,6 +447,7 @@
                             </tr>
                         </table>
             </form>
+
       </div>
 
   
@@ -450,7 +461,6 @@
       </div>
   
       <div id="modalBackDrop"></div>
-      
       
 
 </body>

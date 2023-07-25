@@ -158,7 +158,7 @@
 }
 
 
-#eventTitleInput,#dateInput{
+#eventTitleInput,#dateInput,#searchBox{
     padding: 10px;
     width: 100%;
     box-sizing: border-box;
