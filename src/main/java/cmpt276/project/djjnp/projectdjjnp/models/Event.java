@@ -12,6 +12,8 @@ public class Event {
     private int sid;
     private int uid;
     private String eventName; // replace with location/event from map API
+    private String latitude;
+    private String longitude;
     private String date;
     private int timeBegin;
     private int timeEnd;
@@ -21,9 +23,11 @@ public class Event {
     public Event() {
     }
 
-    public Event(int uid, String eventName, int timeBegin, int timeEnd, String date) {
+    public Event(int uid, String eventName, String latitude, String longitude, int timeBegin, int timeEnd, String date) {
         this.uid = uid;
         this.eventName = eventName;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.timeBegin = timeBegin;
         this.timeEnd = timeEnd;
         this.date = date;
@@ -37,6 +41,22 @@ public class Event {
         this.eventName = eventName;
     }
    
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
     public int getTimeBegin() {
         return timeBegin;
     }
