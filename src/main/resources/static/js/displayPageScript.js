@@ -73,6 +73,56 @@ function initMap() {
     map = new google.maps.Map(document.getElementById("map"), options);
     console.log("NOTE: Map may not load if you refresh too frequently");
 
+    // Load search box
+    const input = document.getElementById("pac-input");
+    const searchbox = new google.maps.places.SearchBox(input);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    map.addListener("bounds_changed", () => {
+        searchbox.setBounds(map.getBounds());
+    });
+
+    // Listen for search box inputs and generate predictions
+    searchbox.addListener("places_changed", () => {
+        const places = searchbox.getPlaces();
+        // Do nothing if no predictions found
+        if (places.length == 0) { return; }
+
+        const bounds = new google.maps.LatLngBounds();
+
+        places.forEach((place) => {
+            if (!place.geometry || !place.geometry.location) {
+                console.log("No geometry found");
+                return;
+            }
+
+            // Create icon depending on location
+            const icon = {
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(25, 25)
+            }
+
+            // Create marker if prediction selected
+            markers.push(
+                {
+                    "timestamp": place.name,
+                    "latitude": place.geometry.location.lat(),
+                    "longitude": place.geometry.location.lng(),
+                    "description": "From autocomplete search box"
+                }
+            );
+            
+            bounds.extend(place.geometry.location);
+            console.log("TESTING place.geometry.location: " + place.geometry.location);
+
+            // TESTING: print out all markers after selection
+            console.table(markers);
+        });
+        map.fitBounds(bounds);
+    });
+
     // Place marker on click location
     google.maps.event.addListener(map, "click", function(event) {
         // Create marker and store in list
@@ -102,21 +152,6 @@ function initMap() {
 
         // Reload to show routes
         reloadMap();
-
-        // // Ajax test
-        // $.ajax({
-        //     url: 'jdbc:postgresql://dpg-cib1ic5gkuvl1dgdgv70-a.oregon-postgres.render.com/cmpt276_project_database',
-        //     type: 'POST',
-        //     data: {
-        //         timestamp: "name here",
-        //         latitude: "lat here",
-        //         longitude: "long here",
-        //         latitude: "lat here"
-        //     },
-        //     success: function(msg) {
-        //         alert('Email Sent');
-        //     }               
-        // });
     });
 
     // Load markers and routes
@@ -164,6 +199,7 @@ function reloadMap() {
 
         // Auto-adjust the map to show all markers
         latLngBounds.extend(marker.position);
+        console.log("TESTING marker.position: " + marker.position);
     }
 
     // Routing stuff

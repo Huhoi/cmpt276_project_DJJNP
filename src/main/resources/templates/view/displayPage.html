@@ -46,12 +46,15 @@
             </tr>
         </table>
 
+    <!-- Search box goes here -->
+    <input id="pac-input" class="controls" type="text" placeholder="Search box"/>
+
     <!-- Initmap() targets this div and loads the map -->
     <div id="map"></div>
         
     <!-- Google Maps JavaScript API with key -->
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCs8dt2-arfwhEtAAcBeVAFXZlr8HxBTqI&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCs8dt2-arfwhEtAAcBeVAFXZlr8HxBTqI&callback=initMap&libraries=places">
     </script><br>
 
     <div id="listDiv" class="table-wrapper-scroll-y">
