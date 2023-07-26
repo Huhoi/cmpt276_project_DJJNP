@@ -15,7 +15,6 @@ public class EventServiceImplementation implements EventService {
         this.eventRepo = eventRepo;
     }
 
-    
     public void deleteEventById(int eventId) {
         eventRepo.deleteById(eventId);
     }
