@@ -464,6 +464,12 @@ function initButtons() {
   document.getElementById('closeButton').addEventListener('click', closeModal);
 }
 
+function deleteEvent() {
+  events = events.filter(e => e.date !== clicked);
+  localStorage.setItem('events', JSON.stringify(events));
+  closeModal();
+}
+
 
 //Checks if there are conflicting time begins
 function timeCheck() {
