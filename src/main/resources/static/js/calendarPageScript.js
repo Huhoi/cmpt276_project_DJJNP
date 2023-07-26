@@ -6,6 +6,7 @@ let weatherDataIndex = 0;
 
 let check = 0;
 
+
 const calendar = document.getElementById('calendar');
 const newEventModal = document.getElementById('newEventModal');
 const deleteEventModal = document.getElementById('deleteEventModal');
