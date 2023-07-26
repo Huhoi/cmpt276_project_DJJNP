@@ -53,7 +53,6 @@ public class UsersLogin {
     private LocationRepository locationRepo;
 
     private String errorMessageString = "";
-    private String currentDateSelected = "";
 
     private final LocationController locationController;
 
@@ -218,49 +217,49 @@ public class UsersLogin {
     }
 
     //Adding From Calendar
-    @PostMapping("/calendar/add")
-    public String addCalendar(@RequestParam Map<String, String> form, Model model, HttpServletRequest request,
-            HttpSession session, HttpServletResponse response) throws Exception {
-        //Saves Event
-        User currentUser = (User) request.getSession().getAttribute("sessionUser");
-        model.addAttribute("user", currentUser);
+    // @PostMapping("/calendar/add")
+    // public String addCalendar(@RequestParam Map<String, String> form, Model model, HttpServletRequest request,
+    //         HttpSession session, HttpServletResponse response) throws Exception {
+    //     //Saves Event
+    //     User currentUser = (User) request.getSession().getAttribute("sessionUser");
+    //     model.addAttribute("user", currentUser);
 
-        //Gets Paremeters from form
-        int id = currentUser.getUid();
-        String event = form.get("eventTitleInput");
-        int timeBegin = Integer.parseInt(form.get("timeBegin"));
-        int timeEnd = Integer.parseInt(form.get("timeEnd"));
-        String locationLatitude = form.get("locationLat");
-        String locationLongitude = form.get("locationLng");
+    //     //Gets Paremeters from form
+    //     int id = currentUser.getUid();
+    //     String event = form.get("eventTitleInput");
+    //     int timeBegin = Integer.parseInt(form.get("timeBegin"));
+    //     int timeEnd = Integer.parseInt(form.get("timeEnd"));
+    //     String locationLatitude = form.get("locationLat");
+    //     String locationLongitude = form.get("locationLng");
 
     
 
-        //Gets selected date
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        Date date = formatter.parse(form.get("selectedDate"));
-        String dateAsString = formatter.format(date);
+    //     //Gets selected date
+    //     SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    //     Date date = formatter.parse(form.get("selectedDate"));
+    //     String dateAsString = formatter.format(date);
         
 
-        //Prints into console for error check
-        System.out.println("Event: " + event);
-        System.out.println("Date: " + date);
-        System.out.println("time: " + timeBegin);
-        System.out.println("time: " + timeEnd);
+    //     //Prints into console for error check
+    //     System.out.println("Event: " + event);
+    //     System.out.println("Date: " + date);
+    //     System.out.println("time: " + timeBegin);
+    //     System.out.println("time: " + timeEnd);
 
-        eventRepo.save(new Event(id, event, locationLatitude ,locationLongitude, timeBegin, timeEnd, dateAsString));
+    //     eventRepo.save(new Event(id, event, locationLatitude ,locationLongitude, timeBegin, timeEnd, dateAsString));
 
-        return "redirect:/calendar";
-    }
+    //     return "redirect:/calendar";
+    // }
     
 
 
     
-    //Delete From Event List
-    @GetMapping("/calendar/delete/{sid}")
-    public String deleteCalendar(@PathVariable String sid){
-        eventRepo.deleteById(Integer.parseInt(sid));
-        return "redirect:/calendar";
-    }
+    // //Delete From Event List
+    // @GetMapping("/calendar/delete/{sid}")
+    // public String deleteCalendar(@PathVariable String sid){
+    //     eventRepo.deleteById(Integer.parseInt(sid));
+    //     return "redirect:/calendar";
+    // }
     
 
 
