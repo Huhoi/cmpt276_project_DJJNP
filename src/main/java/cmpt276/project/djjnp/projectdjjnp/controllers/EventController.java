@@ -65,4 +65,11 @@ public class EventController {
         return ResponseEntity.ok("Event deleted successfully.");
     }
 
+    @PostMapping("/display/add")
+    public ResponseEntity<String> saveMarker(@RequestBody Event event) {
+
+        eventService.saveEvent(event);
+
+        return ResponseEntity.ok("Marker saved successfully.");
+    }
 }

@@ -80,12 +80,29 @@
         <input type="hidden" id="currentUser" th:value="${user.uid}">
     </div>
 
-    <!-- Hidden Form to get Data from API -->
-    <form action="/display/add" method="post" id="markerForm" name="markerForm">
+    <!-- Hidden form to get data from API -->
+    <!-- <form action="/display/add" method="post" id="markerForm" name="markerForm">
         <input type="hidden" id="timestampInput" name="timestampInput"/>
         <input type="hidden" id="latitudeInput" name="latitudeInput"/>
         <input type="hidden" id="longitudeInput" name="longitudeInput"/>
-    </form>    
+    </form> -->
+
+    <!-- Send data to database -->
+    <form action="/display/add" method="post" name="mForm" id="markerForm" onsubmit="saveMarker(event)">
+        <!-- <input id="markerTitleInput"
+            name="markerTitleInput" 
+            type="text" 
+            placeholder="Event Title"
+            class="form-control form-control-lg"
+            required 
+        /> -->
+
+        <input type="hidden" id="markerTitle" name="markerTitle">
+        <input type="hidden" id="markerLat" name="markerLat">
+        <input type="hidden" id="markerLng" name="markerLng">
+
+        <button id="saveButton" type="submit" >Save</button>
+    </form>
     
 </body>
 </html>

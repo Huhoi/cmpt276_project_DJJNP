@@ -3,10 +3,21 @@
 //////////////////////////
 var markers = [];
 let currentUser = document.getElementById("currentUser").value;
+var currentMarker;
+document.getElementById('saveButton').addEventListener('click', saveEvent);
 
-///////////////////////////////////////
-//   Runs on initialization of map   //
-///////////////////////////////////////
+var rn = new Date();
+console.log("LocaleTimeString: " + rn.toLocaleTimeString('en-US'));
+rn.setMinutes(rn.getMinutes() + 30)
+console.log("30 mins from now: " + rn.toLocaleTimeString('en-US'));
+
+//////////////////////////////////////
+//   Map initialization functions   //
+//////////////////////////////////////
+
+// ====================================================
+// Make Google Maps JavaScript API call when page loads
+// - Documentation: https://developers.google.com/maps/documentation/javascript/overview
 function initMap() {
     // Edit map options and assign it to its HTML ID
     var options = {
@@ -59,20 +70,15 @@ function initMap() {
     // LISTENER: Map click
     google.maps.event.addListener(map, "click", function(event) {
         // Create marker and display on list
-        let marker = addByLatLng(event.latLng);
+        addByLatLng(event.latLng);
 
-        // document.getElementById("timestampInput").value = marker.timestamp;
-        // document.getElementById("latitudeInput").value = marker.latitude;
-        // document.getElementById("longitudeInput").value = marker.longitude;
-
-        // document.forms["markerForm"].submit();
-
-        // Regenerate routes and adjust view
         initRoutes();
     });
 }
 
-// Reinitializes markers on the map
+// ===================================================
+// Fetches data from API and places markers on the map
+// - Uses the fetch() function to access controller, which returns data
 function initMarkers() {
     // Use the built-in JavaScript fetch method to convert Java data to JSON
     fetch('/api/event')
@@ -114,7 +120,9 @@ function initMarkers() {
     .catch(error => console.error('Error fetching locations', error));
 }
 
-// Rebuilds routes on the map
+// =========================================
+// Builds routes between initialized markers
+// - Documentation: https://developers.google.com/maps/documentation/javascript/directions
 function initRoutes() {
     var service = new google.maps.DirectionsService(); // Google directions service for pathfinding
     var coordList = new Array(); // Stores all latitude and longitudes as LatLng objects
@@ -156,11 +164,9 @@ function initRoutes() {
     resizeMap();
 }
 
-
-
-////////////////////////////
-//   Re-adjust map view   //
-////////////////////////////
+// ==========================
+// Re-size/re-adjust map view
+// - Uses farthest coordinate points to generate best view
 function resizeMap() {
     var latLngBounds = new google.maps.LatLngBounds();
     markers.forEach(marker => {
@@ -172,14 +178,12 @@ function resizeMap() {
     console.table(markers);
 }
 
+//
 
-
-/////////////////////////////
-//   Add to map and list   //
-/////////////////////////////
-
-// IF TYPE == google.maps.LatLng
-// Reference: https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLng
+// ===========================================
+// Places a marker on the map and adds to list
+// - IF TYPE == google.maps.LatLng
+// - Documentation: https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLng
 function addByLatLng(newMarker) {
     // Display new marker on the map
     new google.maps.Marker({
@@ -187,20 +191,25 @@ function addByLatLng(newMarker) {
         map: map
     });
 
-    // Add new marker to the list and display it
+    // Marker details
     marker = {
         "timestamp": "New event", // TO-DO
         "latitude": Number(newMarker.lat()),
         "longitude": Number(newMarker.lng()),
     }
-    markers.push(marker);
-    addToList(marker);
+
+    markers.push(marker); // Add to JS list
+    addToList(marker); // Add to HTML list
+    currentMarker = marker;
+    // document.getElementById("markerForm").submit(); // Send data to DB (runs saveMarker() on submit)
 
     return marker;
 }
 
-// IF TYPE == google.maps.places.PlaceResult
-// Reference: https://developers.google.com/maps/documentation/javascript/reference/places-service#PlaceResult
+// ===========================================
+// Places a marker on the map and adds to list
+// - IF TYPE == google.maps.places.PlaceResult
+// - Documentation: https://developers.google.com/maps/documentation/javascript/reference/places-service#PlaceResult
 function addByPlaceResult(newMarker) {
     // Display new marker on the map
     new google.maps.Marker({
@@ -208,19 +217,23 @@ function addByPlaceResult(newMarker) {
         map: map
     });
 
-    // Add new marker to the list and display it
+    // Marker details
     marker = {
         "timestamp": newMarker.name,
         "latitude": newMarker.geometry.location.lat(),
         "longitude": newMarker.geometry.location.lng(),
     }
-    markers.push(marker);
-    addToList(marker);
+
+    markers.push(marker); // Add to JS list
+    addToList(marker); // Add to HTML list
+    currentMarker = marker;
+    // document.getElementById("markerForm").submit(); // Send data to DB (runs saveMarker() on submit)
 
     return marker;
 }
 
-// Display added marker on list
+// ==================================
+// Helper function for adding to list
 function addToList(newMarker) {
     var table = document.getElementById("list");
     var row = table.insertRow(1);
@@ -232,7 +245,51 @@ function addToList(newMarker) {
     cell3.innerHTML = newMarker.longitude;
 }
 
+// =============================================
+// Helper function for adding marker to database
+async function saveMarker(event) {
+    event.preventDefault();
+    var timeNow = new Date();
+    var timeLater = new Date();
+    timeLater.setMinutes(timeNow.getMinutes() + 30);
 
+    document.getElementById("markerTitle").value = currentMarker.timestamp;
+    document.getElementById("markerLat").value = currentMarker.latitude;
+    document.getElementById("markerLng").value = currentMarker.longitude;
+
+    const eventData = {
+        eventName: "New event",
+        latitude: currentMarker.latitude,
+        longitude: currentMarker.longitude,
+        date: timeNow.toLocaleDateString('en-US'),
+        timeBegin: 1800,
+        timeEnd: 1830,
+        // timeBegin: timeNow.toLocaleTimeString('en-US'),
+        // timeEnd: timeLater.toLocaleTimeString('en-US'),
+        uid: currentUser,
+    };
+
+    // Use fetch() to add to database
+    try {
+        const response = await fetch('/api/display/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(eventData),
+        });
+
+        // If saving is not successful, 
+        if (!response.ok) {
+            console.error('Failed to save event: ', response.status);
+        }
+    }
+    catch (error) {
+        console.error('Error saving event: ', error);
+    }
+
+    console.log("DONE RUNNING saveMarker()");
+}
 
 
 

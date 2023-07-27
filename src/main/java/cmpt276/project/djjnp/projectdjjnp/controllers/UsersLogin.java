@@ -291,36 +291,36 @@ public class UsersLogin {
 
 
     //Adds location to database
-    @PostMapping("/display/add")
-    public String showMapAdd(@RequestParam Map<String, String> form, Model model, HttpServletRequest request,
-            HttpSession session, HttpServletResponse response) throws Exception {
+    // @PostMapping("/display/add")
+    // public String showMapAdd(@RequestParam Map<String, String> form, Model model, HttpServletRequest request,
+    //         HttpSession session, HttpServletResponse response) throws Exception {
 
-        //Saves Location
-        User currentUser = (User) request.getSession().getAttribute("sessionUser");
-        List<Location> currentUserLocations = locationRepo.findAll();
-        model.addAttribute("user", currentUser);
-        model.addAttribute("location", currentUserLocations);
+    //     //Saves Location
+    //     User currentUser = (User) request.getSession().getAttribute("sessionUser");
+    //     List<Location> currentUserLocations = locationRepo.findAll();
+    //     model.addAttribute("user", currentUser);
+    //     model.addAttribute("location", currentUserLocations);
         
-        //Gets parameters from form
-        int id = currentUser.getUid();
-        String timestamp = form.get("timestampInput");
-        String latitude = form.get("latitudeInput");
-        String longitude = form.get("longitudeInput");
-        String description = form.get("descriptionInput");
+    //     //Gets parameters from form
+    //     int id = currentUser.getUid();
+    //     String timestamp = form.get("timestampInput");
+    //     String latitude = form.get("latitudeInput");
+    //     String longitude = form.get("longitudeInput");
+    //     String description = form.get("descriptionInput");
         
 
-        //Testing if it works
-        System.out.println("Sumbiting");
-        System.out.println("Timestamp: " + timestamp);
-        System.out.println("Latitude: " + latitude);
-        System.out.println("Longitude: " + longitude);
-        System.out.println("Description: " + description);
+    //     //Testing if it works
+    //     System.out.println("Sumbiting");
+    //     System.out.println("Timestamp: " + timestamp);
+    //     System.out.println("Latitude: " + latitude);
+    //     System.out.println("Longitude: " + longitude);
+    //     System.out.println("Description: " + description);
         
-        locationRepo.save(new Location(id, timestamp, latitude, longitude, description));
+    //     locationRepo.save(new Location(id, timestamp, latitude, longitude, description));
 
-        return "redirect:/display";
+    //     return "redirect:/display";
 
-    }
+    // }
 
 
   
