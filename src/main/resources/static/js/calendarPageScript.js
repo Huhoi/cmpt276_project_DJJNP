@@ -122,8 +122,8 @@ function openModal(date) {
             todayEventList.push({
               eventName: i.eventName,
               date: new Date(i.date),
-              timeBegin: convertTo12HourFormat(i.timeBegin), // Convert to 12-hour time format
-              timeEnd: convertTo12HourFormat(i.timeEnd), // Convert to 12-hour time format
+              timeBegin: i.timeBegin, // Convert to 12-hour time format
+              timeEnd: i.timeEnd, // Convert to 12-hour time format
               uid: i.uid,
               sid: i.sid
             });
@@ -131,7 +131,16 @@ function openModal(date) {
         }
       }
       
-    
+    // Sort the todayEventList by timeBegin in ascending order
+    todayEventList.sort((a, b) => {
+      if (a.timeBegin !== b.timeBegin) {
+        // Sort by timeBegin first
+        return a.timeBegin - b.timeBegin;
+      } else {
+        // If timeBegin values are equal, sort by timeEnd
+        return a.timeEnd - b.timeEnd;
+      }
+    });
       
     // Get a reference to the table body element
     const tableBody = document.querySelector('#tEvents tbody');
@@ -150,11 +159,11 @@ function openModal(date) {
       
       //Time Begin
       const timeBeginCell = row.insertCell();
-      timeBeginCell.textContent = event.timeBegin.toLocaleString(); // Display the date in a human-readable format
+      timeBeginCell.textContent = convertTo12HourFormat(event.timeBegin.toLocaleString()); // Display the date in a human-readable format
       
       //Tiem ENd
       const timeEndCell = row.insertCell();
-      timeEndCell.textContent = event.timeEnd;
+      timeEndCell.textContent = convertTo12HourFormat(event.timeEnd);
     
       //Date
       const dateCell = row.insertCell();
@@ -189,13 +198,13 @@ function reloadModal() {
       const eventNameCell = row.insertCell();
       eventNameCell.textContent = event.eventName;
       
-      //Time Begin
-      const timeBeginCell = row.insertCell();
-      timeBeginCell.textContent = event.timeBegin.toLocaleString(); // Display the date in a human-readable format
+    //Time Begin
+    const timeBeginCell = row.insertCell();
+    timeBeginCell.textContent = convertTo12HourFormat(event.timeBegin.toLocaleString()); // Display the date in a human-readable format
       
-      //Tiem ENd
-      const timeEndCell = row.insertCell();
-      timeEndCell.textContent = event.timeEnd;
+     //Tiem ENd
+     const timeEndCell = row.insertCell();
+     timeEndCell.textContent = convertTo12HourFormat(event.timeEnd);
     
       //Date
       const dateCell = row.insertCell();
@@ -254,10 +263,21 @@ async function saveEvent(event) {
         todayEventList.push({
           eventName: eventData.eventName,
           date: new Date(eventData.date),
-          timeBegin: convertTo12HourFormat(eventData.timeBegin),
-          timeEnd: convertTo12HourFormat(eventData.timeEnd),
+          timeBegin: eventData.timeBegin,
+          timeEnd: eventData.timeEnd,
           uid: eventData.uid,
           sid: eventData.sid, // Replace this with the actual sid received from the server
+        });
+
+        // Sort the todayEventList by timeBegin in ascending order
+        todayEventList.sort((a, b) => {
+          if (a.timeBegin !== b.timeBegin) {
+            // Sort by timeBegin first
+            return a.timeBegin - b.timeBegin;
+          } else {
+            // If timeBegin values are equal, sort by timeEnd
+            return a.timeEnd - b.timeEnd;
+          }
         });
 
         // Update the table in the modal without closing it
