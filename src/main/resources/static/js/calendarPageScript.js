@@ -82,7 +82,7 @@ function openModal(date) {
   //Changes an hidden input to selected date on click
   document.getElementById('selectedDate').value = date;
 
-  //Selected Date value ie 'daybox' that was clicked
+  //Selecteddate
   let selectedDate = document.getElementById('selectedDate').value;
 
 
@@ -109,10 +109,11 @@ function openModal(date) {
           const day = eventDate.getDate();
           const year = eventDate.getFullYear();
 
-          // Create the formatted date string in the "MM/dd/yyyy" format
+          // Create the formatted date string in the "M/d/yyyy" format
           const formattedDate = `${month}/${day}/${year}`;
 
-          console.log(formattedDate); // Output: "07/25/2023" (assuming the eventDate is July 25, 2023)
+          console.log(formattedDate); // Output: "7/25/2023" (assuming the eventDate is July 25, 2023)
+        
           //Pushes current day events to 
           if (formattedDate === selectedDate) {
             console.log(eventDate);
@@ -139,7 +140,7 @@ function openModal(date) {
       
     // Clear any existing rows in the table
       tableBody.innerHTML = '';
-      
+
     
     //Adds events to list
     todayEventList.forEach(event => {
@@ -168,7 +169,6 @@ function openModal(date) {
       deleteCell.appendChild(deleteButton);
       
     });
-    
       
     // Now eventList contains events sorted by their date/time
     console.log(todayEventList);
@@ -181,11 +181,9 @@ function reloadModal() {
   // Here you can add any additional logic to fetch updated event data from the server
   // For now, let's just clear the existing table and re-populate it with updated data
   const tableBody = document.querySelector('#tEvents tbody');
-  const allTableBody = document.querySelector('#aEvents tbody');
   tableBody.innerHTML = ''; // Clear existing table rows
-  allTableBody.innerHTML = '';
-      
 
+    
     todayEventList.forEach(event => {
       const row = tableBody.insertRow();
     

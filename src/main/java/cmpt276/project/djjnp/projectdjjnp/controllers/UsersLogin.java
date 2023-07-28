@@ -185,31 +185,8 @@ public class UsersLogin {
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         List<Event> currentUserEvent = eventRepo.findAll();
 
-        //Get Date
-        //SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        LocalDateTime curDate = LocalDateTime.now();
-        
-        String str = curDate.format(formatter);
-    
 
         
-        System.out.println(str);
-        
-
-        //Sort the list by chronological order
-        Collections.sort(currentUserEvent, (e1, e2) -> {
-            //Compare date
-            int sameDate = e1.getDate().compareTo(e2.getDate());
-            if (sameDate != 0) {
-                return sameDate;
-            }
-            //Compare start time if events are the same date
-            return e1.getTimeBegin() - e2.getTimeBegin();
-        });
-       
-
-        model.addAttribute("date", str);
         model.addAttribute("user", currentUser);
         model.addAttribute("event", currentUserEvent);
 
