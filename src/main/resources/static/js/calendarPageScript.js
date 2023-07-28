@@ -4,8 +4,6 @@ let events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('e
 let weatherData = null;
 let weatherDataIndex = 0;
 let todayEventList = [];
-let allEventList = [];
-
 
 let check = 0;
 
@@ -83,7 +81,11 @@ function openModal(date) {
 
   //Changes an hidden input to selected date on click
   document.getElementById('selectedDate').value = date;
-  
+
+  //Selected Date value ie 'daybox' that was clicked
+  let selectedDate = document.getElementById('selectedDate').value;
+
+
   //Creates the ADD Event Modal
   newEventModal.style.display = 'block';
 
@@ -102,21 +104,20 @@ function openModal(date) {
       for (const i of data) {
         if (i.uid == currentUser) {
           const eventDate = new Date(i.date);
-        
+          // Extract the components from the eventDate
+          const month = eventDate.getMonth() + 1; // JavaScript months are zero-based, so we add 1
+          const day = eventDate.getDate();
+          const year = eventDate.getFullYear();
 
-          //Add Every event to another list to display
-          allEventList.push({
-            eventName: i.eventName,
-            date: new Date(i.date),
-            timeBegin: convertTo12HourFormat(i.timeBegin), // Convert to 12-hour time format
-            timeEnd: convertTo12HourFormat(i.timeEnd), // Convert to 12-hour time format
-            uid: i.uid,
-            sid: i.sid
-          })
+          // Create the formatted date string in the "MM/dd/yyyy" format
+          const formattedDate = `${month}/${day}/${year}`;
 
-
+          console.log(formattedDate); // Output: "07/25/2023" (assuming the eventDate is July 25, 2023)
           //Pushes current day events to 
-          if (eventDate.toDateString() === currentDate.toDateString()) {
+          if (formattedDate === selectedDate) {
+            console.log(eventDate);
+            console.log(currentDate);
+
             todayEventList.push({
               eventName: i.eventName,
               date: new Date(i.date),
@@ -133,19 +134,11 @@ function openModal(date) {
     todayEventList.sort((a, b) => a.date - b.date);
     todayEventList.sort((a, b) => new Date(a.timeBegin) - new Date(b.timeBegin));
       
-    // Sort the all eventList by time and date in ascending order
-    allEventList.sort((a, b) => a.date - b.date);
-    allEventList.sort((a, b) => new Date(a.timeBegin) - new Date(b.timeBegin));
-
     // Get a reference to the table body element
     const tableBody = document.querySelector('#tEvents tbody');
       
-    // Get a reference to the table body element
-    const allTableBody = document.querySelector('#aEvents tbody');
-
     // Clear any existing rows in the table
       tableBody.innerHTML = '';
-      allTableBody.innerHTML = '';
       
     
     //Adds events to list
@@ -176,32 +169,6 @@ function openModal(date) {
       
     });
     
-    //Adds events to list
-    allEventList.forEach(event => {
-      const row = allTableBody.insertRow();
-
-      // Add cells with event data to the row
-      const eventNameCell = row.insertCell();
-      eventNameCell.textContent = event.eventName;
-      
-      //Time Begin
-      const timeBeginCell = row.insertCell();
-      timeBeginCell.textContent = event.timeBegin.toLocaleString(); // Display the date in a human-readable format
-      
-      //Tiem ENd
-      const timeEndCell = row.insertCell();
-      timeEndCell.textContent = event.timeEnd;
-    
-      //Date
-      const dateCell = row.insertCell();
-      dateCell.textContent = event.date.toLocaleDateString('en-US'); // Display date in "Month/day/year" format
-    
-      const deleteCell = row.insertCell();
-      const deleteButton = document.createElement('button');
-      deleteButton.textContent = 'Delete';
-      deleteButton.addEventListener('click', () => handleDeleteEvent(event.sid));
-      deleteCell.appendChild(deleteButton);
-    });
       
     // Now eventList contains events sorted by their date/time
     console.log(todayEventList);
@@ -244,34 +211,6 @@ function reloadModal() {
       deleteButton.addEventListener('click', () => handleDeleteEvent(event.sid));
       deleteCell.appendChild(deleteButton);
       
-    });
-    
-    //Adds events to list
-    allEventList.forEach(event => {
-      const row = allTableBody.insertRow();
-
-      // Add cells with event data to the row
-      const eventNameCell = row.insertCell();
-      eventNameCell.textContent = event.eventName;
-      
-      //Time Begin
-      const timeBeginCell = row.insertCell();
-      timeBeginCell.textContent = event.timeBegin.toLocaleString(); // Display the date in a human-readable format
-      
-      //Tiem ENd
-      const timeEndCell = row.insertCell();
-      timeEndCell.textContent = event.timeEnd;
-    
-      //Date
-      const dateCell = row.insertCell();
-      dateCell.textContent = event.date.toLocaleDateString('en-US'); // Display date in "Month/day/year" format
-    
-      const deleteCell = row.insertCell();
-      const deleteButton = document.createElement('button');
-      deleteButton.textContent = 'Delete';
-      deleteButton.addEventListener('click', () => handleDeleteEvent(event.sid));
-      deleteCell.appendChild(deleteButton);
-
     });
 }
 
