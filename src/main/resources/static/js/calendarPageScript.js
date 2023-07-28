@@ -130,10 +130,8 @@ function openModal(date) {
           }
         }
       }
+      
     
-    // Sort the eventList by time and date in ascending order
-    todayEventList.sort((a, b) => a.date - b.date);
-    todayEventList.sort((a, b) => new Date(a.timeBegin) - new Date(b.timeBegin));
       
     // Get a reference to the table body element
     const tableBody = document.querySelector('#tEvents tbody');
@@ -237,7 +235,9 @@ async function saveEvent(event) {
       date: clicked,
       timeBegin: parseInt(document.getElementById('timeBegin').value),
       timeEnd: parseInt(document.getElementById('timeEnd').value),
-      uid: parseInt(document.getElementById('currentUser').value)
+      uid: parseInt(document.getElementById('currentUser').value),
+      longitude: document.getElementById('locationLng').value,
+      latitude: document.getElementById('locationLat').value,
     };
 
     try {
@@ -246,7 +246,7 @@ async function saveEvent(event) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(eventData),
+        body: JSON.stringify(eventData), 
       });
 
       if (response.ok) {
@@ -304,12 +304,16 @@ function handleDeleteEvent(sid) {
 
 // Function to convert time from military (24-hour) to 12-hour format
 function convertTo12HourFormat(militaryTime) {
-  // Parse the militaryTime string to extract hours and minutes
   const hours = Math.floor(militaryTime / 100);
   const minutes = militaryTime % 100;
-  const period = hours >= 12 ? 'PM' : 'AM';
-  const twelveHour = hours % 12 === 0 ? 12 : hours % 12;
-  return `${twelveHour}:${minutes.toString().padStart(2, '0')} ${period}`;
+  const ampm = hours >= 12 ? 'pm' : 'am';
+
+  let formattedHours = hours % 12;
+  formattedHours = formattedHours === 0 ? 12 : formattedHours;
+
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+
+  return `${formattedHours}:${formattedMinutes} ${ampm}`;
 }
 
 //Loads the Calendar
