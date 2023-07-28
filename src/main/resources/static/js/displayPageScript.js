@@ -2,9 +2,12 @@
 //   Global variables   //
 //////////////////////////
 var markers = [];
+var selected = [];
 let currentUser = document.getElementById("currentUser").value;
 var currentMarker;
+const dateInput = document.getElementById("displayDate");
 document.getElementById('saveButton').addEventListener('click', saveEvent);
+
 
 var rn = new Date();
 console.log("LocaleTimeString: " + rn.toLocaleTimeString('en-US'));
@@ -74,6 +77,20 @@ function initMap() {
 
         initRoutes();
     });
+
+
+    dateInput.addEventListener('change', () => {
+        setMapOnAll(null);
+        markers = [];
+        selected = [];
+        initMarkers();
+    });
+}
+
+function setMapOnAll(nullMap) {
+    for (let i = 0; i < selected.length; i++) {
+        selected[i].setMap(nullMap);
+      }
 }
 
 function formatDate(dateString) {
@@ -88,21 +105,19 @@ function formatDate(dateString) {
     const formattedDate = `${formattedMonth}/${formattedDay}/${year}`;
 
     return formattedDate;
-  }
+}
 
 // ===================================================
 // Fetches data from API and places markers on the map
 // - Uses the fetch() function to access controller, which returns data
 function initMarkers() {
-    const selectedDate = formatDate(document.getElementById("displayDate").value);
-    console.log(selectedDate);
     // Use the built-in JavaScript fetch method to convert Java data to JSON
     fetch('/api/event')
     .then(response => response.json())
     .then(data => {
         for (const i of data){
             console.log(i.date);
-            if (i.uid == currentUser && i.date == selectedDate){
+            if (i.uid == currentUser && i.date == formatDate(dateInput.value)){
                 markers.push({
                     timestamp: i.eventName,
                     latitude: Number(i.latitude),
@@ -116,11 +131,11 @@ function initMarkers() {
         markers.forEach(marker => {
             coordList.push(new google.maps.LatLng(marker.latitude, marker.longitude));
             // Display marker on map
-            var selected = new google.maps.Marker({
+            selected.push(new google.maps.Marker({
                 position: new google.maps.LatLng(marker.latitude, marker.longitude),
                 map: map,
                 title: marker.timestamp
-            });
+            }));
 
             // Click on marker to reveal details
             (function(marker, selected) {
