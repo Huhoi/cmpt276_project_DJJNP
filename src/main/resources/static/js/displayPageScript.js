@@ -76,16 +76,33 @@ function initMap() {
     });
 }
 
+function formatDate(dateString) {
+    // Split the input string into year, month, and day components
+    const [year, month, day] = dateString.split('-');
+
+    // Remove leading zeros from the month and day components
+    const formattedMonth = Number(month).toString();
+    const formattedDay = Number(day).toString();
+
+    // Create a new string in "M/d/yyyy" format
+    const formattedDate = `${formattedMonth}/${formattedDay}/${year}`;
+
+    return formattedDate;
+  }
+
 // ===================================================
 // Fetches data from API and places markers on the map
 // - Uses the fetch() function to access controller, which returns data
 function initMarkers() {
+    const selectedDate = formatDate(document.getElementById("displayDate").value);
+    console.log(selectedDate);
     // Use the built-in JavaScript fetch method to convert Java data to JSON
     fetch('/api/event')
     .then(response => response.json())
     .then(data => {
         for (const i of data){
-            if (i.uid == currentUser){
+            console.log(i.date);
+            if (i.uid == currentUser && i.date == selectedDate){
                 markers.push({
                     timestamp: i.eventName,
                     latitude: Number(i.latitude),

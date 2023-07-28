@@ -3,6 +3,7 @@ package cmpt276.project.djjnp.projectdjjnp.controllers;
 
 import java.text.SimpleDateFormat;
 import java.time.Clock;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -282,6 +283,11 @@ public class UsersLogin {
             return "redirect:/view/login";
         }
 
+
+        LocalDate curDate = LocalDate.now();
+
+
+        model.addAttribute("curDate", curDate);
         model.addAttribute("user", currentUser);
         model.addAttribute("event", currentUserEvent);
         model.addAttribute("location", currentUserLocation);
