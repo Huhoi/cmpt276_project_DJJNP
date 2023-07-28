@@ -46,12 +46,15 @@
             </tr>
         </table>
 
+    <!-- Search box goes here -->
+    <input id="pac-input" class="controls form-control" type="text" placeholder="Search box" style="width: 30vw; margin: 10px;"/>
+
     <!-- Initmap() targets this div and loads the map -->
     <div id="map"></div>
         
     <!-- Google Maps JavaScript API with key -->
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCs8dt2-arfwhEtAAcBeVAFXZlr8HxBTqI&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCs8dt2-arfwhEtAAcBeVAFXZlr8HxBTqI&callback=initMap&libraries=places">
     </script><br>
 
     <div id="listDiv" class="table-wrapper-scroll-y">
@@ -61,7 +64,6 @@
                     <th>Marker name</th>
                     <th>Latitude</th>
                     <th>Longitude</th>
-                    <th>Description</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,23 +71,38 @@
                     <td th:text="${loc.timestamp}"></td>
                     <td th:text="${loc.latitude}"></td>
                     <td th:text="${loc.longitude}"></td>
-                    <td th:text="${loc.description}"></td>
-                    <script th:inline="javascript">
-                        var loc = /*[[${loc}]]*/ "";
-                        console.log("INLINE JAVASCRIPT: " + loc.timestamp);
-                    </script>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <!-- Hidden Form to get Data from API -->
-    <form action="/display/add" method="post" id="markerForm" name="markerForm">
+    <div>
+        <input type="hidden" id="currentUser" th:value="${user.uid}">
+    </div>
+
+    <!-- Hidden form to get data from API -->
+    <!-- <form action="/display/add" method="post" id="markerForm" name="markerForm">
         <input type="hidden" id="timestampInput" name="timestampInput"/>
         <input type="hidden" id="latitudeInput" name="latitudeInput"/>
         <input type="hidden" id="longitudeInput" name="longitudeInput"/>
-        <input type="hidden" id="descriptionInput" name="descriptionInput"/>
-    </form>    
+    </form> -->
+
+    <!-- Send data to database -->
+    <form action="/display/add" method="post" name="mForm" id="markerForm" onsubmit="saveMarker(event)">
+        <!-- <input id="markerTitleInput"
+            name="markerTitleInput" 
+            type="text" 
+            placeholder="Event Title"
+            class="form-control form-control-lg"
+            required 
+        /> -->
+
+        <input type="hidden" id="markerTitle" name="markerTitle">
+        <input type="hidden" id="markerLat" name="markerLat">
+        <input type="hidden" id="markerLng" name="markerLng">
+
+        <button id="saveButton" type="submit" >Save</button>
+    </form>
     
 </body>
 </html>
