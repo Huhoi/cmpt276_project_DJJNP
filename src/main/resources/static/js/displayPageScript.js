@@ -2,9 +2,12 @@
 //   Global variables   //
 //////////////////////////
 var markers = [];
+var selected = [];
 let currentUser = document.getElementById("currentUser").value;
 var currentMarker;
+const dateInput = document.getElementById("displayDate");
 document.getElementById('saveButton').addEventListener('click', saveEvent);
+
 
 var rn = new Date();
 console.log("LocaleTimeString: " + rn.toLocaleTimeString('en-US'));
@@ -74,6 +77,34 @@ function initMap() {
 
         initRoutes();
     });
+
+
+    dateInput.addEventListener('change', () => {
+        setMapOnAll(null);
+        markers = [];
+        selected = [];
+        initMarkers();
+    });
+}
+
+function setMapOnAll(nullMap) {
+    for (let i = 0; i < selected.length; i++) {
+        selected[i].setMap(nullMap);
+      }
+}
+
+function formatDate(dateString) {
+    // Split the input string into year, month, and day components
+    const [year, month, day] = dateString.split('-');
+
+    // Remove leading zeros from the month and day components
+    const formattedMonth = Number(month).toString();
+    const formattedDay = Number(day).toString();
+
+    // Create a new string in "M/d/yyyy" format
+    const formattedDate = `${formattedMonth}/${formattedDay}/${year}`;
+
+    return formattedDate;
 }
 
 // ===================================================
@@ -85,7 +116,8 @@ function initMarkers() {
     .then(response => response.json())
     .then(data => {
         for (const i of data){
-            if (i.uid == currentUser){
+            console.log(i.date);
+            if (i.uid == currentUser && i.date == formatDate(dateInput.value)){
                 markers.push({
                     timestamp: i.eventName,
                     latitude: Number(i.latitude),
@@ -99,11 +131,11 @@ function initMarkers() {
         markers.forEach(marker => {
             coordList.push(new google.maps.LatLng(marker.latitude, marker.longitude));
             // Display marker on map
-            var selected = new google.maps.Marker({
+            selected.push(new google.maps.Marker({
                 position: new google.maps.LatLng(marker.latitude, marker.longitude),
                 map: map,
                 title: marker.timestamp
-            });
+            }));
 
             // Click on marker to reveal details
             (function(marker, selected) {
