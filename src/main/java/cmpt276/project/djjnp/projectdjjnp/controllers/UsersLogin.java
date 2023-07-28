@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.support.incrementer.SybaseAnywhereMaxValueIncrementer;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +37,7 @@ import cmpt276.project.djjnp.projectdjjnp.models.User;
 import cmpt276.project.djjnp.projectdjjnp.models.UserRepository;
 import cmpt276.project.djjnp.projectdjjnp.models.ShareLink;
 import cmpt276.project.djjnp.projectdjjnp.models.ShareLinkRepository;
+import cmpt276.project.djjnp.projectdjjnp.service.ShareLinkService;
 import cmpt276.project.djjnp.projectdjjnp.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -58,6 +60,9 @@ public class UsersLogin {
 
     @Autowired(required = true)
     private ShareLinkRepository shareLinkRepo;
+
+    @Autowired
+    private ShareLinkService shareLinkService;
 
     private String errorMessageString = "";
 
@@ -402,17 +407,31 @@ public class UsersLogin {
     public String generateShareLink(HttpServletRequest request){
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
 
-        int id = currentUser.getUid();
+        int uid = currentUser.getUid();
         String shareToken = generateShareToken();
         LocalDateTime expDateTime = LocalDateTime.now().plusMinutes(5);
 
-        shareLinkRepo.save(new ShareLink(id, shareToken, expDateTime));
+        ShareLink shareLink = new ShareLink();
+        shareLink.setUid(uid);
+        shareLink.setShareToken(shareToken);
+        shareLink.setExpirationTimestamp(expDateTime);
+        
+        shareLinkService.saveShareLink(shareLink);
 
-        System.out.println("This is the current user id: " + id);
+
+        System.out.println("This is the current user id: " + uid);
         System.out.println("This is the current share token: " + shareToken);
         System.out.println("This is the current expiration time: " + expDateTime);
 
-        return "view/shareLinkPage";
+        //
+        // CHANGE URL FOR RENDER
+        //
+        String shareLinkUrl = "http://localhost:8080/share/" + shareToken;
+
+        ShareLink sharedLink = shareLinkService.getShareLinkByToken(shareToken);
+        System.out.println("This is the current sharedlink: " + sharedLink);
+
+        return shareLinkUrl;
     }
 
     public static String generateShareToken() {
@@ -421,6 +440,34 @@ public class UsersLogin {
         return token;
     }
 
+    @GetMapping("/share/{shareToken}")
+    public RedirectView handleShareLink(@PathVariable String shareToken, Model model){
+        ShareLink shareLink = shareLinkService.getShareLinkByToken(shareToken);
+        System.out.println("This is the current sharelink: " + shareLink);
+
+        if (shareLink != null && !isShareLinkExpired((ShareLink) shareLink)){
+            model.addAttribute("shareToken", shareLink);
+            return new RedirectView("/shareSuccess");
+        }
+        else{
+            return new RedirectView("/shareError");
+        }
+    }
+
+    private boolean isShareLinkExpired(ShareLink shareLink){
+        return shareLink.getExpirationTimestamp().isBefore(LocalDateTime.now());
+    }
+
+    @GetMapping("/shareError")
+    public String expiredShareLink(){
+        return "view/expiredShareLink";
+    }
+
+    @GetMapping("/shareSuccess")
+    public String shareSuccess(){
+        return "view/shareSuccess";
+    }
+    
 }
 
 

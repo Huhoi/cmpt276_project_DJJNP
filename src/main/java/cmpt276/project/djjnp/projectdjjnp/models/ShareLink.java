@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class ShareLink {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int share_id;
+    private int shareid;
     private int uid;
     private String shareToken;
     private LocalDateTime expirationTimestamp;
@@ -47,11 +47,16 @@ public class ShareLink {
     }
 
     public int getShare_id() {
-        return share_id;
+        return shareid;
     }
 
     public void setShare_id(int share_id) {
-        this.share_id = share_id;
+        this.shareid = shareid;
+    }
+
+    @Override
+    public String toString() {
+        return "ShareLink [id=" + shareid + ", shareToken=" + shareToken + "]";
     }
 
     
