@@ -229,16 +229,23 @@ h2{
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
 }
 
-#aSchedule, #tSchedule{
+#tSchedule{
     position: relative;
     top: 10px;
     margin-top: 10px;
 
     
+    
     font-weight: bold;
     font-style: italic;
     font-size: 25px;
     color: #1f3f61;
+}
+
+#tSchedule td {
+    padding: 8px;
+    color: gray;
+
 }
 
 #legend{

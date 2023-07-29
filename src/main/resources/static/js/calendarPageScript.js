@@ -159,7 +159,7 @@ function openModal(date) {
       
       //Time Begin
       const timeBeginCell = row.insertCell();
-      timeBeginCell.textContent = convertTo12HourFormat(event.timeBegin.toLocaleString()); // Display the date in a human-readable format
+      timeBeginCell.textContent = convertTo12HourFormat(event.timeBegin); // Display the date in a human-readable format
       
       //Tiem ENd
       const timeEndCell = row.insertCell();
@@ -198,13 +198,13 @@ function reloadModal() {
       const eventNameCell = row.insertCell();
       eventNameCell.textContent = event.eventName;
       
-    //Time Begin
-    const timeBeginCell = row.insertCell();
-    timeBeginCell.textContent = convertTo12HourFormat(event.timeBegin.toLocaleString()); // Display the date in a human-readable format
+      //Time Begin
+      const timeBeginCell = row.insertCell();
+      timeBeginCell.textContent = convertTo12HourFormat(event.timeBegin); // Display the date in a human-readable format
       
-     //Tiem ENd
-     const timeEndCell = row.insertCell();
-     timeEndCell.textContent = convertTo12HourFormat(event.timeEnd);
+      //Tiem ENd
+      const timeEndCell = row.insertCell();
+      timeEndCell.textContent = convertTo12HourFormat(event.timeEnd);
     
       //Date
       const dateCell = row.insertCell();
