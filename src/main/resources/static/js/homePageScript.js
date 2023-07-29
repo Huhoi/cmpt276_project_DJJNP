@@ -62,40 +62,47 @@ todayEventList.sort((a, b) => {
   // Clear any existing rows in the table
   tableBody.innerHTML = '';
 
+// Adds events to the table, limiting the display to at most 5 events
+const maxEventsToShow = 3;
+const eventsToDisplay = todayEventList.slice(0, maxEventsToShow);
+const remainingEventsCount = todayEventList.length - eventsToDisplay.length;
 
-  const maxEventsToShow = 2;
-  const remainingEventsCount = todayEventList.length - maxEventsToShow;
-  //Adds events to list to display at most 5 events
-  todayEventList.slice(0, maxEventsToShow).forEach(event => {
+if (eventsToDisplay.length === 0) {
+  // Display a message when there are no events for the current day
+  const noEventsRow = tableBody.insertRow();
+  const noEventsCell = noEventsRow.insertCell();
+  noEventsCell.colSpan = 4; // Span the cell across all columns
+  noEventsCell.textContent = 'No events for today';
+} else {
+  // Display events in the table
+  eventsToDisplay.forEach(event => {
     const row = tableBody.insertRow();
 
     // Add cells with event data to the row
     const eventNameCell = row.insertCell();
     eventNameCell.textContent = event.eventName;
-    
-    //Time Begin
+
+    // Time Begin
     const timeBeginCell = row.insertCell();
-    timeBeginCell.textContent = convertTo12HourFormat(event.timeBegin); // Display the date in a human-readable format
-    
-    //Tiem ENd
+    timeBeginCell.textContent = convertTo12HourFormat(event.timeBegin);
+
+    // Time End
     const timeEndCell = row.insertCell();
     timeEndCell.textContent = convertTo12HourFormat(event.timeEnd);
 
-    //Date
+    // Date
     const dateCell = row.insertCell();
     dateCell.textContent = event.date.toLocaleDateString('en-US'); // Display date in "Month/day/year" format
-    
   });
-    
-  // Add the ellipsis row if there are more events
-  if (remainingEventsCount > 0) {
 
-  // Add the row to show the count of remaining events
-  const remainingEventsRow = tableBody.insertRow();
-  const remainingEventsCell = remainingEventsRow.insertCell();
-  remainingEventsCell.colSpan = 4; // Span the cell across all columns
-  remainingEventsCell.textContent = `. . . ${remainingEventsCount} More Events . . .`; // Display the count of remaining events
+  if (remainingEventsCount > 0) {
+    // Add the ellipsis row with the remaining events count
+    const ellipsisRow = tableBody.insertRow();
+    const ellipsisCell = ellipsisRow.insertCell();
+    ellipsisCell.colSpan = 4; // Span the cell across all columns
+    ellipsisCell.textContent = `... and ${remainingEventsCount} more event(s)`;
   }
+}
 
 
   // Now eventList contains events sorted by their date/time
