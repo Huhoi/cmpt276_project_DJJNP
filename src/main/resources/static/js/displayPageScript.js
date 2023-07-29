@@ -13,7 +13,7 @@ var firstInit = 0;
 var markerCount = 0;
 var currentUser = document.getElementById("currentUser").value; // UID
 const dateInput = document.getElementById("displayDate"); // HTML calendar input
-document.getElementById('saveButton').addEventListener('click', saveMarker); // !!! TEMPORARY !!! 
+// document.getElementById('saveButton').addEventListener('click', saveMarker); // !!! TEMPORARY !!! 
 
 
 //////////////////////////////////////
@@ -48,47 +48,49 @@ function initListeners() {
     // Load markers and routes from database
     initMarkers();
 
-    // LISTENER: Map click
-    google.maps.event.addListener(map, "click", function(event) {
-        // Create marker and display on list
-        addByLatLng(event.latLng);
-        console.log("clicking");
-
-        initRoutes();
-    });
-
-    // LISTENER: Search box
-    searchbox.addListener("places_changed", () => {
-        const places = searchbox.getPlaces();
-        // Do nothing if no predictions found
-        if (places.length == 0) { return; }
-
-        places.forEach((place) => {
-            if (!place.geometry || !place.geometry.location) {
-                return;
-            }
-
-            // Create icon depending on location
-            const icon = {
-                url: place.icon,
-                size: new google.maps.Size(71, 71),
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(17, 34),
-                scaledSize: new google.maps.Size(25, 25)
-            }
-
-            // Create marker if prediction selected and display on list
-            addByPlaceResult(place);
-
-            // Regenerate routes and adjust view
-            initRoutes();
-        });
-    });
-
-    // Listen for changes to the HTML calendar: refresh map if changed
-    // NOTE: Only do this for the first init, otherwise there will be unintended
+    // NOTE: Only initialize listeners on first init, otherwise there'll be unintended
     //       "event bubbling" from calls to initListeners() caused by setMapOnAll().
     if (firstInit == 0) {
+        // LISTENER: Map click
+        google.maps.event.addListener(map, "click", function(event) {
+            // Create marker and display on list
+            addByLatLng(event.latLng);
+            console.log("clicking");
+
+            initRoutes();
+            document.getElementById("saveButton").click();
+        });
+
+        // LISTENER: Search box
+        searchbox.addListener("places_changed", () => {
+            const places = searchbox.getPlaces();
+            // Do nothing if no predictions found
+            if (places.length == 0) { return; }
+
+            places.forEach((place) => {
+                if (!place.geometry || !place.geometry.location) {
+                    return;
+                }
+
+                // Create icon depending on location
+                const icon = {
+                    url: place.icon,
+                    size: new google.maps.Size(71, 71),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(17, 34),
+                    scaledSize: new google.maps.Size(25, 25)
+                }
+
+                // Create marker if prediction selected and display on list
+                addByPlaceResult(place);
+
+                // Regenerate routes and adjust view
+                initRoutes();
+                document.getElementById("saveButton").click();
+            });
+        });
+
+        // Listen for changes to the HTML calendar: refresh map if changed
         dateInput.addEventListener('change', () => {
             console.log("DATE CHANGED");
             firstInit++;
