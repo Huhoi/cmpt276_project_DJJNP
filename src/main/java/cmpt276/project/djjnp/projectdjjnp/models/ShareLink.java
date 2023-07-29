@@ -56,7 +56,7 @@ public class ShareLink {
 
     @Override
     public String toString() {
-        return "ShareLink [id=" + shareid + ", shareToken=" + shareToken + "]";
+        return "ShareLink [id=" + shareid + ", shareToken=" + shareToken + ", uid=" + uid + "]";
     }
 
     

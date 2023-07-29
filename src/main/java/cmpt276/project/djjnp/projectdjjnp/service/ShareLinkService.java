@@ -7,4 +7,5 @@ public interface ShareLinkService {
 
     public ShareLink getShareLinkByToken(String shareToken);
 
+    public int getDataFromShareLink(ShareLink ShareLink);
 }

@@ -4,8 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="/js/sharePageScript.js" defer></script>
 </head>
 <body>
-    THIS IS A SHARED PAGE
+    <table id="tSchedule">
+        <thead>
+            <tr>
+                <td id="legend">TODO</td>
+                <td id="legend">Time</td>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <input type="hidden" id="shareUid" name="shareUid" th:value="${shareUid}"/>
 </body>
 </html>

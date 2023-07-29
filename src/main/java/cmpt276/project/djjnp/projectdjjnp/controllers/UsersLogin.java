@@ -428,8 +428,8 @@ public class UsersLogin {
         //
         String shareLinkUrl = "http://localhost:8080/share/" + shareToken;
 
-        ShareLink sharedLink = shareLinkService.getShareLinkByToken(shareToken);
-        System.out.println("This is the current sharedlink: " + sharedLink);
+        // ShareLink sharedLink = shareLinkService.getShareLinkByToken(shareToken);
+        // System.out.println("This is the current sharedlink: " + sharedLink);
 
         return shareLinkUrl;
     }
@@ -443,11 +443,11 @@ public class UsersLogin {
     @GetMapping("/share/{shareToken}")
     public RedirectView handleShareLink(@PathVariable String shareToken, Model model){
         ShareLink shareLink = shareLinkService.getShareLinkByToken(shareToken);
-        System.out.println("This is the current sharelink: " + shareLink);
+        // System.out.println("This is the current sharelink: " + shareLink);
 
         if (shareLink != null && !isShareLinkExpired((ShareLink) shareLink)){
             model.addAttribute("shareToken", shareLink);
-            return new RedirectView("/shareSuccess");
+            return new RedirectView("/shareSuccess/{shareToken}");
         }
         else{
             return new RedirectView("/shareError");
@@ -463,8 +463,18 @@ public class UsersLogin {
         return "view/expiredShareLink";
     }
 
-    @GetMapping("/shareSuccess")
-    public String shareSuccess(){
+    @GetMapping("/shareSuccess/{shareToken}")
+    public String shareSuccess(Model model, @PathVariable String shareToken ){
+        ShareLink shareLink = shareLinkService.getShareLinkByToken(shareToken);
+        int uid = shareLinkService.getDataFromShareLink(shareLink);
+        
+        model.addAttribute("shareLink", shareLink);
+        model.addAttribute("shareUid", uid);
+
+        System.out.println("SHARE SUCCESS PAGE HERE");
+        System.out.println("This is the current sharedlink: " + shareLink);
+        System.out.println("This is the uid of the user being shared: " + uid);
+
         return "view/shareSuccess";
     }
     
