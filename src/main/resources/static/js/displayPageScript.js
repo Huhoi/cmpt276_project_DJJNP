@@ -95,7 +95,6 @@ function initListeners() {
             console.log("DATE CHANGED");
             firstInit++;
             markerCount = markers.length;
-            markers = [];
             setMapOnAll(null);
         });
     }
@@ -138,6 +137,9 @@ function initMarkers() {
                     infoWindow.open(map, marker);
                 });
             })(marker, selected);  
+
+            // Place each marker in HTML list
+            addToHtmlList(marker);
         });
 
         // Generate routes while in fetch call
@@ -281,6 +283,23 @@ function addToHtmlList(newMarker) {
     cell3.innerHTML = newMarker.longitude;
 }
 
+// ======================================
+// Helper function for removing from list
+
+// ==================================
+// Helper function for clearing list
+function clearHtmlList(size) {
+    var table = document.getElementById("list");
+
+    if (size == 0) {
+        return;
+    }
+
+    for (let i = 0; i < size; i++) {
+        table.deleteRow(1);
+    }
+}
+
 // =============================================
 // Helper function for adding marker to database
 async function saveMarker(event) {
@@ -320,6 +339,7 @@ async function saveMarker(event) {
         console.error('Error saving event: ', error);
     }
 
+    console.table(markers);
     console.log("DONE RUNNING saveMarker()");
 }
 
@@ -339,6 +359,8 @@ function setMapOnAll(nullMap) {
         path.clear();
     }
 
+    clearHtmlList(markers.length);
+    markers = [];
     initListeners();
 }
 
