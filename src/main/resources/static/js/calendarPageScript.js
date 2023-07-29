@@ -122,18 +122,25 @@ function openModal(date) {
             todayEventList.push({
               eventName: i.eventName,
               date: new Date(i.date),
-              timeBegin: convertTo12HourFormat(i.timeBegin), // Convert to 12-hour time format
-              timeEnd: convertTo12HourFormat(i.timeEnd), // Convert to 12-hour time format
+              timeBegin: i.timeBegin, // Convert to 12-hour time format
+              timeEnd: i.timeEnd, // Convert to 12-hour time format
               uid: i.uid,
               sid: i.sid
             });
           }
         }
       }
-    
-    // Sort the eventList by time and date in ascending order
-    todayEventList.sort((a, b) => a.date - b.date);
-    todayEventList.sort((a, b) => new Date(a.timeBegin) - new Date(b.timeBegin));
+      
+    // Sort the todayEventList by timeBegin in ascending order
+    todayEventList.sort((a, b) => {
+      if (a.timeBegin !== b.timeBegin) {
+        // Sort by timeBegin first
+        return a.timeBegin - b.timeBegin;
+      } else {
+        // If timeBegin values are equal, sort by timeEnd
+        return a.timeEnd - b.timeEnd;
+      }
+    });
       
     // Get a reference to the table body element
     const tableBody = document.querySelector('#tEvents tbody');
@@ -152,11 +159,11 @@ function openModal(date) {
       
       //Time Begin
       const timeBeginCell = row.insertCell();
-      timeBeginCell.textContent = event.timeBegin.toLocaleString(); // Display the date in a human-readable format
+      timeBeginCell.textContent = convertTo12HourFormat(event.timeBegin); // Display the date in a human-readable format
       
       //Tiem ENd
       const timeEndCell = row.insertCell();
-      timeEndCell.textContent = event.timeEnd;
+      timeEndCell.textContent = convertTo12HourFormat(event.timeEnd);
     
       //Date
       const dateCell = row.insertCell();
@@ -193,11 +200,11 @@ function reloadModal() {
       
       //Time Begin
       const timeBeginCell = row.insertCell();
-      timeBeginCell.textContent = event.timeBegin.toLocaleString(); // Display the date in a human-readable format
+      timeBeginCell.textContent = convertTo12HourFormat(event.timeBegin); // Display the date in a human-readable format
       
       //Tiem ENd
       const timeEndCell = row.insertCell();
-      timeEndCell.textContent = event.timeEnd;
+      timeEndCell.textContent = convertTo12HourFormat(event.timeEnd);
     
       //Date
       const dateCell = row.insertCell();
@@ -237,7 +244,9 @@ async function saveEvent(event) {
       date: clicked,
       timeBegin: parseInt(document.getElementById('timeBegin').value),
       timeEnd: parseInt(document.getElementById('timeEnd').value),
-      uid: parseInt(document.getElementById('currentUser').value)
+      uid: parseInt(document.getElementById('currentUser').value),
+      longitude: document.getElementById('locationLng').value,
+      latitude: document.getElementById('locationLat').value,
     };
 
     try {
@@ -246,7 +255,7 @@ async function saveEvent(event) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(eventData),
+        body: JSON.stringify(eventData), 
       });
 
       if (response.ok) {
@@ -254,10 +263,21 @@ async function saveEvent(event) {
         todayEventList.push({
           eventName: eventData.eventName,
           date: new Date(eventData.date),
-          timeBegin: convertTo12HourFormat(eventData.timeBegin),
-          timeEnd: convertTo12HourFormat(eventData.timeEnd),
+          timeBegin: eventData.timeBegin,
+          timeEnd: eventData.timeEnd,
           uid: eventData.uid,
           sid: eventData.sid, // Replace this with the actual sid received from the server
+        });
+
+        // Sort the todayEventList by timeBegin in ascending order
+        todayEventList.sort((a, b) => {
+          if (a.timeBegin !== b.timeBegin) {
+            // Sort by timeBegin first
+            return a.timeBegin - b.timeBegin;
+          } else {
+            // If timeBegin values are equal, sort by timeEnd
+            return a.timeEnd - b.timeEnd;
+          }
         });
 
         // Update the table in the modal without closing it
@@ -304,12 +324,16 @@ function handleDeleteEvent(sid) {
 
 // Function to convert time from military (24-hour) to 12-hour format
 function convertTo12HourFormat(militaryTime) {
-  // Parse the militaryTime string to extract hours and minutes
   const hours = Math.floor(militaryTime / 100);
   const minutes = militaryTime % 100;
-  const period = hours >= 12 ? 'PM' : 'AM';
-  const twelveHour = hours % 12 === 0 ? 12 : hours % 12;
-  return `${twelveHour}:${minutes.toString().padStart(2, '0')} ${period}`;
+  const ampm = hours >= 12 ? 'pm' : 'am';
+
+  let formattedHours = hours % 12;
+  formattedHours = formattedHours === 0 ? 12 : formattedHours;
+
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+
+  return `${formattedHours}:${formattedMinutes} ${ampm}`;
 }
 
 //Loads the Calendar

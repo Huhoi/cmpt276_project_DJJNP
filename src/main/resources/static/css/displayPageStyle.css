@@ -17,3 +17,23 @@
 .table-wrapper-scroll-y {
     display: block;
 }
+
+#dateForm {
+    height: 100px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+label {
+    font-weight: bold;
+    font-size: large;
+}
+
+#displayDate {
+    font-size: large; /* Adjust the font size as needed */
+    width: 200px; /* Adjust the width as needed */
+    padding: 10px; /* Add padding to increase the clickable area */
+}

@@ -3,6 +3,7 @@ package cmpt276.project.djjnp.projectdjjnp.controllers;
 
 import java.text.SimpleDateFormat;
 import java.time.Clock;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -205,54 +206,6 @@ public class UsersLogin {
         return "view/calendarPage";
     }
 
-    //Adding From Calendar
-    // @PostMapping("/calendar/add")
-    // public String addCalendar(@RequestParam Map<String, String> form, Model model, HttpServletRequest request,
-    //         HttpSession session, HttpServletResponse response) throws Exception {
-    //     //Saves Event
-    //     User currentUser = (User) request.getSession().getAttribute("sessionUser");
-    //     model.addAttribute("user", currentUser);
-
-    //     //Gets Paremeters from form
-    //     int id = currentUser.getUid();
-    //     String event = form.get("eventTitleInput");
-    //     int timeBegin = Integer.parseInt(form.get("timeBegin"));
-    //     int timeEnd = Integer.parseInt(form.get("timeEnd"));
-    //     String locationLatitude = form.get("locationLat");
-    //     String locationLongitude = form.get("locationLng");
-
-    
-
-    //     //Gets selected date
-    //     SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-    //     Date date = formatter.parse(form.get("selectedDate"));
-    //     String dateAsString = formatter.format(date);
-        
-
-    //     //Prints into console for error check
-    //     System.out.println("Event: " + event);
-    //     System.out.println("Date: " + date);
-    //     System.out.println("time: " + timeBegin);
-    //     System.out.println("time: " + timeEnd);
-
-    //     eventRepo.save(new Event(id, event, locationLatitude ,locationLongitude, timeBegin, timeEnd, dateAsString));
-
-    //     return "redirect:/calendar";
-    // }
-    
-
-
-    
-    // //Delete From Event List
-    // @GetMapping("/calendar/delete/{sid}")
-    // public String deleteCalendar(@PathVariable String sid){
-    //     eventRepo.deleteById(Integer.parseInt(sid));
-    //     return "redirect:/calendar";
-    // }
-    
-
-
-
     //------------------------------------------
     // Display Page
     //------------------------------------------
@@ -271,46 +224,16 @@ public class UsersLogin {
             return "redirect:/view/login";
         }
 
+        LocalDate curDate = LocalDate.now();
+
+
+        model.addAttribute("curDate", curDate);
         model.addAttribute("user", currentUser);
         model.addAttribute("event", currentUserEvent);
         model.addAttribute("location", currentUserLocation);
 
         return "view/displayPage";
     }
-
-
-    //Adds location to database
-    // @PostMapping("/display/add")
-    // public String showMapAdd(@RequestParam Map<String, String> form, Model model, HttpServletRequest request,
-    //         HttpSession session, HttpServletResponse response) throws Exception {
-
-    //     //Saves Location
-    //     User currentUser = (User) request.getSession().getAttribute("sessionUser");
-    //     List<Location> currentUserLocations = locationRepo.findAll();
-    //     model.addAttribute("user", currentUser);
-    //     model.addAttribute("location", currentUserLocations);
-        
-    //     //Gets parameters from form
-    //     int id = currentUser.getUid();
-    //     String timestamp = form.get("timestampInput");
-    //     String latitude = form.get("latitudeInput");
-    //     String longitude = form.get("longitudeInput");
-    //     String description = form.get("descriptionInput");
-        
-
-    //     //Testing if it works
-    //     System.out.println("Sumbiting");
-    //     System.out.println("Timestamp: " + timestamp);
-    //     System.out.println("Latitude: " + latitude);
-    //     System.out.println("Longitude: " + longitude);
-    //     System.out.println("Description: " + description);
-        
-    //     locationRepo.save(new Location(id, timestamp, latitude, longitude, description));
-
-    //     return "redirect:/display";
-
-    // }
-
 
   
     //------------------------------------------
@@ -479,47 +402,3 @@ public class UsersLogin {
     }
     
 }
-
-
-
-// // Controller-compatible Ajax call for live updates (unfinished)
-// @PostMapping("/display/add")
-// public ResponseEntity<?> showMapAdd(Errors errors) {
-
-//     AjaxResponseBody result = new AjaxResponseBody();
-
-//     if (errors.hasErrors()) {
-
-//         result.setMsg(errors.getAllErrors()
-//                     .stream().map(x -> x.getDefaultMessage())
-//                     .collect(Collectors.joining(",")));
-
-//         return ResponseEntity.badRequest().body(result);
-
-//     }
-
-//     //Saves Location
-//     User currentUser = (User) request.getSession().getAttribute("sessionUser");
-//     List<Location> currentUserLocations = locationRepo.findAll();
-//     model.addAttribute("user", currentUser);
-//     model.addAttribute("location", currentUserLocations);
-    
-//     //Gets parameters from form
-//     int id = currentUser.getUid();
-//     String timestamp = form.get("timestampInput");
-//     String latitude = form.get("latitudeInput");
-//     String longitude = form.get("longitudeInput");
-//     String description = form.get("descriptionInput");
-    
-
-//     //Testing if it works
-//     System.out.println("Sumbiting");
-//     System.out.println("Timestamp: " + timestamp);
-//     System.out.println("Latitude: " + latitude);
-//     System.out.println("Longitude: " + longitude);
-//     System.out.println("Description: " + description);
-    
-//     locationRepo.save(new Location(id, timestamp, latitude, longitude, description));
-
-//     return "redirect:/display";
-// }

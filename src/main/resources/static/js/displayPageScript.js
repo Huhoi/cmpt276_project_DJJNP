@@ -1,15 +1,17 @@
-//////////////////////////
-//   Global variables   //
-//////////////////////////
-var markers = [];
-let currentUser = document.getElementById("currentUser").value;
-var currentMarker;
-document.getElementById('saveButton').addEventListener('click', saveEvent);
+////////////////////////////////////////
+//   Global variables and listeners   //
+////////////////////////////////////////
+var markers = []; // List of markers fetched from DB
+var selected = []; // List of google.maps.Marker objects
+var currentMarker; // Used for saving markers to DB
+var poly; // Google Maps Routes API polyline that creates routes
+var path; // Used for route creation
+let currentUser = document.getElementById("currentUser").value; // UID
+const dateInput = document.getElementById("displayDate"); // HTML calendar input
+document.getElementById('saveButton').addEventListener('click', saveEvent); // !!! TEMPORARY !!! 
+let firstInit = 0; // !!! FIX THIS !!!
 
-var rn = new Date();
-console.log("LocaleTimeString: " + rn.toLocaleTimeString('en-US'));
-rn.setMinutes(rn.getMinutes() + 30)
-console.log("30 mins from now: " + rn.toLocaleTimeString('en-US'));
+
 
 //////////////////////////////////////
 //   Map initialization functions   //
@@ -25,7 +27,6 @@ function initMap() {
         zoom: 10
     };
     map = new google.maps.Map(document.getElementById("map"), options);
-    console.log("NOTE: Map may not load if you refresh too frequently");
 
     // Load search box
     const input = document.getElementById("pac-input");
@@ -35,7 +36,7 @@ function initMap() {
         searchbox.setBounds(map.getBounds());
     });
 
-    // // Load markers and routes from database
+    // Load markers and routes from database
     initMarkers();
 
     // LISTENER: Search box
@@ -46,7 +47,6 @@ function initMap() {
 
         places.forEach((place) => {
             if (!place.geometry || !place.geometry.location) {
-                console.log("No geometry found");
                 return;
             }
 
@@ -74,6 +74,44 @@ function initMap() {
 
         initRoutes();
     });
+
+    // Listen for changes to the HTML calendar: refresh map if changed
+    // NOTE: Only do this for the first init, otherwise there'll be unintended
+    //       "event bubbling" from calls to initMap() caused by setMapOnAll().
+    if (firstInit == 0) {
+        dateInput.addEventListener('change', () => {
+            console.log("DATE CHANGED");
+            setMapOnAll(null);
+            markers = [];
+            selected = [];
+            firstInit++;
+        });
+    }
+}
+
+function setMapOnAll(nullMap) {
+    for (let i = 0; i < selected.length; i++) {
+        selected[i].setMap(nullMap);
+    }
+
+    path = new google.maps.MVCArray();
+    poly.setMap(null);
+    
+    initMap();
+}
+
+function formatDate(dateString) {
+    // Split the input string into year, month, and day components
+    const [year, month, day] = dateString.split('-');
+
+    // Remove leading zeros from the month and day components
+    const formattedMonth = Number(month).toString();
+    const formattedDay = Number(day).toString();
+
+    // Create a new string in "M/d/yyyy" format
+    const formattedDate = `${formattedMonth}/${formattedDay}/${year}`;
+
+    return formattedDate;
 }
 
 // ===================================================
@@ -85,7 +123,8 @@ function initMarkers() {
     .then(response => response.json())
     .then(data => {
         for (const i of data){
-            if (i.uid == currentUser){
+            console.log(i.date);
+            if (i.uid == currentUser && i.date == formatDate(dateInput.value)){
                 markers.push({
                     timestamp: i.eventName,
                     latitude: Number(i.latitude),
@@ -99,11 +138,11 @@ function initMarkers() {
         markers.forEach(marker => {
             coordList.push(new google.maps.LatLng(marker.latitude, marker.longitude));
             // Display marker on map
-            var selected = new google.maps.Marker({
+            selected.push(new google.maps.Marker({
                 position: new google.maps.LatLng(marker.latitude, marker.longitude),
                 map: map,
                 title: marker.timestamp
-            });
+            }));
 
             // Click on marker to reveal details
             (function(marker, selected) {
@@ -147,8 +186,8 @@ function initRoutes() {
             // proceeds to create a path between the two given points
             function(result, status) {
                 if (status == google.maps.DirectionsStatus.OK) {
-                    var path = new google.maps.MVCArray();
-                    var poly = new google.maps.Polyline({
+                    path = new google.maps.MVCArray();
+                    poly = new google.maps.Polyline({
                         map: map,
                         strokeColor: '#8153f5'
                     });
@@ -168,17 +207,25 @@ function initRoutes() {
 // Re-size/re-adjust map view
 // - Uses farthest coordinate points to generate best view
 function resizeMap() {
-    var latLngBounds = new google.maps.LatLngBounds();
-    markers.forEach(marker => {
-        var lat = Number(marker.latitude);
-        var lng = Number(marker.longitude);
-        latLngBounds.extend(new google.maps.LatLng(lat, lng));
-    });
-    map.fitBounds(latLngBounds);
-    console.table(markers);
+    // Edge case: If no markers exist, then focus view on Vancouver
+    if (markers.length == 0) {
+        console.log("ADJUSTING VIEW");
+        var options = {
+            center: {lat: 49.278059, lng: -122.919883},
+            zoom: 10
+        };
+        map = new google.maps.Map(document.getElementById("map"), options);
+    }
+    else {
+        var latLngBounds = new google.maps.LatLngBounds();
+        markers.forEach(marker => {
+            var lat = Number(marker.latitude);
+            var lng = Number(marker.longitude);
+            latLngBounds.extend(new google.maps.LatLng(lat, lng));
+        });
+        map.fitBounds(latLngBounds);
+    }
 }
-
-//
 
 // ===========================================
 // Places a marker on the map and adds to list

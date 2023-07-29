@@ -46,6 +46,13 @@
             </tr>
         </table>
 
+    <div id="dateForm">
+        <form>
+            <label for="displayDate">Date:</label>
+            <input type="date" id="displayDate" th:value="${curDate}">
+         </form>
+    </div>
+
     <!-- Search box goes here -->
     <input id="pac-input" class="controls form-control" type="text" placeholder="Search box" style="width: 30vw; margin: 10px;"/>
 
@@ -54,7 +61,7 @@
         
     <!-- Google Maps JavaScript API with key -->
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCs8dt2-arfwhEtAAcBeVAFXZlr8HxBTqI&callback=initMap&libraries=places">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCs8dt2-arfwhEtAAcBeVAFXZlr8HxBTqI&callback=firstInit&libraries=places">
     </script><br>
 
     <div id="listDiv" class="table-wrapper-scroll-y">

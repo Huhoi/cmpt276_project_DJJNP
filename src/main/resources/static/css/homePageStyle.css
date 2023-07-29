@@ -1,7 +1,38 @@
 .main{
-    margin-top: 75px;
-    width: 100%;
-    height: 300px;
-    font-size: xx-large;
+    margin-top: 50px;
+    height: 150px;
+    font-size: 50px;
+    font-weight: bold;
     text-align: center;
 }
+
+h1{
+    position: relative;
+    left: 250px;
+}
+
+#tSchedule{
+    position: relative;
+    left: 350px;
+    
+    border: 1px solid gray;
+    border-spacing: 10px;
+    border-collapse: separate;
+    box-shadow: 5px 10px gray;
+}
+
+
+#tSchedule td {
+    padding: 8px;
+  }
+
+
+#legend{
+    font-size: 30px;
+    font-weight:lighter
+}
+
+tbody{
+    font-size: 25px;
+}
+

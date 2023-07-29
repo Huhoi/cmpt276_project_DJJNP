@@ -18,6 +18,8 @@ import cmpt276.project.djjnp.projectdjjnp.models.EventRepository;
 import cmpt276.project.djjnp.projectdjjnp.service.EventService;
 
 
+
+
 @RestController
 @RequestMapping("/api")
 public class EventController {
@@ -25,7 +27,9 @@ public class EventController {
     @Autowired(required = true)
     private EventRepository eventRepo;
 
+
     private final EventService eventService;
+
 
     
     public EventController(EventService eventService) {
@@ -44,7 +48,6 @@ public class EventController {
     
     @PostMapping("/calendar/add")
     public ResponseEntity<String> saveEvent(@RequestBody Event event) {
-
         // Save the event using the EventService
         eventService.saveEvent(event);
 
