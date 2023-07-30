@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/css/navigationBarStyle.css">
     <script src="/js/homePageScript.js" defer></script>
 </head>
-<body>
+<body style="overflow-x: hidden;">
     <div class="navBar">
         <table class="navBarTable">
             <tr>
@@ -47,22 +47,37 @@
         <span th:text="*{email}"></span>
     </div>
     <input type="hidden" id="currentUser" name="currentUser" th:value="${user.uid}"/>
-    <div>
-        <h1 id="ScheduleTitle">Today's Schedule</h1>
-        <table id="tSchedule" th:onclick="|window.location.href='/calendar'|">
-            <thead>
-                <tr>
-                    <td id="legend">TODO</td>
-                    <td id="legend">Time</td>
-                    <td id="legend"></td>
-                    <td id="legend">Date</td>
-                </tr>   
-            </thead>
-            <tbody>
-            
-            </tbody>
-        </table>
-    </div>
+    
+    <!-- Flexbox -->
+    <div id="container">
+        <div id="box1">
+            <h1 id="ScheduleTitle">Today's Schedule</h1>
+            <table id="tSchedule" th:onclick="|window.location.href='/calendar'|">
+                <thead>
+                    <tr>
+                        <td id="legend">TODO</td>
+                        <td id="legend">Time</td>
+                        <td id="legend"></td>
+                        <td id="legend">Date</td>
+                    </tr>   
+                </thead>
+                <tbody>
+                
+                </tbody>
+            </table>
+        </div>
+
+        <div id="box2">
+            <h1 id="DisplayTitle">Preview</h1>
+            <!-- Initmap() targets this div and loads the map -->
+            <div id="previewMap"></div>
+        </div>
+    </div>    
+    
+    <!-- Google Maps JavaScript API with key -->
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCs8dt2-arfwhEtAAcBeVAFXZlr8HxBTqI&callback=initMap&libraries=places">
+    </script><br>
 
 </body>
 </html>

@@ -2,15 +2,15 @@
 //   Global variables and listeners   //
 ////////////////////////////////////////
 var map; // google.maps.Map
-var paths = []; // List of paths
+var searchbox; // google.maps.places.SearchBox
+var paths = []; // List of paths (for routing)
 var markers = []; // List of markers fetched from DB
 var selected = []; // List of google.maps.Marker objects
 var polylines = []; // List of google.maps.Polyline objects
 var currentMarker; // Used for saving markers to DB
-var timeInterval = 0; // Prevent time-collisions
-var searchbox;
 var firstInit = 0;
 var markerCount = 0;
+var timeInterval = 0; // Prevent time-collisions
 var currentUser = document.getElementById("currentUser").value; // UID
 const dateInput = document.getElementById("displayDate"); // HTML calendar input
 // document.getElementById('saveButton').addEventListener('click', saveMarker); // !!! TEMPORARY !!! 
@@ -389,6 +389,7 @@ function setMapOnAll(nullMap) {
 
     clearHtmlList(markers.length);
     markers = [];
+    timeInterval = 0;
     initListeners();
 }
 

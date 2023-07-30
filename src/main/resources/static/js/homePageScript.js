@@ -142,3 +142,19 @@ document.addEventListener('DOMContentLoaded', function() {
   // Append the formatted date to the h1 element
   h1Element.textContent += ' ' + formattedDate;
 });
+
+// ===================
+// Initialize map view
+function initMap() {
+  console.log("initMap() running");
+  // Edit map options and assign it to its HTML ID
+  var options = {
+      disableDefaultUI: true,
+      clickableIcons: false,
+      gestureHandling: "none",
+      zoomControl: false,
+      center: {lat: 49.278059, lng: -122.919883},
+      zoom: 10
+  };
+  map = new google.maps.Map(document.getElementById("previewMap"), options);
+}
