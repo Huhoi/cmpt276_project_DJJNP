@@ -24,7 +24,7 @@ h1{
 
 #tSchedule td {
     padding: 8px;
-  }
+}
 
 
 #legend{
@@ -35,4 +35,37 @@ h1{
 tbody{
     font-size: 25px;
 }
+
+#DisplayTitle {
+    right: 350px;
+}
+
+
+#box1 {
+    border-radius: 5px;
+    padding: 0px 10px 10px 20px;
+    margin: 5px;
+    float: left;
+    grid-row: 1 / 1;
+    grid-column: 1 / 2;
+}
+
+
+#box2 {
+    border-radius: 5px;
+    padding: 0px 10px 10px 20px;
+    margin: 5px;
+    float: right;
+    grid-row: 1 / 1;
+    grid-column: 2 / 2;
+}
+
+
+#previewMap {
+    /* position: relative;
+    right: 350px; */
+    height: 337px;
+    width: 525px;
+}
+
 
