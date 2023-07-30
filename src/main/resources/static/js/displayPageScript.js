@@ -113,37 +113,53 @@ function initMarkers() {
             if (i.uid == currentUser && i.date == formatDate(dateInput.value)){
                 markers.push({
                     timestamp: i.eventName,
+                    begin: i.timeBegin,
+                    end: i.timeEnd,
                     latitude: Number(i.latitude),
                     longitude: Number(i.longitude),
                 });
             }
         }
         
-        // Loop to initialize all markers that currently exist
-        var coordList = new Array(); // Stores all latitude and longitudes as LatLng objects
-        markers.forEach(marker => {
-            coordList.push(new google.maps.LatLng(marker.latitude, marker.longitude));
-            // Display marker on map
-            selected.push(new google.maps.Marker({
-                position: new google.maps.LatLng(marker.latitude, marker.longitude),
-                map: map,
-                title: marker.timestamp
-            }));
+        // If there are markers for the selected day:
+        if (markers.length > 0) {
+            // Show list and hide error message
+            document.getElementById("list").style.visibility = "visible";
+            document.getElementById("noMarkers").innerHTML = "Showing markers for " + dateInput.value;
+            
+            // Loop to initialize all markers that currently exist
+            var coordList = new Array(); // Stores all latitude and longitudes as LatLng objects
+            markers.forEach(marker => {
+                coordList.push(new google.maps.LatLng(marker.latitude, marker.longitude));
+                // Display marker on map
+                selected.push(new google.maps.Marker({
+                    position: new google.maps.LatLng(marker.latitude, marker.longitude),
+                    map: map,
+                    title: marker.timestamp
+                }));
 
-            // Click on marker to reveal details
-            (function(marker, selected) {
-                google.maps.event.addListener(marker, "click", function(e) {
-                    infoWindow.setContent(selected.timestamp);
-                    infoWindow.open(map, marker);
-                });
-            })(marker, selected);  
+                // Click on marker to reveal details
+                (function(marker, selected) {
+                    google.maps.event.addListener(marker, "click", function(e) {
+                        infoWindow.setContent(selected.timestamp);
+                        infoWindow.open(map, marker);
+                    });
+                })(marker, selected);  
 
-            // Place each marker in HTML list
-            addToHtmlList(marker);
-        });
+                // Place each marker in HTML list
+                addToHtmlList(marker);
+            });
 
-        // Generate routes while in fetch call
-        initRoutes();
+            // Generate routes while in fetch call
+            initRoutes();
+        }
+        
+        // Else if no markers for selected day:
+        else {
+            // Give feedback that there are no markers
+            document.getElementById("list").style.visibility = "hidden";
+            document.getElementById("noMarkers").innerHTML = "No markers found on " + dateInput.value;
+        }
     })
     .catch(error => console.error('Error fetching locations', error));
 }
@@ -223,6 +239,10 @@ function resizeMap() {
 // - IF TYPE == google.maps.LatLng
 // - Documentation: https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLng
 function addByLatLng(newMarker) {
+    // Edge case: Adding first marker for selected date
+    document.getElementById("list").style.visibility = "visible";
+    document.getElementById("noMarkers").innerHTML = "Showing markers for " + dateInput.value;
+
     // Marker details
     marker = {
         "timestamp": "New event", // TO-DO
@@ -249,6 +269,10 @@ function addByLatLng(newMarker) {
 // - IF TYPE == google.maps.places.PlaceResult
 // - Documentation: https://developers.google.com/maps/documentation/javascript/reference/places-service#PlaceResult
 function addByPlaceResult(newMarker) {
+    // Edge case: Adding first marker for selected date
+    document.getElementById("list").style.visibility = "visible";
+    document.getElementById("noMarkers").innerHTML = "Showing markers for " + dateInput.value;
+
     // Marker details
     marker = {
         "timestamp": newMarker.name,
@@ -278,9 +302,13 @@ function addToHtmlList(newMarker) {
     var cell1 = row.insertCell(0);
     var cell2 = row.insertCell(1);
     var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
+    var cell5 = row.insertCell(4);
     cell1.innerHTML = newMarker.timestamp;
-    cell2.innerHTML = newMarker.latitude;
-    cell3.innerHTML = newMarker.longitude;
+    cell2.innerHTML = convertTo12HourFormat(newMarker.begin);
+    cell3.innerHTML = convertTo12HourFormat(newMarker.end);
+    cell4.innerHTML = newMarker.latitude;
+    cell5.innerHTML = newMarker.longitude;
 }
 
 // ======================================
@@ -405,6 +433,22 @@ function formatTime(when) {
     console.log(newTime);
     return newTime;
 }
+
+// =======================================================
+// Converts time from military (24-hour) to 12-hour format
+// - Derived from calendarPageScript.js
+function convertTo12HourFormat(militaryTime) {
+    const hours = Math.floor(militaryTime / 100);
+    const minutes = militaryTime % 100;
+    const ampm = hours >= 12 ? 'pm' : 'am';
+  
+    let formattedHours = hours % 12;
+    formattedHours = formattedHours === 0 ? 12 : formattedHours;
+  
+    const formattedMinutes = minutes.toString().padStart(2, '0');
+  
+    return `${formattedHours}:${formattedMinutes} ${ampm}`;
+  }
 
 // ==================================================
 // Pick a random color in the form of a hex (#XXXXXX)
