@@ -52,6 +52,7 @@ tbody{
     margin: 5px;
     float: left;
     order: 1;
+    cursor: pointer;
 }
 
 

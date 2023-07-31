@@ -247,9 +247,19 @@ function addByLatLng(newMarker) {
     document.getElementById("list").style.visibility = "visible";
     document.getElementById("noMarkers").innerHTML = "Showing markers for " + dateInput.value;
 
+    // Let user rename event with alert prompt
+    var newName;
+    var promptResult = window.prompt("Enter a name for the marker:", newMarker.name);
+    if (promptResult == null || promptResult == "") {
+        newName = "New event";
+    }
+    else {
+        newName = promptResult;
+    }
+
     // Marker details
     marker = {
-        "timestamp": "New event", // TO-DO
+        "timestamp": newName,
         "latitude": Number(newMarker.lat()),
         "longitude": Number(newMarker.lng()),
     }
@@ -277,9 +287,19 @@ function addByPlaceResult(newMarker) {
     document.getElementById("list").style.visibility = "visible";
     document.getElementById("noMarkers").innerHTML = "Showing markers for " + dateInput.value;
 
+    // Let user rename event with alert prompt
+    var newName;
+    var promptResult = window.prompt("Enter a name for the marker:", newMarker.name);
+    if (promptResult == null || promptResult == "") {
+        newName = newMarker.name;
+    }
+    else {
+        newName = promptResult;
+    }
+
     // Marker details
     marker = {
-        "timestamp": newMarker.name,
+        "timestamp": newName,
         "latitude": newMarker.geometry.location.lat(),
         "longitude": newMarker.geometry.location.lng(),
     }
@@ -315,9 +335,6 @@ function addToHtmlList(newMarker) {
     cell5.innerHTML = newMarker.longitude;
 }
 
-// ======================================
-// Helper function for removing from list
-
 // ==================================
 // Helper function for clearing list
 function clearHtmlList(size) {
@@ -343,7 +360,7 @@ async function saveMarker(event) {
     document.getElementById("markerLng").value = currentMarker.longitude;
 
     const eventData = {
-        eventName: "New event",
+        eventName: currentMarker.timestamp,
         latitude: currentMarker.latitude,
         longitude: currentMarker.longitude,
         date: formatDate(dateInput.value),
