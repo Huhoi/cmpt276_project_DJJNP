@@ -24,8 +24,16 @@ public class ShareLinkServiceImplementation implements ShareLinkService{
         return shareLinkRepo.findByShareToken(shareToken);
     }   
 
-    public int getDataFromShareLink(ShareLink shareLink) {
+    public int getUidFromShareLink(ShareLink shareLink) {
         return shareLink.getUid();
+    }
+
+    public String getUserNameFromShareLink(ShareLink shareLink){
+        return shareLink.getUserName();
+    }
+
+    public String getShareTokenFromShareLink(ShareLink shareLink){
+        return shareLink.getShareToken();
     }
 
 }

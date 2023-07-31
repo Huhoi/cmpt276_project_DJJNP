@@ -12,14 +12,18 @@ public class ShareLink {
     private int uid;
     private String shareToken;
     private LocalDateTime expirationTimestamp;
+    private String userName;
+    private String shareLink;
     
     public ShareLink() {
     }
 
-    public ShareLink(int uid, String shareToken, LocalDateTime expirationTimestamp) {
+    public ShareLink(int uid, String shareToken, LocalDateTime expirationTimestamp, String userName, String shareLink) {
         this.uid = uid;
         this.shareToken = shareToken;
         this.expirationTimestamp = expirationTimestamp;
+        this.userName = userName;
+        this.shareLink = shareLink;
     }
 
     public int getUid() {
@@ -46,12 +50,20 @@ public class ShareLink {
         this.expirationTimestamp = expirationTimestamp;
     }
 
-    public int getShare_id() {
+    public int getShareid() {
         return shareid;
     }
 
-    public void setShare_id(int share_id) {
+    public void setShareid(int shareid) {
         this.shareid = shareid;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     @Override
@@ -59,6 +71,12 @@ public class ShareLink {
         return "ShareLink [id=" + shareid + ", shareToken=" + shareToken + ", uid=" + uid + "]";
     }
 
-    
+    public String getShareLink() {
+        return shareLink;
+    }
+
+    public void setShareLink(String shareLink) {
+        this.shareLink = shareLink;
+    }
     
 }
