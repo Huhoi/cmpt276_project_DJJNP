@@ -45,6 +45,13 @@ public class EventController {
 
         return null;
     }
+
+    @GetMapping("/event/{uid}")
+        
+    public List<Event> getEventsByUserId(@PathVariable int uid) {
+        return eventService.getEventsByUserId(uid);
+    }
+    
     
     @PostMapping("/calendar/add")
     public ResponseEntity<String> saveEvent(@RequestBody Event event) {
