@@ -171,6 +171,18 @@ public class UsersLogin {
             return "redirect:/view/login";
         }
 
+
+        if(request.getSession().getAttribute("sessionUserShare") == null){
+            return "redirect:/share";
+        }
+        else{
+            ShareLink currentUserShare = (ShareLink) request.getSession().getAttribute("sessionUserShare");
+            // String userShare = currentUserShare.getShareLink();
+            // System.out.println("This is the share link" + userShare);
+            model.addAttribute("currentUserShare", currentUserShare);
+        }
+        
+
         //Get Data
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         List<Event> currentUserEvent = eventRepo.findAll();
@@ -303,11 +315,12 @@ public class UsersLogin {
     }
 
     @GetMapping("/share")
-    @ResponseBody
+    // @ResponseBody
     public String generateShareLink(HttpServletRequest request){
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
 
         int uid = currentUser.getUid();
+        String userName = currentUser.getEmail();
         String shareToken = generateShareToken();
         LocalDateTime expDateTime = LocalDateTime.now().plusMinutes(5);
 
@@ -315,23 +328,27 @@ public class UsersLogin {
         shareLink.setUid(uid);
         shareLink.setShareToken(shareToken);
         shareLink.setExpirationTimestamp(expDateTime);
+        shareLink.setUserName(userName);
         
-        shareLinkService.saveShareLink(shareLink);
-
-
         System.out.println("This is the current user id: " + uid);
         System.out.println("This is the current share token: " + shareToken);
         System.out.println("This is the current expiration time: " + expDateTime);
+        System.out.println("This is the current user email: " + userName);
 
-        //
-        // CHANGE URL FOR RENDER
-        //
-        String shareLinkUrl = "http://localhost:8080/share/" + shareToken;
+  
+        // RENDER LINK
+        String shareLinkUrl = "https://project-djjnp-iteration1.onrender.com/share/" + shareToken;
+        // LOCAL HOST LINK
+        // String shareLinkUrl = "http://localhost:8080/share/" + shareToken;
+
+        shareLink.setShareLink(shareLinkUrl);
+        shareLinkService.saveShareLink(shareLink);
+        request.getSession().setAttribute("sessionUserShare", shareLink);
 
         // ShareLink sharedLink = shareLinkService.getShareLinkByToken(shareToken);
         // System.out.println("This is the current sharedlink: " + sharedLink);
 
-        return shareLinkUrl;
+        return "redirect:/calendar";
     }
 
     public static String generateShareToken() {
@@ -366,14 +383,17 @@ public class UsersLogin {
     @GetMapping("/shareSuccess/{shareToken}")
     public String shareSuccess(Model model, @PathVariable String shareToken ){
         ShareLink shareLink = shareLinkService.getShareLinkByToken(shareToken);
-        int uid = shareLinkService.getDataFromShareLink(shareLink);
+        int uid = shareLinkService.getUidFromShareLink(shareLink);
+        String userName = shareLinkService.getUserNameFromShareLink(shareLink);
         
         model.addAttribute("shareLink", shareLink);
         model.addAttribute("shareUid", uid);
+        model.addAttribute("shareUserName", userName);
 
         System.out.println("SHARE SUCCESS PAGE HERE");
         System.out.println("This is the current sharedlink: " + shareLink);
         System.out.println("This is the uid of the user being shared: " + uid);
+        System.out.println("This is the current user email being shared: " + userName);
 
         return "view/shareSuccess";
     }
