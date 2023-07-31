@@ -10,4 +10,5 @@ public interface EventRepository extends JpaRepository<Event,Integer>{
     // List<Event> findByTimeBegin(int timeBegin);
     // List<Event> findByTimeEnd(int timeEnd);
     // List<Event> findByTimeBeginEnd(int timeBegin,int timeEnd);
+    List<Event> findByUid(int uid);
 }

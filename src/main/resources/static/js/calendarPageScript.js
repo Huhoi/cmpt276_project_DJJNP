@@ -122,8 +122,8 @@ function openModal(date) {
             todayEventList.push({
               eventName: i.eventName,
               date: new Date(i.date),
-              timeBegin: i.timeBegin, // Convert to 12-hour time format
-              timeEnd: i.timeEnd, // Convert to 12-hour time format
+              timeBegin: i.timeBegin,
+              timeEnd: i.timeEnd, 
               uid: i.uid,
               sid: i.sid
             });
@@ -335,6 +335,49 @@ function convertTo12HourFormat(militaryTime) {
 
   return `${formattedHours}:${formattedMinutes} ${ampm}`;
 }
+
+// Function to export data to Excel
+async function exportToExcel() {
+  const currentUser = parseInt(document.getElementById("currentUser").value);
+  try {
+    const response = await fetch(`/api/event/${currentUser}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch events data');
+    }
+    const eventData = await response.json();
+
+    const data = eventData.map(event => ({
+      'Event Name': event.eventName,
+      'Date': new Date(event.date).toLocaleDateString('en-US'),
+      'Time Begin': convertTo12HourFormat(event.timeBegin),
+      'Time End': convertTo12HourFormat(event.timeEnd),
+      'Longitude': event.longitude,
+      'Latitude': event.latitude
+    }));
+
+    const today = new Date().toLocaleDateString('en-us', { year: 'numeric', month: 'numeric', day: 'numeric' });
+    const filename = `events_${today}.xlsx`;
+
+    // Create a new Excel workbook
+    const workbook = XLSX.utils.book_new();
+
+    // Convert the data to a worksheet
+    const worksheet = XLSX.utils.json_to_sheet(data);
+
+    // Add the worksheet to the workbook
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Events');
+
+    // Export the workbook to an Excel file
+    XLSX.writeFile(workbook, filename);
+  } catch (error) {
+    console.error('Error exporting data to Excel:', error);
+    alert('Failed to export data to Excel. Please try again.');
+  }
+}
+
+//Event listener to the Export button
+document.getElementById('exportButton').addEventListener('click', exportToExcel);
+
 
 //Loads the Calendar
 async function load() {

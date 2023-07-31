@@ -8,14 +8,14 @@
 
 h1{
     position: relative;
-    left: 250px;
+    /* left: 250px; */
 }
 
 #tSchedule{
     position: relative;
-    left: 350px;
+    /* left: 350px; */
     
-    border: 1px solid gray;
+    border: 1px solid black;
     border-spacing: 10px;
     border-collapse: separate;
     box-shadow: 5px 10px gray;
@@ -24,7 +24,7 @@ h1{
 
 #tSchedule td {
     padding: 8px;
-  }
+}
 
 
 #legend{
@@ -35,4 +35,42 @@ h1{
 tbody{
     font-size: 25px;
 }
+
+/* #DisplayTitle {
+    right: 350px;
+} */
+
+#container {
+    display: flex;
+    justify-content: space-evenly;
+    
+}
+
+
+#box1 {
+    border-radius: 5px;
+    margin: 5px;
+    float: left;
+    order: 1;
+}
+
+
+#box2 {
+    border-radius: 5px;
+    margin: 5px;
+    float: right;
+    order: 2;
+}
+
+
+#previewMap {
+    border: 1px solid black;
+    box-shadow: 5px 10px gray;
+    margin: 8px;
+    /* position: relative;
+    right: 350px; */
+    height: 337px;
+    width: 525px;
+}
+
 

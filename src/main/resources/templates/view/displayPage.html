@@ -10,19 +10,15 @@
     <link rel="stylesheet" href="/css/navigationBarStyle.css">
     <!-- jQuery && JavaScript -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-    <script src="/js/displayPageScript.js" defer></script>
 </head>
 <body>
     <!-- Navigation Bar  -->
     <div class="navBar">
         <table class="navBarTable">
             <tr>
-                <th>ChronoPlanner</th>
-                <td class="navButton">
-                    <div>
-                        <button type="button" th:onclick="|window.location.href='/home'|" id="button">Home</button>
-                    </div>
-                </td>
+                <!-- Logo on navbar -->
+                <td><img src="/img/ChronoPlannerLogo.png" id="logo" th:onclick="|window.location.href='/home'|" height="120px"></td>
+
                 <td class="navButton">
                     <div>
                         <button type="button" th:onclick="|window.location.href='/calendar'|" id="button">Schedule</button>
@@ -50,7 +46,7 @@
         <form>
             <label for="displayDate">Date:</label>
             <input type="date" id="displayDate" th:value="${curDate}">
-         </form>
+        </form>
     </div>
 
     <!-- Search box goes here -->
@@ -58,17 +54,38 @@
 
     <!-- Initmap() targets this div and loads the map -->
     <div id="map"></div>
+
+    <!-- External JS -->
+    <script src="/js/displayPageScript.js"></script>
         
     <!-- Google Maps JavaScript API with key -->
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCs8dt2-arfwhEtAAcBeVAFXZlr8HxBTqI&callback=firstInit&libraries=places">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCs8dt2-arfwhEtAAcBeVAFXZlr8HxBTqI&callback=initMap&libraries=places">
     </script><br>
 
+    <!-- Send data to database -->
+    <form action="/display/add" method="post" name="mForm" id="markerForm" onsubmit="saveMarker(event)">
+        <input type="hidden" id="markerTitle" name="markerTitle">
+        <input type="hidden" id="markerLat" name="markerLat">
+        <input type="hidden" id="markerLng" name="markerLng">
+
+        <!-- Invis button that is clicked in JS -->
+        <div>
+            <button id="saveButton" type="submit" class="btn btn-primary" style="visibility: hidden;"></button>
+        </div>
+    </form>
+
+    <div style="text-align: center;">
+        <h2 id="noMarkers"></h2>
+    </div>
+
     <div id="listDiv" class="table-wrapper-scroll-y">
-        <table id="list" class="table table-dark table-striped">
-            <thead class="thead-dark">
+        <table id="list" class="table table-bordered table-striped table-dark">
+            <thead>
                 <tr>
-                    <th>Marker name</th>
+                    <th>Name</th>
+                    <th>Start</th>
+                    <th>End</th>
                     <th>Latitude</th>
                     <th>Longitude</th>
                 </tr>
@@ -81,35 +98,11 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+    </div><br><br>
 
     <div>
         <input type="hidden" id="currentUser" th:value="${user.uid}">
     </div>
-
-    <!-- Hidden form to get data from API -->
-    <!-- <form action="/display/add" method="post" id="markerForm" name="markerForm">
-        <input type="hidden" id="timestampInput" name="timestampInput"/>
-        <input type="hidden" id="latitudeInput" name="latitudeInput"/>
-        <input type="hidden" id="longitudeInput" name="longitudeInput"/>
-    </form> -->
-
-    <!-- Send data to database -->
-    <form action="/display/add" method="post" name="mForm" id="markerForm" onsubmit="saveMarker(event)">
-        <!-- <input id="markerTitleInput"
-            name="markerTitleInput" 
-            type="text" 
-            placeholder="Event Title"
-            class="form-control form-control-lg"
-            required 
-        /> -->
-
-        <input type="hidden" id="markerTitle" name="markerTitle">
-        <input type="hidden" id="markerLat" name="markerLat">
-        <input type="hidden" id="markerLng" name="markerLng">
-
-        <button id="saveButton" type="submit" >Save</button>
-    </form>
     
 </body>
 </html>

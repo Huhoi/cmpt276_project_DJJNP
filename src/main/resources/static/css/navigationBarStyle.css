@@ -1,22 +1,23 @@
 .navBarTable{
     background-color: black;
-    height: 75px;
+    height: 100px;
     width: 100%;
 }
 
 .navButton{
     border-collapse: collapse;
-    border:solid 1pt white;
-    width: 350px;
+    border:solid 1pt rgb(69, 81, 148);
+    width: 560px;
     
 }
 
 #button{
-    font-size: large;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 40px;
     color: white;
-    background-color: black;
+    background-color: rgb(58, 79, 201);
     width: 100%;
-    height: 75px;
+    height: 120px;
 }
 
 th{
@@ -26,4 +27,9 @@ th{
     width: 350px;
 }
 
-
+#logo {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    cursor: pointer;
+}

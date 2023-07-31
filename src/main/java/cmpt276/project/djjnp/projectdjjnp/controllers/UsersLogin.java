@@ -1,31 +1,19 @@
 package cmpt276.project.djjnp.projectdjjnp.controllers;
 
 
-import java.text.SimpleDateFormat;
-import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.support.incrementer.SybaseAnywhereMaxValueIncrementer;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
@@ -37,7 +25,6 @@ import cmpt276.project.djjnp.projectdjjnp.models.LocationRepository;
 import cmpt276.project.djjnp.projectdjjnp.models.User;
 import cmpt276.project.djjnp.projectdjjnp.models.UserRepository;
 import cmpt276.project.djjnp.projectdjjnp.models.ShareLink;
-import cmpt276.project.djjnp.projectdjjnp.models.ShareLinkRepository;
 import cmpt276.project.djjnp.projectdjjnp.service.ShareLinkService;
 import cmpt276.project.djjnp.projectdjjnp.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,20 +46,10 @@ public class UsersLogin {
     @Autowired(required = true)
     private LocationRepository locationRepo;
 
-    @Autowired(required = true)
-    private ShareLinkRepository shareLinkRepo;
-
     @Autowired
     private ShareLinkService shareLinkService;
 
     private String errorMessageString = "";
-
-    private final LocationController locationController;
-
-    @Autowired
-    public UsersLogin(LocationController locationController){
-        this.locationController = locationController;
-    }
 
     @GetMapping("/")
     public RedirectView homeRedirect() {
