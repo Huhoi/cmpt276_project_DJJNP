@@ -122,8 +122,8 @@ function openModal(date) {
             todayEventList.push({
               eventName: i.eventName,
               date: new Date(i.date),
-              timeBegin: i.timeBegin, // Convert to 12-hour time format
-              timeEnd: i.timeEnd, // Convert to 12-hour time format
+              timeBegin: i.timeBegin,
+              timeEnd: i.timeEnd, 
               uid: i.uid,
               sid: i.sid
             });
