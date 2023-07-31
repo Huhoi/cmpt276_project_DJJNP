@@ -3,6 +3,7 @@
 ////////////////////////////////////////
 var map; // google.maps.Map
 var searchbox; // google.maps.places.SearchBox
+var path;
 var paths = []; // List of paths (for routing)
 var markers = []; // List of markers fetched from DB
 var selected = []; // List of google.maps.Marker objects
