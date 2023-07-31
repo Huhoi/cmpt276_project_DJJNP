@@ -337,9 +337,9 @@ public class UsersLogin {
 
   
         // RENDER LINK
-        // String shareLinkUrl = "https://project-djjnp-iteration1.onrender.com/share/" + shareToken;
+        String shareLinkUrl = "https://project-djjnp-iteration1.onrender.com/share/" + shareToken;
         // LOCAL HOST LINK
-        String shareLinkUrl = "http://localhost:8080/share/" + shareToken;
+        // String shareLinkUrl = "http://localhost:8080/share/" + shareToken;
 
         shareLink.setShareLink(shareLinkUrl);
         shareLinkService.saveShareLink(shareLink);
