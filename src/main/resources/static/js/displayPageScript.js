@@ -11,8 +11,8 @@ var currentMarker; // Used for saving markers to DB
 var firstInit = 0;
 var markerCount = 0;
 var timeInterval = 0; // Prevent time-collisions
-var currentUser = document.getElementById("currentUser").value; // UID
-const dateInput = document.getElementById("displayDate"); // HTML calendar input
+var currentUser; // UID
+var dateInput; // HTML calendar input
 // document.getElementById('saveButton').addEventListener('click', saveMarker); // !!! TEMPORARY !!! 
 
 
@@ -24,6 +24,10 @@ const dateInput = document.getElementById("displayDate"); // HTML calendar input
 // Make Google Maps JavaScript API call when page loads
 // - Documentation: https://developers.google.com/maps/documentation/javascript/overview
 function initMap() {
+    // Initialize some global variables onload
+    currentUser = document.getElementById("currentUser").value;
+    dateInput = document.getElementById("displayDate");
+
     // Edit map options and assign it to its HTML ID
     var options = {
         center: {lat: 49.278059, lng: -122.919883},

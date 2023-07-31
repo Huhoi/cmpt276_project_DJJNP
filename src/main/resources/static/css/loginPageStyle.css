@@ -2,10 +2,8 @@
 .container{
     position: relative;
     right: 150px;
-    top: 150px;
+    top: 50px;
     width: 30px; 
-
-   
 
     
 }
@@ -46,4 +44,15 @@ a{
 
     text-decoration: none;
    
+}
+
+
+/* Logo img */
+#logo {
+    display: block;
+    margin-top: 50px;
+    margin-right: auto;
+    margin-bottom: 0px;
+    margin-left: auto;
+
 }

@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="/css/loginPageStyle.css">
 </head>
 <body>
+    <img src="/img/ChronoPlannerLogo.png" id="logo" height="300px">
     <div class="container">
 
-        <h1 >Login</h1>
+        <h1>Login</h1>
         <form th:action="@{/view/loginUser}" th:object="${us}" method="post" id="loginForm">
             <!-- Email -->
             <div>

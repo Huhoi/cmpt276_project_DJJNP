@@ -12,12 +12,9 @@
     <div class="navBar">
         <table class="navBarTable">
             <tr>
-                <th>ChronoPlanner</th>
-                <td class="navButton">
-                    <div>
-                        <button type="button" th:onclick="|window.location.href='/home'|" id="button">Home</button>
-                    </div>
-                </td>
+                <!-- Logo on navbar -->
+                <td><img src="/img/ChronoPlannerLogo.png" id="logo" th:onclick="|window.location.href='/home'|" height="120px"></td>
+
                 <td class="navButton">
                     <div>
                         <button type="button" th:onclick="|window.location.href='/calendar'|" id="button">Schedule</button>
