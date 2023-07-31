@@ -356,7 +356,7 @@ async function exportToExcel() {
     }));
 
     const today = new Date().toLocaleDateString('en-us', { year: 'numeric', month: 'numeric', day: 'numeric' });
-    const filename = `events_${today}.xlsx`;
+    const filename = `events_${currentUser}.xlsx`;
 
     // Create a new Excel workbook
     const workbook = XLSX.utils.book_new();
