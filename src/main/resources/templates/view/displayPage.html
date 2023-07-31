@@ -10,19 +10,15 @@
     <link rel="stylesheet" href="/css/navigationBarStyle.css">
     <!-- jQuery && JavaScript -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-    <script src="/js/displayPageScript.js" defer></script>
 </head>
 <body>
     <!-- Navigation Bar  -->
     <div class="navBar">
         <table class="navBarTable">
             <tr>
-                <th>ChronoPlanner</th>
-                <td class="navButton">
-                    <div>
-                        <button type="button" th:onclick="|window.location.href='/home'|" id="button">Home</button>
-                    </div>
-                </td>
+                <!-- Logo on navbar -->
+                <td><img src="/img/ChronoPlannerLogo.png" id="logo" th:onclick="|window.location.href='/home'|" height="120px"></td>
+
                 <td class="navButton">
                     <div>
                         <button type="button" th:onclick="|window.location.href='/calendar'|" id="button">Schedule</button>
@@ -58,6 +54,9 @@
 
     <!-- Initmap() targets this div and loads the map -->
     <div id="map"></div>
+
+    <!-- External JS -->
+    <script src="/js/displayPageScript.js"></script>
         
     <!-- Google Maps JavaScript API with key -->
     <script async defer
