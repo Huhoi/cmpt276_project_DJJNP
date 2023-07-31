@@ -5,7 +5,6 @@ let weatherData = null;
 let weatherDataIndex = 0;
 let todayEventList = [];
 
-let check = 0;
 
 const calendar = document.getElementById('calendar');
 const newEventModal = document.getElementById('newEventModal');
@@ -336,6 +335,76 @@ function convertTo12HourFormat(militaryTime) {
   return `${formattedHours}:${formattedMinutes} ${ampm}`;
 }
 
+
+// //Loads the Calendar
+async function load(weatherData) {
+  const dt = new Date();
+  dt.setMonth(new Date().getMonth() + nav);
+
+  //Get the Current Date
+  const today = new Date().getDate();
+  const currentMonth = dt.getMonth();
+  const year = dt.getFullYear();
+  const firstDayOfMonth = new Date(year, currentMonth, 1);
+  const daysInMonth = new Date(year, currentMonth + 1, 0).getDate();
+  const dateString = firstDayOfMonth.toLocaleDateString('en-us', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  });
+
+
+  const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
+
+  document.getElementById('monthDisplay').innerText = `${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`;
+
+  calendar.innerHTML = '';
+
+  if (currentMonth === new Date().getMonth()) {
+    const fetchedData = await fetchWeatherData();
+    if (fetchedData && fetchedData.daily && fetchedData.daily.weathercode) {
+      weatherData = fetchedData.daily.weathercode;
+    } else {
+      weatherData = null;
+    }
+    weatherDataIndex = 0;
+  }
+  
+  for (let i = 1; i <= paddingDays + daysInMonth; i++) {
+    const daySquare = document.createElement('div');
+    daySquare.classList.add('day');
+    const dayString = `${currentMonth + 1}/${i - paddingDays}/${year}`;
+
+    if (i > paddingDays) {
+      daySquare.innerText = i - paddingDays;
+
+      if (i - paddingDays === today && nav === 0) {
+        daySquare.id = 'currentDay';
+      }
+
+      const isForecastAvailable = weatherData && weatherDataIndex < weatherData.length;
+      if ((currentMonth === new Date().getMonth() && i - paddingDays >= today && isForecastAvailable) || (nav > 0 && isForecastAvailable)) {
+        const weatherForDay = weatherData[weatherDataIndex];
+        if (weatherForDay !== null) {
+          const weatherDiv = document.createElement('div');
+          weatherDiv.classList.add('weather');
+          weatherDiv.innerText = decodeWeatherCode(weatherForDay);
+          daySquare.appendChild(weatherDiv);
+        }
+        weatherDataIndex++;
+      }
+
+      daySquare.addEventListener('click', () => openModal(dayString));
+    } else {
+      daySquare.classList.add('padding');
+    }
+
+    calendar.appendChild(daySquare);
+  }
+}
+
+
 // Function to export data to Excel
 async function exportToExcel() {
   const currentUser = parseInt(document.getElementById("currentUser").value);
@@ -379,94 +448,26 @@ async function exportToExcel() {
 document.getElementById('exportButton').addEventListener('click', exportToExcel);
 
 
-//Loads the Calendar
-async function load() {
-  const dt = new Date();
-
-  if (nav !== 0) {
-    dt.setMonth(new Date().getMonth() + nav);
-  }
-
-  const today = new Date().getDate();
-  const currentMonth = new Date().getMonth();
-  const month = dt.getMonth();
-  const year = dt.getFullYear();
-  const firstDayOfMonth = new Date(year, month, 1);
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const dateString = firstDayOfMonth.toLocaleDateString('en-us', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-  });
-  const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
-
-  document.getElementById('monthDisplay').innerText = `${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`;
-
-  calendar.innerHTML = '';
-
-  if (month === currentMonth) {
-    const fetchedData = await fetchWeatherData();
-    if (fetchedData && fetchedData.daily && fetchedData.daily.weathercode) {
-      weatherData = fetchedData.daily.weathercode;
-      weatherDataIndex = 0;
-    } else {
-      weatherData = null;
-    }
-  }
-
-  for (let i = 1; i <= paddingDays + daysInMonth; i++) {
-    const daySquare = document.createElement('div');
-    daySquare.classList.add('day');
-    const dayString = `${month + 1}/${i - paddingDays}/${year}`;
-
-    if (i > paddingDays) {
-      daySquare.innerText = i - paddingDays;
-
-      if (i - paddingDays === today && nav === 0) {
-        daySquare.id = 'currentDay';
-      }
-
-      const isForecastAvailable = weatherData && weatherDataIndex < weatherData.length;
-      if ((month === currentMonth && i - paddingDays >= today && isForecastAvailable) || (nav > 0 && isForecastAvailable)) {
-        const weatherForDay = weatherData[weatherDataIndex];
-        if (weatherForDay !== null) {
-          const weatherDiv = document.createElement('div');
-          weatherDiv.classList.add('weather');
-          weatherDiv.innerText = decodeWeatherCode(weatherForDay);
-          daySquare.appendChild(weatherDiv);
-        }
-        weatherDataIndex++;
-      }
-
-      daySquare.addEventListener('click', () => openModal(dayString));
-    }
-    else {
-      daySquare.classList.add('padding');
-    }
-
-    calendar.appendChild(daySquare);
-  }
-}
 
 
 //Initalizes buttons
 function initButtons() {
-  document.getElementById('nextButton').addEventListener('click', () => {
-    nav++;
-    load();
-  });
-
-  document.getElementById('backButton').addEventListener('click', () => {
-    nav--;
-    load();
-  });
 
   document.getElementById('saveButton').addEventListener('click', saveEvent);
   document.getElementById('cancelButton').addEventListener('click', closeModal);
   document.getElementById('deleteButton').addEventListener('click', deleteEvent);
   document.getElementById('closeButton').addEventListener('click', closeModal);
 }
+
+document.getElementById('nextButton').addEventListener('click', () => {
+  nav++;
+  load();
+});
+
+document.getElementById('backButton').addEventListener('click', () => {
+  nav--;
+  load();
+});
 
 function deleteEvent() {
   events = events.filter(e => e.date !== clicked);
