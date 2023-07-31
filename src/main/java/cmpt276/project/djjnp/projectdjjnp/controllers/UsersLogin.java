@@ -171,6 +171,18 @@ public class UsersLogin {
             return "redirect:/view/login";
         }
 
+
+        if(request.getSession().getAttribute("sessionUserShare") == null){
+            return "redirect:/share";
+        }
+        else{
+            ShareLink currentUserShare = (ShareLink) request.getSession().getAttribute("sessionUserShare");
+            // String userShare = currentUserShare.getShareLink();
+            // System.out.println("This is the share link" + userShare);
+            model.addAttribute("currentUserShare", currentUserShare);
+        }
+        
+
         //Get Data
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         List<Event> currentUserEvent = eventRepo.findAll();
@@ -323,10 +335,12 @@ public class UsersLogin {
         System.out.println("This is the current expiration time: " + expDateTime);
         System.out.println("This is the current user email: " + userName);
 
-        //
-        // CHANGE URL FOR RENDER
-        //
+  
+        // RENDER LINK
+        // String shareLinkUrl = "https://project-djjnp-iteration1.onrender.com/share/" + shareToken;
+        // LOCAL HOST LINK
         String shareLinkUrl = "http://localhost:8080/share/" + shareToken;
+
         shareLink.setShareLink(shareLinkUrl);
         shareLinkService.saveShareLink(shareLink);
         request.getSession().setAttribute("sessionUserShare", shareLink);

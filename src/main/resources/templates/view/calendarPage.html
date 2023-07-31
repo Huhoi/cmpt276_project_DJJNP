@@ -240,9 +240,10 @@
       
         <button type="button" class="btn btn-primary" id="exportButton">Export to Excel</button>
     
-
       <div>
-        <button type="button" class="btn btn-primary"  th:onclick="|window.location.href='/share'|" id="shareButton">Share Page</button>
+        <input type="text" id="shareLink" th:value="${currentUserShare.shareLink}" readonly>
+        <button type="button" class="btn btn-primary"  th:onclick="|window.location.href='/share'|" id="generateShareLink">Generate Link</button>
+        <button type="button" class="btn btn-primary" onclick="copyToClipboard()" id="copyButton">Copy Link</button>
       </div>
 </body>
 </html>
