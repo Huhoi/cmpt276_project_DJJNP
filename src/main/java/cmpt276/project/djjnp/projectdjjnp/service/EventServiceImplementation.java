@@ -1,6 +1,9 @@
 package cmpt276.project.djjnp.projectdjjnp.service;
 
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cmpt276.project.djjnp.projectdjjnp.models.Event;
@@ -21,6 +24,10 @@ public class EventServiceImplementation implements EventService {
 
     public void saveEvent(Event event) {
         eventRepo.save(event);
+    }
+
+    public List<Event> getEventsByUserId(int uid) {
+        return eventRepo.findByUid(uid);
     }
 
 }
