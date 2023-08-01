@@ -309,6 +309,7 @@ public class UsersLogin {
         System.out.println("~~~ Deleting session for email: " + u.getEmail() + " ~~~\n~~~ Session ID: " + request.getSession().getId() + " ~~~");
 
         userRepo.delete(u);
+        eventRepo.deleteByUid(id);
         request.getSession().invalidate();
 
         return "redirect:/view/login";
