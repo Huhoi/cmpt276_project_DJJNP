@@ -21,6 +21,13 @@ h1{
     box-shadow: 5px 10px gray;
 }
 
+#ScheduleTitle, #DisplayTitle{
+    font-style: italic;
+    color: cadetblue;
+    font-weight: normal;
+    text-decoration: underline;
+
+}
 
 #tSchedule td {
     padding: 8px;
@@ -63,6 +70,9 @@ tbody{
     order: 2;
 }
 
+#DisplayTitle{
+    padding-left: 8px;
+}
 
 #previewMap {
     border: 1px solid black;

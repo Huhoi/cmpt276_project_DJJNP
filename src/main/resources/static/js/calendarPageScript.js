@@ -245,6 +245,7 @@ function loadEventsToList() {
     const deleteCell = row.insertCell();
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Delete';
+    deleteButton.setAttribute('id', 'deleteButton');
     deleteButton.addEventListener('click', () => handleDeleteEvent(event.sid));
     deleteCell.appendChild(deleteButton);
     
@@ -276,7 +277,7 @@ async function saveEvent(event) {
   if (eventTitleInput.value) {
     eventTitleInput.classList.remove('error');
     
-
+    //Asserts data into a EventData Object to be sent to the backend
     const eventData = {
       eventName: eventTitleInput.value,
       date: clicked,
@@ -304,7 +305,7 @@ async function saveEvent(event) {
           timeBegin: eventData.timeBegin,
           timeEnd: eventData.timeEnd,
           uid: eventData.uid,
-          sid: eventData.sid, // Replace this with the actual sid received from the server
+          sid: eventData.sid,
         });
 
         // Sort the todayEventList by timeBegin in ascending order
@@ -466,6 +467,7 @@ async function load() {
 // Function to export data to Excel
 async function exportToExcel() {
   const currentUser = parseInt(document.getElementById("currentUser").value);
+  const currentUserEmail = document.getElementById("currentUserEmail").value;
   try {
     const response = await fetch(`/api/event/${currentUser}`);
     if (!response.ok) {
@@ -483,7 +485,7 @@ async function exportToExcel() {
     }));
 
     const today = new Date().toLocaleDateString('en-us', { year: 'numeric', month: 'numeric', day: 'numeric' });
-    const filename = `events_${currentUser}.xlsx`;
+    const filename = `${currentUserEmail}_event_data.xlsx`;
 
     // Create a new Excel workbook
     const workbook = XLSX.utils.book_new();

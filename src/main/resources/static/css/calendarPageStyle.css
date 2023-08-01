@@ -260,3 +260,16 @@ h2{
     padding-left: 5px;
     
 }
+
+#deleteButton {
+    background-color:#e03444;
+    color: #ffffff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+#deleteButton:hover {
+background-color: #cc0000;
+}

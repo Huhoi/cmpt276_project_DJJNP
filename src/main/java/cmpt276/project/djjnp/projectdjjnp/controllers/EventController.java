@@ -27,15 +27,11 @@ public class EventController {
     @Autowired(required = true)
     private EventRepository eventRepo;
 
-
     private final EventService eventService;
-
-
     
     public EventController(EventService eventService) {
         this.eventService = eventService;
     }
-    
     
     @GetMapping("/event")
     public List<Event> getEvents() {
