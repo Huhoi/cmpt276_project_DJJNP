@@ -57,6 +57,38 @@ let weatherMapping = {
   99: "Thunderstorm with heavy hail"
 };
 
+let weatherIconMapping = {
+  0: "wi-day-sunny",
+  1: "wi-day-cloudy",
+  2: "wi-day-cloudy",
+  3: "wi-cloudy",
+  45: "wi-fog",
+  48: "wi-fog",
+  51: "wi-sprinkle",
+  53: "wi-showers",
+  55: "wi-rain",
+  56: "wi-rain-mix",
+  57: "wi-rain-mix",
+  61: "wi-sprinkle",
+  63: "wi-showers",
+  65: "wi-rain",
+  66: "wi-rain-mix",
+  67: "wi-rain-mix",
+  71: "wi-snow",
+  73: "wi-snow",
+  75: "wi-snow",
+  77: "wi-snow",
+  80: "wi-showers",
+  81: "wi-showers",
+  82: "wi-rain",
+  85: "wi-snow",
+  86: "wi-snow",
+  95: "wi-thunderstorm",
+  96: "wi-thunderstorm",
+  99: "wi-thunderstorm"
+};
+
+
 
 function decodeWeatherCode(code) {
   return weatherMapping[code] || "Unknown";
@@ -337,12 +369,12 @@ function convertTo12HourFormat(militaryTime) {
 
 
 // //Loads the Calendar
-async function load(weatherData) {
+async function load() {
   const dt = new Date();
   dt.setMonth(new Date().getMonth() + nav);
 
-  //Get the Current Date
-  const today = new Date().getDate();
+  // Get the Current Date
+  const today = new Date();
   const currentMonth = dt.getMonth();
   const year = dt.getFullYear();
   const firstDayOfMonth = new Date(year, currentMonth, 1);
@@ -354,14 +386,13 @@ async function load(weatherData) {
     day: 'numeric',
   });
 
-
   const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
 
   document.getElementById('monthDisplay').innerText = `${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`;
 
   calendar.innerHTML = '';
 
-  if (currentMonth === new Date().getMonth()) {
+  if (nav === 0 && currentMonth === today.getMonth()) {
     const fetchedData = await fetchWeatherData();
     if (fetchedData && fetchedData.daily && fetchedData.daily.weathercode) {
       weatherData = fetchedData.daily.weathercode;
@@ -370,7 +401,7 @@ async function load(weatherData) {
     }
     weatherDataIndex = 0;
   }
-  
+
   for (let i = 1; i <= paddingDays + daysInMonth; i++) {
     const daySquare = document.createElement('div');
     daySquare.classList.add('day');
@@ -379,18 +410,23 @@ async function load(weatherData) {
     if (i > paddingDays) {
       daySquare.innerText = i - paddingDays;
 
-      if (i - paddingDays === today && nav === 0) {
+      if (i - paddingDays === today.getDate() && nav === 0) {
         daySquare.id = 'currentDay';
       }
 
       const isForecastAvailable = weatherData && weatherDataIndex < weatherData.length;
-      if ((currentMonth === new Date().getMonth() && i - paddingDays >= today && isForecastAvailable) || (nav > 0 && isForecastAvailable)) {
+      if ((currentMonth === today.getMonth() && i - paddingDays >= today.getDate() && isForecastAvailable) || (nav > 0 && isForecastAvailable)) {
         const weatherForDay = weatherData[weatherDataIndex];
         if (weatherForDay !== null) {
           const weatherDiv = document.createElement('div');
           weatherDiv.classList.add('weather');
           weatherDiv.innerText = decodeWeatherCode(weatherForDay);
           daySquare.appendChild(weatherDiv);
+
+          // New code to add weather icons
+          const weatherIcon = document.createElement('i');
+          weatherIcon.className = `wi ${weatherIconMapping[weatherForDay]}`;
+          weatherDiv.appendChild(weatherIcon);
         }
         weatherDataIndex++;
       }
@@ -403,6 +439,7 @@ async function load(weatherData) {
     calendar.appendChild(daySquare);
   }
 }
+
 
 
 // Function to export data to Excel
