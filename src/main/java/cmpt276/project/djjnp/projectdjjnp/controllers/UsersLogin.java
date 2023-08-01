@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 
 import cmpt276.project.djjnp.projectdjjnp.models.Event;
@@ -319,7 +318,6 @@ public class UsersLogin {
     }
 
     @GetMapping("/share")
-    // @ResponseBody
     public String generateShareLink(HttpServletRequest request){
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
 
@@ -334,14 +332,9 @@ public class UsersLogin {
         shareLink.setExpirationTimestamp(expDateTime);
         shareLink.setUserName(userName);
         
-        System.out.println("This is the current user id: " + uid);
-        System.out.println("This is the current share token: " + shareToken);
-        System.out.println("This is the current expiration time: " + expDateTime);
-        System.out.println("This is the current user email: " + userName);
-
-  
         // RENDER LINK
         String shareLinkUrl = "https://project-djjnp-iteration1.onrender.com/share/" + shareToken;
+
         // LOCAL HOST LINK
         // String shareLinkUrl = "http://localhost:8080/share/" + shareToken;
 
@@ -349,12 +342,11 @@ public class UsersLogin {
         shareLinkService.saveShareLink(shareLink);
         request.getSession().setAttribute("sessionUserShare", shareLink);
 
-        // ShareLink sharedLink = shareLinkService.getShareLinkByToken(shareToken);
-        // System.out.println("This is the current sharedlink: " + sharedLink);
-
         return "redirect:/calendar";
     }
 
+    // Helper Function for share
+    // Generates unique share token
     public static String generateShareToken() {
         UUID uuid = UUID.randomUUID();
         String token = uuid.toString();
@@ -364,7 +356,6 @@ public class UsersLogin {
     @GetMapping("/share/{shareToken}")
     public RedirectView handleShareLink(@PathVariable String shareToken, Model model){
         ShareLink shareLink = shareLinkService.getShareLinkByToken(shareToken);
-        // System.out.println("This is the current sharelink: " + shareLink);
 
         if (shareLink != null && !isShareLinkExpired((ShareLink) shareLink)){
             model.addAttribute("shareToken", shareLink);
@@ -375,6 +366,8 @@ public class UsersLogin {
         }
     }
 
+    // Helper Function for share
+    // Helps check if share link is valid
     private boolean isShareLinkExpired(ShareLink shareLink){
         return shareLink.getExpirationTimestamp().isBefore(LocalDateTime.now());
     }
@@ -393,11 +386,6 @@ public class UsersLogin {
         model.addAttribute("shareLink", shareLink);
         model.addAttribute("shareUid", uid);
         model.addAttribute("shareUserName", userName);
-
-        System.out.println("SHARE SUCCESS PAGE HERE");
-        System.out.println("This is the current sharedlink: " + shareLink);
-        System.out.println("This is the uid of the user being shared: " + uid);
-        System.out.println("This is the current user email being shared: " + userName);
 
         return "view/shareSuccess";
     }

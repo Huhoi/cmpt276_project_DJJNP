@@ -1,0 +1,29 @@
+#title{
+    font-weight: bold;
+}
+
+#tableView {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+ 
+#usersTable{
+    border-collapse: separate;
+    border-spacing: 10px;
+}
+
+#logoutButton{
+    background-color: gray;
+    font-size: xx-large;
+    color: white;
+    width: 22%;
+    height: 100px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+}
+
+#logout{
+    text-align: center;
+}
