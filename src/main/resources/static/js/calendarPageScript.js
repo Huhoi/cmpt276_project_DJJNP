@@ -137,6 +137,8 @@ async function fetchWeatherData() {
 
 //Opens the Modal (Popup)
 function openModal(date) {
+  document.getElementById("searchBox").value = null;
+  
   //The day that is clicked
   clicked = date;
 
@@ -251,6 +253,7 @@ function loadEventsToList() {
 
 //Reloads the Modal ie Reloads the data on the opened modal
 function reloadModal() {
+  document.getElementById("searchBox").value = null;
   loadEventsToList();
 }
 
