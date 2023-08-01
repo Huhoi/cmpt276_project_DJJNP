@@ -87,6 +87,36 @@ let weatherIconMapping = {
   96: "wi-thunderstorm",
   99: "wi-thunderstorm"
 };
+let weatherColorMapping = {
+  0: "#FDB813", //sunny
+  1: "#A4A4A4", //mainly clear
+  2: "#A4A4A4", //partly cloudy
+  3: "#6E6E6E", //overcast
+  45: "#6E6E6E", //fog
+  48: "#6E6E6E", //depositing rime fog
+  51: "#0095ff", //drizzle: Light
+  53: "#0095ff", //drizzle: Moderate
+  55: "#0095ff", //drizzle: Dense intensity
+  56: "#0095ff", //freezing drizzle: Light
+  57: "#0095ff", //freezing drizzle: Dense intensity
+  61: "#0095ff", //rain: Slight
+  63: "#0095ff", //rain: Moderate
+  65: "#0095ff", //rain: Heavy intensity
+  66: "#0095ff", //freezing rain: Light
+  67: "#0095ff", //freezing rain: Heavy intensity
+  71: "#c6fffa", //snow fall: Slight
+  73: "#c6fffa", //snow fall: Moderate
+  75: "#c6fffa", //snow fall: Heavy intensity
+  77: "#c6fffa", //snow grains
+  80: "#0095ff", //rain showers: Slight
+  81: "#0095ff", //rain showers: Moderate
+  82: "#0095ff", //rain showers: Violent
+  85: "#0095ff", //snow showers: Slight
+  86: "#2E9AFE", //snow showers: Heavy
+  95: "#DF0101", //thunderstorm: Slight or moderate
+  96: "#DF0101", //thunderstorm with slight hail
+  99: "#DF0101" //thunderstorm with heavy hail
+};
 
 
 
@@ -420,13 +450,17 @@ async function load() {
         if (weatherForDay !== null) {
           const weatherDiv = document.createElement('div');
           weatherDiv.classList.add('weather');
-          weatherDiv.innerText = decodeWeatherCode(weatherForDay);
-          daySquare.appendChild(weatherDiv);
 
-          // New code to add weather icons
           const weatherIcon = document.createElement('i');
-          weatherIcon.className = `wi ${weatherIconMapping[weatherForDay]}`;
+          weatherIcon.className = `wi ${weatherIconMapping[weatherForDay]} weather-icon`;
+
+          // Set the color of the icon according to the mapping
+          weatherIcon.style.color = weatherColorMapping[weatherForDay];
+
+          weatherIcon.title = decodeWeatherCode(weatherForDay);
+
           weatherDiv.appendChild(weatherIcon);
+          daySquare.appendChild(weatherDiv);
         }
         weatherDataIndex++;
       }

@@ -18,6 +18,11 @@
     display: block;
 }
 
+.wi {
+    font-size: 40px !important;
+}
+
+
 #dateForm {
     height: 100px;
     padding-top: 25px;
