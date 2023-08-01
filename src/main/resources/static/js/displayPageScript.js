@@ -122,6 +122,7 @@ function initMarkers() {
                     end: i.timeEnd,
                     latitude: Number(i.latitude),
                     longitude: Number(i.longitude),
+                    sid: i.sid
                 });
             }
         }
@@ -329,12 +330,52 @@ function addToHtmlList(newMarker) {
     var cell3 = row.insertCell(2);
     var cell4 = row.insertCell(3);
     var cell5 = row.insertCell(4);
+    
+    
     cell1.innerHTML = newMarker.timestamp;
     cell2.innerHTML = convertTo12HourFormat(newMarker.begin);
     cell3.innerHTML = convertTo12HourFormat(newMarker.end);
     cell4.innerHTML = newMarker.latitude;
     cell5.innerHTML = newMarker.longitude;
+    
+    //Delete Button
+    const cell6 = row.insertCell(5); //Delete Button
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.addEventListener('click', () => handleDeleteEvent(newMarker.sid));
+    cell6.appendChild(deleteButton);
 }
+
+//===================================
+//Function to delete item from list
+//Deletes Events
+function handleDeleteEvent(sid) {
+    //Fetches backend controller to delete
+    fetch(`/api/${sid}`, {
+      method: 'DELETE'
+    })
+      .then(response => {
+  
+      // Event deleted successfully
+      if (response.ok) {
+        todayEventList = todayEventList.filter(event => event.sid !== sid);
+          
+        //Refreshes all things (Map, Route, Listeners, etc)
+          initListeners();
+          
+      }
+      else {
+        console.error('Error deleting event');
+      }
+    })
+      
+    .catch(error => console.error('Error deleting event', error));
+}
+
+//Helper Function to update list
+
+
+
 
 // ==================================
 // Helper function for clearing list

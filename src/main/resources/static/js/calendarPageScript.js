@@ -377,14 +377,16 @@ function convertTo12HourFormat(militaryTime) {
 }
 
 
+//Initalize date for loading calendar
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
+
 // //Loads the Calendar
 async function load() {
-  const dt = new Date();
-  dt.setMonth(new Date().getMonth() + nav);
+  const dt = new Date(currentYear, currentMonth, 1);
 
   // Get the Current Date
   const today = new Date();
-  const currentMonth = dt.getMonth();
   const year = dt.getFullYear();
   const firstDayOfMonth = new Date(year, currentMonth, 1);
   const daysInMonth = new Date(year, currentMonth + 1, 0).getDate();
@@ -395,21 +397,25 @@ async function load() {
     day: 'numeric',
   });
 
+  const daysInCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+  //Adds Blank Boxes Representing the Previous Month
   const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
 
-  document.getElementById('monthDisplay').innerText = `${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`;
+  //Prepares the Month Display
+  document.getElementById('monthDisplay').innerText = `${dt.toLocaleDateString('en-us', { month: 'long' })} ${currentYear}`;
 
+  //Empties Month Display before Insertion
   calendar.innerHTML = '';
 
-  if (nav === 0 && currentMonth === today.getMonth()) {
-    const fetchedData = await fetchWeatherData();
-    if (fetchedData && fetchedData.daily && fetchedData.daily.weathercode) {
-      weatherData = fetchedData.daily.weathercode;
-    } else {
-      weatherData = null;
-    }
-    weatherDataIndex = 0;
+  //Fetch the weather data
+  const fetchedData = await fetchWeatherData();
+  if (fetchedData && fetchedData.daily && fetchedData.daily.weathercode) {
+    weatherData = fetchedData.daily.weathercode;
+  } else {
+    weatherData = null;
   }
+  weatherDataIndex = 0;
 
   for (let i = 1; i <= paddingDays + daysInMonth; i++) {
     const daySquare = document.createElement('div');
@@ -419,7 +425,8 @@ async function load() {
     if (i > paddingDays) {
       daySquare.innerText = i - paddingDays;
 
-      if (i - paddingDays === today.getDate() && nav === 0) {
+      //Highlight the box representing today
+      if (currentMonth === today.getMonth() && currentYear === today.getFullYear() && i - paddingDays === today.getDate()) {
         daySquare.id = 'currentDay';
       }
 
@@ -445,7 +452,8 @@ async function load() {
       }
 
       daySquare.addEventListener('click', () => openModal(dayString));
-    } else {
+    }
+    else {
       daySquare.classList.add('padding');
     }
 
@@ -503,12 +511,24 @@ document.getElementById('exportButton').addEventListener('click', exportToExcel)
 //Initalizes buttons
 function initButtons() {
   document.getElementById('nextButton').addEventListener('click', () => {
-    nav++;
+    // Increment currentMonth and update the calendar
+    currentMonth++;
+    if (currentMonth > 11) {
+      // If currentMonth exceeds December, switch to the next year
+      currentMonth = 0;
+      currentYear++;
+    }
     load();
   });
-  
+
   document.getElementById('backButton').addEventListener('click', () => {
-    nav--;
+    // Decrement currentMonth and update the calendar
+    currentMonth--;
+    if (currentMonth < 0) {
+      // If currentMonth goes below January, switch to the previous year
+      currentMonth = 11;
+      currentYear--;
+    }
     load();
   });
 
