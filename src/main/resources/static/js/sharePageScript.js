@@ -41,15 +41,18 @@ const currentDate = new Date(); // Get the current date
   
 // Sort the todayEventList by timeBegin in ascending order
 todayEventList.sort((a, b) => {
-  if (a.timeBegin !== b.timeBegin) {
-    // Sort by timeBegin first
+  if (a.date.getTime() !== b.date.getTime()) {
+    // Sort by date first
+    return a.date.getTime() - b.date.getTime();
+  } else if (a.timeBegin !== b.timeBegin) {
+    // If date values are equal, sort by timeBegin
     return a.timeBegin - b.timeBegin;
   } else {
     // If timeBegin values are equal, sort by timeEnd
     return a.timeEnd - b.timeEnd;
   }
 });
-  
+
 // Get a reference to the table body element
 const tableBody = document.querySelector('#tSchedule tbody');
   

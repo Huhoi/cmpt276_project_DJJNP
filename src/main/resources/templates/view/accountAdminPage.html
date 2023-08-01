@@ -30,11 +30,6 @@
                         <button type="button" th:onclick="|window.location.href='/display'|" id="button">Display</button>
                     </div>
                 </td>     
-                <!-- <td class="navButton">
-                    <div>
-                        <button type="button" id="button">Feature 5</button>
-                    </div>
-                </td> -->
                 <td class="navButton">
                     <div>
                         <button type="button" th:onclick="|window.location.href='/account'|" id="button">Account</button>
@@ -44,15 +39,14 @@
             </tr>
         </table>
     </div>
-    <div class="main">
-        <table class="accButtonTable">
-            <tr class="rowName">
-                User Accounts
-            </tr>
 
+    <div id="tableView">
+        <table id="usersTable">
+                <tr>
+                   <td id="title">User Accounts</td> 
+                </tr>
             <tr th:each ="user,rStat:${us}" th:if="${rStat.count} &gt; 1">
-                <td th:text="${user.email}" class="userEmail"></td>
-                <div></div>
+                <td th:text="${user.email}"></td>
                 <td>
                     <a th:href="@{'/delete/{uid}'(uid=${user.uid})}"
                     class="btn btn-danger" 
@@ -62,15 +56,12 @@
                     </a>
                 </td>
             </tr>
-
-            <tr>
-                <td class="logoutContainer">
-                    <button type="button" th:onclick="|window.location.href='/logout'|" id="logoutButton">Log Out</button>
-                </td>
-            </tr>
-
-            
-        </table>
+        </table>  
     </div>
+
+    <div id="logout">
+        <button type="button" th:onclick="|window.location.href='/logout'|" id="logoutButton">Log Out</button>
+    </div>
+    
 </body>
 </html>
