@@ -141,81 +141,55 @@ function openModal(date) {
       }
     });
       
-    // Get a reference to the table body element
-    const tableBody = document.querySelector('#tEvents tbody');
-      
-    // Clear any existing rows in the table
-      tableBody.innerHTML = '';
+    loadEventsToList();
 
-    
-    //Adds events to list
-    todayEventList.forEach(event => {
-      const row = tableBody.insertRow();
-    
-      // Add cells with event data to the row
-      const eventNameCell = row.insertCell();
-      eventNameCell.textContent = event.eventName;
-      
-      //Time Begin
-      const timeBeginCell = row.insertCell();
-      timeBeginCell.textContent = convertTo12HourFormat(event.timeBegin); // Display the date in a human-readable format
-      
-      //Tiem ENd
-      const timeEndCell = row.insertCell();
-      timeEndCell.textContent = convertTo12HourFormat(event.timeEnd);
-    
-      //Date
-      const dateCell = row.insertCell();
-      dateCell.textContent = event.date.toLocaleDateString('en-US'); // Display date in "Month/day/year" format
-    
-      const deleteCell = row.insertCell();
-      const deleteButton = document.createElement('button');
-      deleteButton.textContent = 'Delete';
-      deleteButton.addEventListener('click', () => handleDeleteEvent(event.sid));
-      deleteCell.appendChild(deleteButton);
-      
-    });
-      
     // Now eventList contains events sorted by their date/time
     console.log(todayEventList);
       
   }).catch(error => console.error('Error fetching events', error));
 }
 
-//Reloads the Modal
-function reloadModal() {
-  // Here you can add any additional logic to fetch updated event data from the server
-  // For now, let's just clear the existing table and re-populate it with updated data
+//Loads the events onto a html table
+function loadEventsToList() {
+  // Get a reference to the table body element
   const tableBody = document.querySelector('#tEvents tbody');
-  tableBody.innerHTML = ''; // Clear existing table rows
+      
+  // Clear any existing rows in the table
+  tableBody.innerHTML = '';
+  
+  //Adds events to list
+  todayEventList.forEach(event => {
+    const row = tableBody.insertRow();
+  
+    // Add cells with event data to the row
+    const eventNameCell = row.insertCell();
+    eventNameCell.textContent = event.eventName;
+    
+    //Time Begin
+    const timeBeginCell = row.insertCell();
+    timeBeginCell.textContent = convertTo12HourFormat(event.timeBegin); // Display the date in a human-readable format
+    
+    //Tiem ENd
+    const timeEndCell = row.insertCell();
+    timeEndCell.textContent = convertTo12HourFormat(event.timeEnd);
+  
+    //Date
+    const dateCell = row.insertCell();
+    dateCell.textContent = event.date.toLocaleDateString('en-US'); // Display date in "Month/day/year" format
+    
+    //Delete Button
+    const deleteCell = row.insertCell();
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.addEventListener('click', () => handleDeleteEvent(event.sid));
+    deleteCell.appendChild(deleteButton);
+    
+  });
+}
 
-    
-    todayEventList.forEach(event => {
-      const row = tableBody.insertRow();
-    
-      // Add cells with event data to the row
-      const eventNameCell = row.insertCell();
-      eventNameCell.textContent = event.eventName;
-      
-      //Time Begin
-      const timeBeginCell = row.insertCell();
-      timeBeginCell.textContent = convertTo12HourFormat(event.timeBegin); // Display the date in a human-readable format
-      
-      //Tiem ENd
-      const timeEndCell = row.insertCell();
-      timeEndCell.textContent = convertTo12HourFormat(event.timeEnd);
-    
-      //Date
-      const dateCell = row.insertCell();
-      dateCell.textContent = event.date.toLocaleDateString('en-US'); // Display date in "Month/day/year" format
-    
-      const deleteCell = row.insertCell();
-      const deleteButton = document.createElement('button');
-      deleteButton.textContent = 'Delete';
-      deleteButton.addEventListener('click', () => handleDeleteEvent(event.sid));
-      deleteCell.appendChild(deleteButton);
-      
-    });
+//Reloads the Modal ie Reloads the data on the opened modal
+function reloadModal() {
+  loadEventsToList();
 }
 
 //Closes Modal
@@ -298,26 +272,28 @@ async function saveEvent(event) {
   }
 }
 
+
 //Deletes Events
 function handleDeleteEvent(sid) {
-  // You can implement the logic here to delete the event from the database using fetch or any other method.
-  // For this example, let's assume you are sending a DELETE request to the backend.
-
+  //Fetches backend controller to delete
   fetch(`/api/${sid}`, {
     method: 'DELETE'
   })
-  .then(response => {
+    .then(response => {
+
+    // Event deleted successfully
     if (response.ok) {
-      // Event deleted successfully, you may also want to remove the event from the frontend list.
       todayEventList = todayEventList.filter(event => event.sid !== sid);
       // Refresh the table after deletion
       load();
       reloadModal();
-    } else {
-      // Failed to delete the event
+      //Failed to delete the event
+    }
+    else {
       console.error('Error deleting event');
     }
   })
+    
   .catch(error => console.error('Error deleting event', error));
 }
 
@@ -452,6 +428,15 @@ document.getElementById('exportButton').addEventListener('click', exportToExcel)
 
 //Initalizes buttons
 function initButtons() {
+  document.getElementById('nextButton').addEventListener('click', () => {
+    nav++;
+    load();
+  });
+  
+  document.getElementById('backButton').addEventListener('click', () => {
+    nav--;
+    load();
+  });
 
   document.getElementById('saveButton').addEventListener('click', saveEvent);
   document.getElementById('cancelButton').addEventListener('click', closeModal);
@@ -459,15 +444,7 @@ function initButtons() {
   document.getElementById('closeButton').addEventListener('click', closeModal);
 }
 
-document.getElementById('nextButton').addEventListener('click', () => {
-  nav++;
-  load();
-});
 
-document.getElementById('backButton').addEventListener('click', () => {
-  nav--;
-  load();
-});
 
 function deleteEvent() {
   events = events.filter(e => e.date !== clicked);
