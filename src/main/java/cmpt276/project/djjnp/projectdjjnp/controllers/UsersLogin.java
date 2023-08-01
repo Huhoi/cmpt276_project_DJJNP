@@ -83,7 +83,7 @@ public class UsersLogin {
             return "redirect:/view/login";
         }
         else {
-            errorMessageString = "Email Already Exists";
+            errorMessageString = "Email/Username Already Exists!";
             return "redirect:/view/register";
         }
     }
