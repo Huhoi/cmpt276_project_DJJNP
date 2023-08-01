@@ -57,6 +57,68 @@ let weatherMapping = {
   99: "Thunderstorm with heavy hail"
 };
 
+let weatherIconMapping = {
+  0: "wi-day-sunny",
+  1: "wi-day-cloudy",
+  2: "wi-day-cloudy",
+  3: "wi-cloudy",
+  45: "wi-fog",
+  48: "wi-fog",
+  51: "wi-sprinkle",
+  53: "wi-showers",
+  55: "wi-rain",
+  56: "wi-rain-mix",
+  57: "wi-rain-mix",
+  61: "wi-sprinkle",
+  63: "wi-showers",
+  65: "wi-rain",
+  66: "wi-rain-mix",
+  67: "wi-rain-mix",
+  71: "wi-snow",
+  73: "wi-snow",
+  75: "wi-snow",
+  77: "wi-snow",
+  80: "wi-showers",
+  81: "wi-showers",
+  82: "wi-rain",
+  85: "wi-snow",
+  86: "wi-snow",
+  95: "wi-thunderstorm",
+  96: "wi-thunderstorm",
+  99: "wi-thunderstorm"
+};
+let weatherColorMapping = {
+  0: "#FDB813", //sunny
+  1: "#A4A4A4", //mainly clear
+  2: "#A4A4A4", //partly cloudy
+  3: "#6E6E6E", //overcast
+  45: "#6E6E6E", //fog
+  48: "#6E6E6E", //depositing rime fog
+  51: "#0095ff", //drizzle: Light
+  53: "#0095ff", //drizzle: Moderate
+  55: "#0095ff", //drizzle: Dense intensity
+  56: "#0095ff", //freezing drizzle: Light
+  57: "#0095ff", //freezing drizzle: Dense intensity
+  61: "#0095ff", //rain: Slight
+  63: "#0095ff", //rain: Moderate
+  65: "#0095ff", //rain: Heavy intensity
+  66: "#0095ff", //freezing rain: Light
+  67: "#0095ff", //freezing rain: Heavy intensity
+  71: "#c6fffa", //snow fall: Slight
+  73: "#c6fffa", //snow fall: Moderate
+  75: "#c6fffa", //snow fall: Heavy intensity
+  77: "#c6fffa", //snow grains
+  80: "#0095ff", //rain showers: Slight
+  81: "#0095ff", //rain showers: Moderate
+  82: "#0095ff", //rain showers: Violent
+  85: "#0095ff", //snow showers: Slight
+  86: "#2E9AFE", //snow showers: Heavy
+  95: "#DF0101", //thunderstorm: Slight or moderate
+  96: "#DF0101", //thunderstorm with slight hail
+  99: "#DF0101" //thunderstorm with heavy hail
+};
+
+
 
 function decodeWeatherCode(code) {
   return weatherMapping[code] || "Unknown";
@@ -75,6 +137,8 @@ async function fetchWeatherData() {
 
 //Opens the Modal (Popup)
 function openModal(date) {
+  document.getElementById("searchBox").value = null;
+  
   //The day that is clicked
   clicked = date;
 
@@ -189,6 +253,7 @@ function loadEventsToList() {
 
 //Reloads the Modal ie Reloads the data on the opened modal
 function reloadModal() {
+  document.getElementById("searchBox").value = null;
   loadEventsToList();
 }
 
@@ -313,12 +378,12 @@ function convertTo12HourFormat(militaryTime) {
 
 
 // //Loads the Calendar
-async function load(weatherData) {
+async function load() {
   const dt = new Date();
   dt.setMonth(new Date().getMonth() + nav);
 
-  //Get the Current Date
-  const today = new Date().getDate();
+  // Get the Current Date
+  const today = new Date();
   const currentMonth = dt.getMonth();
   const year = dt.getFullYear();
   const firstDayOfMonth = new Date(year, currentMonth, 1);
@@ -330,14 +395,13 @@ async function load(weatherData) {
     day: 'numeric',
   });
 
-
   const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
 
   document.getElementById('monthDisplay').innerText = `${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`;
 
   calendar.innerHTML = '';
 
-  if (currentMonth === new Date().getMonth()) {
+  if (nav === 0 && currentMonth === today.getMonth()) {
     const fetchedData = await fetchWeatherData();
     if (fetchedData && fetchedData.daily && fetchedData.daily.weathercode) {
       weatherData = fetchedData.daily.weathercode;
@@ -346,7 +410,7 @@ async function load(weatherData) {
     }
     weatherDataIndex = 0;
   }
-  
+
   for (let i = 1; i <= paddingDays + daysInMonth; i++) {
     const daySquare = document.createElement('div');
     daySquare.classList.add('day');
@@ -355,17 +419,26 @@ async function load(weatherData) {
     if (i > paddingDays) {
       daySquare.innerText = i - paddingDays;
 
-      if (i - paddingDays === today && nav === 0) {
+      if (i - paddingDays === today.getDate() && nav === 0) {
         daySquare.id = 'currentDay';
       }
 
       const isForecastAvailable = weatherData && weatherDataIndex < weatherData.length;
-      if ((currentMonth === new Date().getMonth() && i - paddingDays >= today && isForecastAvailable) || (nav > 0 && isForecastAvailable)) {
+      if ((currentMonth === today.getMonth() && i - paddingDays >= today.getDate() && isForecastAvailable) || (nav > 0 && isForecastAvailable)) {
         const weatherForDay = weatherData[weatherDataIndex];
         if (weatherForDay !== null) {
           const weatherDiv = document.createElement('div');
           weatherDiv.classList.add('weather');
-          weatherDiv.innerText = decodeWeatherCode(weatherForDay);
+
+          const weatherIcon = document.createElement('i');
+          weatherIcon.className = `wi ${weatherIconMapping[weatherForDay]} weather-icon`;
+
+          // Set the color of the icon according to the mapping
+          weatherIcon.style.color = weatherColorMapping[weatherForDay];
+
+          weatherIcon.title = decodeWeatherCode(weatherForDay);
+
+          weatherDiv.appendChild(weatherIcon);
           daySquare.appendChild(weatherDiv);
         }
         weatherDataIndex++;
@@ -379,6 +452,7 @@ async function load(weatherData) {
     calendar.appendChild(daySquare);
   }
 }
+
 
 
 // Function to export data to Excel
