@@ -19,8 +19,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import cmpt276.project.djjnp.projectdjjnp.models.Event;
 import cmpt276.project.djjnp.projectdjjnp.models.EventRepository;
-import cmpt276.project.djjnp.projectdjjnp.models.Location;
-import cmpt276.project.djjnp.projectdjjnp.models.LocationRepository;
 import cmpt276.project.djjnp.projectdjjnp.models.User;
 import cmpt276.project.djjnp.projectdjjnp.models.UserRepository;
 import cmpt276.project.djjnp.projectdjjnp.models.ShareLink;
@@ -42,8 +40,6 @@ public class UsersLogin {
     @Autowired(required = true)
     private EventRepository eventRepo;
 
-    @Autowired(required = true)
-    private LocationRepository locationRepo;
 
     @Autowired
     private ShareLinkService shareLinkService;
@@ -215,7 +211,6 @@ public class UsersLogin {
 
         User currentUser = (User) request.getSession().getAttribute("sessionUser");
         List<Event> currentUserEvent = eventRepo.findAll();
-        List<Location> currentUserLocation = locationRepo.findAll();
 
         if (request.getSession().getAttribute("sessionUser") == null) {
             return "redirect:/view/login";
@@ -227,7 +222,6 @@ public class UsersLogin {
         model.addAttribute("curDate", curDate);
         model.addAttribute("user", currentUser);
         model.addAttribute("event", currentUserEvent);
-        model.addAttribute("location", currentUserLocation);
 
         return "view/displayPage";
     }
