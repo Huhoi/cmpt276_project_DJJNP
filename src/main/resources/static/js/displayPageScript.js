@@ -47,6 +47,10 @@ function initMap() {
         searchbox.setBounds(map.getBounds());
     });
 
+    // Set correct date upon init
+    var timePST = new Date();
+    dateInput.value = timePST.toDateInputValue();
+
     // Now load listeners for map functionality
     initListeners();
 }
@@ -528,6 +532,14 @@ function militaryTime(when) {
 
     return newTime;
 }
+
+// =============================================
+// Helps with initializing HTML schedule element
+Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0,10);
+});
 
 // =======================================================
 // Converts time from military (24-hour) to 12-hour format
