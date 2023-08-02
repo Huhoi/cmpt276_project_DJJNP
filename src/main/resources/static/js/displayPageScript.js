@@ -112,6 +112,8 @@ function initMarkers() {
     .then(response => response.json())
     .then(data => {
         for (const i of data){
+            // Update max SID (consider ALL dates)
+            if (i.sid > maxSid) { maxSid = i.sid; }
             // Only push markers if UID and date matches
             if (i.uid == currentUser && i.date == getDate(dateInput.value)){
                 markers.push({
@@ -122,8 +124,6 @@ function initMarkers() {
                     longitude: Number(i.longitude),
                     sid: i.sid
                 });
-                // Update max SID
-                if (i.sid > maxSid) { maxSid = i.sid; }
                 // Update max begin time
                 if (i.timeBegin > maxBegin) { maxBegin = i.timeBegin; }
                 // Update min begin time
