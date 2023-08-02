@@ -50,6 +50,8 @@ public class UsersLogin {
 
     private String errorMessageString = "";
 
+    private String loginErrorMessageString = "";
+
     @GetMapping("/")
     public RedirectView homeRedirect() {
         return new RedirectView("view/login");
@@ -100,6 +102,9 @@ public class UsersLogin {
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
         response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
         response.setDateHeader("Expires", 0); // Proxies.
+
+        model.addAttribute("loginErrorMessage", loginErrorMessageString);
+    
         if(request.getSession().getAttribute("sessionUser") != null){
             return "redirect:/home";
         }
@@ -117,7 +122,8 @@ public class UsersLogin {
         List<User> userList = userRepo.findByEmailAndPassword(userEmail, userPassword);
 
         if (userList.isEmpty()) {
-            return "view/loginPage";
+            loginErrorMessageString = "Incorrect Password/Invalid Email!";
+           return "redirect:/view/login";
         }
         else {
             User newUser = userList.get(0);
