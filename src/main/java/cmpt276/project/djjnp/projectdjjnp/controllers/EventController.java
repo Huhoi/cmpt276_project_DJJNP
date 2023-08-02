@@ -62,17 +62,19 @@ public class EventController {
 
     @DeleteMapping("/{sid}")
     public ResponseEntity<String> deleteEvent(@PathVariable int sid) {
+
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(MediaType.TEXT_PLAIN);
+
         // Check if the event exists in the database
         Optional<Event> eventOptional = eventRepo.findById(sid);
         if (!eventOptional.isPresent()) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>("Event not found.", header, HttpStatus.NOT_FOUND);
         }
 
         // Delete the event using the EventService
         eventService.deleteEventById(sid);
 
-        HttpHeaders header = new HttpHeaders();
-        header.setContentType(MediaType.TEXT_PLAIN);
 
         return new ResponseEntity<>("Event deleted successfully.", header, HttpStatus.OK);
     }

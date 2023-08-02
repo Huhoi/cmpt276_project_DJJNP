@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -143,17 +144,28 @@ public class EventControllerTest {
     @Test
     public void testDeleteEvent() throws Exception{
         int testId = 0;
+        int invalidId = 100;
 
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.TEXT_PLAIN);
         
         when(controller.deleteEvent(testId)).thenReturn(new ResponseEntity<>("Event deleted successfully.", header, HttpStatus.OK));
+        when(controller.deleteEvent(invalidId)).thenReturn(new ResponseEntity<>("Event not found.", header, HttpStatus.NOT_FOUND));
 
+        //test for deleting valid id
         mvc.perform(delete("/api/{testId}", testId))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.TEXT_PLAIN))
         .andExpect(content().string("Event deleted successfully."));
-    
+
         verify(controller).deleteEvent(testId);
+        
+        //test for trying to delete invalid id
+        mvc.perform(delete("/api/{invalidId}", 100))
+        .andExpect(status().isNotFound())
+        .andExpect(content().contentType(MediaType.TEXT_PLAIN))
+        .andExpect(content().string("Event not found."));
+
+        verify(controller).deleteEvent(invalidId);
     }
 }
