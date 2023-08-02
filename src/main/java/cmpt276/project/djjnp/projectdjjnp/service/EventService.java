@@ -9,6 +9,8 @@ public interface EventService {
 
     void saveEvent(Event event);
 
+    List<Event> getAllEvents();
+
     List<Event> getEventsByUserId(int uid);
 }
 

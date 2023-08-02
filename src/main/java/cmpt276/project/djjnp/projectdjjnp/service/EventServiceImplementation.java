@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 import cmpt276.project.djjnp.projectdjjnp.models.Event;
 import cmpt276.project.djjnp.projectdjjnp.models.EventRepository;
 
@@ -16,6 +17,10 @@ public class EventServiceImplementation implements EventService {
     @Autowired
     public EventServiceImplementation(EventRepository eventRepo) {
         this.eventRepo = eventRepo;
+    }
+
+    public List<Event> getAllEvents(){
+        return eventRepo.findAll();
     }
 
     public void deleteEventById(int eventId) {

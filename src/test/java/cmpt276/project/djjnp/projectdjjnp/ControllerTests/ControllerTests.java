@@ -1,4 +1,4 @@
-package cmpt276.project.djjnp.projectdjjnp;
+package cmpt276.project.djjnp.projectdjjnp.ControllerTests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
