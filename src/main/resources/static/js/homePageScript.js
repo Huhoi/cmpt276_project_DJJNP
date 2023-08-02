@@ -186,12 +186,26 @@ function initMarkers() {
               if (formattedDate === currFormattedDate) {
                   markers.push({
                       timestamp: i.eventName,
+                      begin: i.timeBegin,
+                      end: i.timeEnd,
                       latitude: Number(i.latitude),
-                      longitude: Number(i.longitude),
+                      longitude: Number(i.longitude)
                   });
               }
           }
       }
+
+      // Sort the received markers by start time (descending)
+      markers.sort((a, b) => {
+          if (b.begin !== a.begin) {
+              // Sort by timeBegin first
+              return b.begin - a.begin;
+          } 
+          else {
+              // If timeBegin values are equal, sort by timeEnd
+              return b.end - a.end;
+          }
+      });
       
       // If there are markers for the selected day:
       if (markers.length > 0) {
