@@ -13,6 +13,7 @@
 
         <h1>Login</h1>
         <form th:action="@{/view/loginUser}" th:object="${us}" method="post" id="loginForm">
+            <div th:text="${loginErrorMessage}" id="errorMsg"></div>
             <!-- Email -->
             <div>
                 <input type="text" 
