@@ -58,3 +58,8 @@ a{
     margin-left: auto;
 
 }
+
+#errorMsg{
+    width: 1000px;
+    color: red;
+}

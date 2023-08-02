@@ -28,7 +28,7 @@ function initAutocomplete() {
 
 let weatherMapping = {
   0: "Clear sky",
-  1: "Mainly clear",
+  1: "Mostly clear",
   2: "Partly cloudy",
   3: "Overcast",
   45: "Fog",
@@ -127,13 +127,14 @@ function decodeWeatherCode(code) {
 //Fetches Weather API
 async function fetchWeatherData() {
   try {
-    const result = await fetch("https://api.open-meteo.com/v1/forecast?latitude=49.24&longitude=-122.98&daily=weathercode&timezone=America%2FLos_Angeles&models=gem_seamless");
+    const result = await fetch("https://api.open-meteo.com/v1/forecast?latitude=49.2664&longitude=-122.9526&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&timezone=America%2FLos_Angeles&models=gem_seamless");
     return await result.json();
   } catch (error) {
     console.error("Error fetching weather data:", error);
     return null;
   }
 }
+
 
 //Opens the Modal (Popup)
 function openModal(date) {
@@ -382,7 +383,7 @@ function convertTo12HourFormat(militaryTime) {
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
 
-// //Loads the Calendar
+//Loads the Calendar
 async function load() {
   const dt = new Date(currentYear, currentMonth, 1);
 
@@ -411,10 +412,18 @@ async function load() {
 
   //Fetch the weather data
   const fetchedData = await fetchWeatherData();
-  if (fetchedData && fetchedData.daily && fetchedData.daily.weathercode) {
+  if (fetchedData && fetchedData.daily) {
     weatherData = fetchedData.daily.weathercode;
+    temperatureMaxData = fetchedData.daily.temperature_2m_max;
+    temperatureMinData = fetchedData.daily.temperature_2m_min;
+    precipitationData = fetchedData.daily.precipitation_sum;
+    windSpeedData = fetchedData.daily.windspeed_10m_max;
   } else {
     weatherData = null;
+    temperatureMaxData = null;
+    temperatureMinData = null;
+    precipitationData = null;
+    windSpeedData = null;
   }
   weatherDataIndex = 0;
 
@@ -441,10 +450,31 @@ async function load() {
           const weatherIcon = document.createElement('i');
           weatherIcon.className = `wi ${weatherIconMapping[weatherForDay]} weather-icon`;
 
-          // Set the color of the icon according to the mapping
           weatherIcon.style.color = weatherColorMapping[weatherForDay];
 
+          // add to tooltip
           weatherIcon.title = decodeWeatherCode(weatherForDay);
+          if (temperatureMaxData && temperatureMaxData[weatherDataIndex]) {
+            weatherIcon.title += `\nMax Temp: ${temperatureMaxData[weatherDataIndex]}°C`;
+          }
+          if (temperatureMinData && temperatureMinData[weatherDataIndex]) {
+            weatherIcon.title += `\nMin Temp: ${temperatureMinData[weatherDataIndex]}°C`;
+          }
+          if (precipitationData && precipitationData[weatherDataIndex] !== undefined) {
+            weatherIcon.title += `\nPrecipitation: ${precipitationData[weatherDataIndex]}mm`;
+          }
+          if (windSpeedData && windSpeedData[weatherDataIndex]) {
+            weatherIcon.title += `\nMax Wind Speed: ${windSpeedData[weatherDataIndex]}km/h`;
+          }
+
+          // displays avg temp
+          if (temperatureMaxData && temperatureMaxData[weatherDataIndex] !== undefined && temperatureMinData && temperatureMinData[weatherDataIndex] !== undefined) {
+            const avgTemp = (temperatureMaxData[weatherDataIndex] + temperatureMinData[weatherDataIndex]) / 2;
+            const avgTempDiv = document.createElement('div');
+            avgTempDiv.classList.add('avg-temp');
+            avgTempDiv.textContent = `${Math.floor(avgTemp)}°C`;
+            weatherDiv.appendChild(avgTempDiv);
+          }
 
           weatherDiv.appendChild(weatherIcon);
           daySquare.appendChild(weatherDiv);
