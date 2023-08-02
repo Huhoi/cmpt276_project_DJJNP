@@ -11,8 +11,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import cmpt276.project.djjnp.projectdjjnp.models.User;
