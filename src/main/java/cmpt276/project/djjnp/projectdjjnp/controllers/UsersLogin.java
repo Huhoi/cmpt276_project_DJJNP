@@ -62,6 +62,7 @@ public class UsersLogin {
     //------------------------------------------
     @GetMapping("/view/register")
     public String register(Model model) {   
+        loginErrorMessageString = "";
         User users = new User();
         model.addAttribute("us", users);
         
@@ -133,9 +134,11 @@ public class UsersLogin {
            
             // Checks if ADMIN account
             if(newUser.getEmail().equals("adminEmail")) {
+                loginErrorMessageString = "";
                 return "redirect:/accountAdmin";
             }
             else {
+                loginErrorMessageString = "";
                 return "redirect:/home";
             }
            
