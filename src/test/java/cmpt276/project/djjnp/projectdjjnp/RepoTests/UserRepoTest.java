@@ -5,22 +5,25 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
-
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cmpt276.project.djjnp.projectdjjnp.models.User;
 import cmpt276.project.djjnp.projectdjjnp.models.UserRepository;
 
-
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class UserRepoTest {
-    
+
     @Autowired
     private TestEntityManager entityManager;
 
@@ -28,7 +31,7 @@ public class UserRepoTest {
     private UserRepository userRepo;
 
     @Test
-    public void testFindAll(){
+    public void testFindAll() {
         User userOne = new User("User One", "password");
         entityManager.persist(userOne);
         entityManager.flush();
@@ -50,7 +53,7 @@ public class UserRepoTest {
     }
 
     @Test
-    public void testFindByEmail(){
+    public void testFindByEmail() {
         User userOne = new User("User One", "password");
         entityManager.persist(userOne);
         entityManager.flush();
@@ -66,15 +69,15 @@ public class UserRepoTest {
         List<User> found = userRepo.findByEmail(userOne.getEmail());
         List<User> notFound = userRepo.findByEmail("Wrong email");
 
-        assertEquals(1, found.size()); //Should only find one
+        assertEquals(1, found.size()); // Should only find one
         assertEquals("User One", found.get(0).getEmail());
 
-        assertEquals(0, notFound.size()); //Should not find
+        assertEquals(0, notFound.size()); // Should not find
 
     }
 
     @Test
-    public void testFindByEmailAndPassword(){
+    public void testFindByEmailAndPassword() {
         User userOne = new User("User One", "password");
         entityManager.persist(userOne);
         entityManager.flush();
@@ -92,18 +95,18 @@ public class UserRepoTest {
         List<User> wrongPass = userRepo.findByEmailAndPassword("User One", "wrongPass");
         List<User> wrongBoth = userRepo.findByEmailAndPassword("Wrong User", "wrongPass");
 
-        assertEquals(1, found.size()); //Should find one
-        assertEquals("User One", found.get(0).getEmail()); //check if email is correct
-        assertEquals("password", userOne.getPassword()); //check if pass is correct
+        assertEquals(1, found.size()); // Should find one
+        assertEquals("User One", found.get(0).getEmail()); // check if email is correct
+        assertEquals("password", userOne.getPassword()); // check if pass is correct
 
-        //shouldn't find any
+        // shouldn't find any
         assertEquals(0, wrongEmail.size());
         assertEquals(0, wrongPass.size());
         assertEquals(0, wrongBoth.size());
     }
 
     @Test
-    public void testFindByUid(){
+    public void testFindByUid() {
         User userOne = new User("User One", "password");
         entityManager.persist(userOne);
         entityManager.flush();
@@ -121,25 +124,25 @@ public class UserRepoTest {
         List<User> foundUserThree = userRepo.findByUid(userThree.getUid());
         List<User> notFound = userRepo.findByUid(100);
 
-        //should find one user for each list generated
+        // should find one user for each list generated
         assertEquals(1, foundUserOne.size());
         assertEquals(1, foundUserTwo.size());
         assertEquals(1, foundUserThree.size());
 
-        //should not find any
+        // should not find any
         assertEquals(0, notFound.size());
 
-        //check uid, entityManager starts it at 10 for some reason
+        // check uid, entityManager starts it at 10 for some reason
         assertEquals(10, foundUserOne.get(0).getUid());
         assertEquals(11, foundUserTwo.get(0).getUid());
         assertEquals(12, foundUserThree.get(0).getUid());
 
-        //check emails are correct
+        // check emails are correct
         assertEquals("User One", foundUserOne.get(0).getEmail());
         assertEquals("User Two", foundUserTwo.get(0).getEmail());
         assertEquals("User Three", foundUserThree.get(0).getEmail());
 
-        //check passwords are correct
+        // check passwords are correct
         assertEquals("password", foundUserOne.get(0).getPassword());
         assertEquals("password", foundUserTwo.get(0).getPassword());
         assertEquals("password", foundUserThree.get(0).getPassword());
